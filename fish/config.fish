@@ -1,8 +1,11 @@
 set fish_greeting ""
-
-# set -gx TERM alacritty
-
-set -gx TERM screen-256color
+# Cursor styles
+set -gx fish_vi_force_cursor 1
+set -gx fish_cursor_default block
+set -gx fish_cursor_insert line blink
+set -gx fish_cursor_visual block
+set -gx fish_cursor_replace_one underscore
+set -gx TERM tmux-256color
 
 # theme
 set -g theme_color_scheme terminal-dark
@@ -19,22 +22,46 @@ alias lla "ll -A"
 alias g git
 # command -qv nvim && alias vim nvim
 
-
-set -gx EDITOR nvim
+set -gx EDITOR (which nvim)
+set -gx VISUAL $EDITOR
+set -gx SUDO_EDITOR $EDITOR
 
 set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 
-if type -q eza
-    alias ll "eza -l -g --icons"
-    alias lla "ll -a"
-end
+# Fish
+set fish_emoji_width 2
 
 set LOCAL_CONFIG (dirname (status --current-filename))/config-local.fish
 if test -f $LOCAL_CONFIG
     source $LOCAL_CONFIG
 end
+
+# Export
+set -x MANPAGER "nvim +Man!"
+
+
+# Tmux
+abbr t tmux
+abbr tc 'tmux attach'
+abbr ta 'tmux attach -t'
+abbr tad 'tmux attach -d -t'
+abbr ts 'tmux new -s'
+abbr tl 'tmux ls'
+abbr tk 'tmux kill-session -t'
+
+# Files & Directories
+abbr mv "mv -iv"
+abbr cp "cp -riv"
+abbr mkdir "mkdir -vp"
+alias ls="eza --color=always --icons --group-directories-first"
+alias la 'eza --color=always --icons --group-directories-first --all'
+alias ll 'eza --color=always --icons --group-directories-first --all --long'
+abbr l ll
+
+# Editor
+abbr v nvim
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
