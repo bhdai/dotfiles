@@ -50,6 +50,8 @@ abbr tad 'tmux attach -d -t'
 abbr ts 'tmux new -s'
 abbr tl 'tmux ls'
 abbr tk 'tmux kill-session -t'
+abbr tks 'tmux kill-server'
+abbr tko 'tmux kill-session -a'
 
 # Files & Directories
 abbr mv "mv -iv"
