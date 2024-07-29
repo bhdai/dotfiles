@@ -6,6 +6,7 @@
   "workbench.productIconTheme": "fluent-icons",
   "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
+  "window.density.editorTabHeight": "compact",
   "workbench.colorTheme": "gruvboxConcoctis dark hard",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.sideBar.location": "right",
@@ -16,6 +17,8 @@
   "editor.lineNumbers": "relative",
   "editor.fontLigatures": true,
   "editor.cursorSmoothCaretAnimation": "on",
+  "editor.selectionHighlight": false,
+  "editor.occurrencesHighlight": "off",
   "editor.minimap.enabled": false,
   "editor.mouseWheelZoom": true,
   "editor.largeFileOptimizations": false,
@@ -64,6 +67,14 @@
   "security.allowedUNCHosts": [
     "wsl.localhost"
   ],
+  "remote.SSH.configFile": "\\\\wsl.localhost\\Ubuntu\\home\\the_monarch\\.ssh\\config",
+  "remote.SSH.remotePlatform": {
+    "kaggle_notebook": "linux",
+    "0.tcp.ap.ngrok.io": "linux",
+    "Kaggle: Ubuntu": "linux",
+    "Ubuntu": "linux",
+    "Kaggle": "linux"
+  },
   // Python settings
   "python.languageServer": "Pylance",
   // Codesnap settings
@@ -85,9 +96,7 @@
     ]
   },
   "remote.autoForwardPortsSource": "hybrid",
-  "window.density.editorTabHeight": "compact",
   "update.mode": "manual",
-  
-  // vscode notebook
+  // vscode jupyter notebook
   "notebook.lineNumbers": "on",
 }
