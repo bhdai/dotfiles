@@ -1,6 +1,6 @@
 import = [
-# "C:\\Users\\Thành\\AppData\\Roaming\\alacritty\\themes\\catppuccin\\catppuccin-frappe.toml",
-# "C:\\Users\\Thành\\AppData\\Roaming\\alacritty\\keybindings.toml",
+# path for windows
+"%APPDATA%\\Roaming\\alacritty\\themes\\cyberdream.tolm",
 ]
 # Colors (Tokyo Night)
 # Source https//github.com/zatchheems/tokyo-night-alacritty-theme
@@ -10,7 +10,6 @@ import = [
 background = '#1a1b26'
 foreground = '#a9b1d6'
 
-# Normal colors
 [colors.normal]
 black   = '#32344a'
 red     = '#f7768e'
@@ -69,9 +68,9 @@ white   = '#acb0d0'
 
 [window]
 
-opacity = 0.8
-dimensions = { columns = 130, lines = 30}
-position = { x = 300, y = 200}
+opacity = 0.6
+dimensions = { columns = 140, lines = 33}
+position = { x = 200, y = 100}
 padding.x = 10
 padding.y = 10
 decorations = "None"
@@ -83,7 +82,7 @@ normal = { family = "BlexMono Nerd Font", style = "Medium"}
 bold = { family = "BlexMono Nerd Font", style = "Bold"} 
 italic = { family = "BlexMono Nerd Font", style = "Italic"} 
 bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"} 
-size = 13.0
+size = 15.0
 
 
 [selection]
