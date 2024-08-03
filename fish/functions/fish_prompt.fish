@@ -1,0 +1,1 @@
+/home/the_monarch/.local/share/omf/themes/pie/fish_prompt.fish
