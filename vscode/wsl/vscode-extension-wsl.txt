@@ -1,0 +1,17 @@
+asvetliakov.vscode-neovim
+cs50.ddb50
+eamodio.gitlens
+jpcrs.binocular
+mechatroner.rainbow-csv
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-renderers
+ms-toolsai.vscode-jupyter-cell-tags
+ms-toolsai.vscode-jupyter-slideshow
+pascalsenn.keyboard-quickfix
+quarto.quarto
+streetsidesoftware.code-spell-checker
+wheredoesyourmindgo.gruvbox-concoctis

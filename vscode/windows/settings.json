@@ -57,6 +57,16 @@
     "height": 40
   },
   "apc.menubar.compact": true,
+  "apc.stylesheet": {
+    ".quick-input-widget": {
+      "position": "absolute !important",
+      "top": "200px !important",
+      "left": "50%",
+      "border-radius": "10px",
+      "border": "1px solid var(--vscode-textSeparator-foreground) !important",
+      "box-shadow": "0 0 60px 0 rgba(0,0,0,0.2) !important"
+    }
+  },
   // Jupyter settings
   "jupyter.widgetScriptSources": [
     "jsdelivr.com",
@@ -98,5 +108,5 @@
   "remote.autoForwardPortsSource": "hybrid",
   "update.mode": "manual",
   // vscode jupyter notebook
-  "notebook.lineNumbers": "on",
+  "notebook.lineNumbers": "on"
 }
