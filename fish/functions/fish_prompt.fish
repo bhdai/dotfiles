@@ -1,1 +1,1 @@
-/home/the_monarch/.local/share/omf/themes/pie/fish_prompt.fish
+/home/monarch/.local/share/omf/themes/slacker/fish_prompt.fish

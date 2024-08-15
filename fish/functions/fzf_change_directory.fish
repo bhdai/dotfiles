@@ -21,7 +21,7 @@ function fzf_change_directory
     # Use find instead of ls to list directories
     find . -maxdepth 1 -type d | sed -r "s#^\./##" | sed -r "s/$remove_ansi//g" | perl -pe "s#^#$PWD/#" | grep -v \.git
 
-    find $HOME/clones -maxdepth 1 -type d | sed -r "s/$remove_ansi//g" | grep -v \.git
+    find $HOME/Downloads -maxdepth 1 -type d | sed -r "s/$remove_ansi//g" | grep -v \.git
 
     find $HOME/workplace -maxdepth 2 -type d | sed -r "s/$remove_ansi//g" | grep -v \.git
   end | sed -e 's/\/$//' | awk '!a[$0]++' | _fzf_change_directory $argv

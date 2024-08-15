@@ -1,74 +1,10 @@
 import = [
-# path for windows
-"%APPDATA%\\Roaming\\alacritty\\themes\\cyberdream.tolm",
+"~/.config/alacritty/themes/cyberdream.tolm",
 ]
-# Colors (Tokyo Night)
-# Source https//github.com/zatchheems/tokyo-night-alacritty-theme
-
-# Default colors
-[colors.primary]
-background = '#1a1b26'
-foreground = '#a9b1d6'
-
-[colors.normal]
-black   = '#32344a'
-red     = '#f7768e'
-green   = '#9ece6a'
-yellow  = '#e0af68'
-blue    = '#7aa2f7'
-magenta = '#ad8ee6'
-cyan    = '#449dab'
-white   = '#787c99'
-
-# Bright colors
-[colors.bright]
-black   = '#444b6a'
-red     = '#ff7a93'
-green   = '#b9f27c'
-yellow  = '#ff9e64'
-blue    = '#7da6ff'
-magenta = '#bb9af7'
-cyan    = '#0db9d7'
-white   = '#acb0d0'
-
-# -----------------------------
-
-# # Colors (Challenger Deep)
-#
-# # Default colors
-# [colors.primary]
-# background = '#1e1c31'
-# foreground = '#cbe1e7'
-#
-# [colors.cursor]
-# text = '#ff271d'
-# cursor = '#fbfcfc'
-#
-# # Normal colors
-# [colors.normal]
-# black   = '#141228'
-# red     = '#ff5458'
-# green   = '#62d196'
-# yellow  = '#ffb378'
-# blue    = '#65b2ff'
-# magenta = '#906cff'
-# cyan    = '#63f2f1'
-# white   = '#a6b3cc'
-#
-# # Bright colors
-# [colors.bright]
-# black   = '#565575'
-# red     = '#ff8080'
-# green   = '#95ffa4'
-# yellow  = '#ffe9aa'
-# blue    = '#91ddff'
-# magenta = '#c991e1'
-# cyan    = '#aaffe4'
-# white   = '#cbe3e7'
 
 [window]
 
-opacity = 0.6
+opacity = 0.9
 dimensions = { columns = 140, lines = 33}
 position = { x = 200, y = 100}
 padding.x = 10
@@ -77,18 +13,15 @@ decorations = "None"
 decorations_theme_variant = "Dark"
 
 [font]
-
 normal = { family = "BlexMono Nerd Font", style = "Medium"} 
 bold = { family = "BlexMono Nerd Font", style = "Bold"} 
 italic = { family = "BlexMono Nerd Font", style = "Italic"} 
 bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"} 
-size = 15.0
+size = 12.0
 
 
 [selection]
-
 save_to_clipboard = true
 
 [shell]
-
-program = "C:\\Windows\\system32\\wsl.exe ~ -d Ubuntu"
+program="/usr/bin/fish"

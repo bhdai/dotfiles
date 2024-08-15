@@ -1,5 +1,0 @@
-[[keyboard.bindings]]
-
-key = "V"
-mods = "Control|Shift"
-action = "Paste"
