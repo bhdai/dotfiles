@@ -1,4 +1,5 @@
-<img src="./vscode.png">
+<img src="./vscode1.png">
 
 > [!NOTE]
-> If you have neovim in your vscode, you might want to check out my neovim config which is works great for vscode. alright happy codding, btw!
+> To make apc work in linux use this to change the file's owner `sudo chown -R $(whoami) /usr/share/code`
+> if you use arch(i use arch, btw!) you should run this `sudo chown -R $(whoami) /opt/visual-studio-code`
