@@ -3,7 +3,7 @@
   "logo": {
     "type": "chafa",
     "width": 60,
-    "printRemaining": false,
+    "printRemaining": true,
     "source": "~/.config/wall.png",
     "chafa": {
       "symbols": "vhalf",
@@ -83,6 +83,11 @@
       "type": "cpu",
       "showPeCoreCount": true,
       "outputColor": "33;1",
+    },
+    {
+      "key": "│           │\u001b[11D{#33}  \u001b[{#37}gpu",
+      "type": "gpu",
+      "outputColor": "32;1",
     },
     {
       "key": "│           │\u001b[11D{#34}󰉉  \u001b[{#37}disk",
