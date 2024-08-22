@@ -30,6 +30,7 @@ set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 
+
 # Fish
 set fish_emoji_width 2
 
@@ -65,8 +66,45 @@ abbr l ll
 # Editor
 abbr v nvim
 
+alias lazygit "TERM=xterm-256color command lazygit"
+abbr gg lazygit
+
+# systemctl
+abbr s systemctl
+abbr su "systemctl --user"
+abbr ss "command systemctl status"
+abbr sl "systemctl --type service --state running"
+abbr slu "systemctl --user --type service --state running"
+abbr se "sudo systemctl enable --now"
+abbr sd "sudo systemctl disable --now"
+abbr sr "sudo systemctl restart"
+abbr so "sudo systemctl stop"
+abbr sa "sudo systemctl start"
+abbr sf "systemctl --failed --all"
+
+# journalctl
+abbr jb "journalctl -b"
+abbr jf "journalctl --follow"
+abbr jg "journalctl -b --grep"
+abbr ju "journalctl --unit"
+
+
 starship init fish | source
 
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if test -f /home/monarch/miniconda3/bin/conda
+    eval /home/monarch/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+else
+    if test -f "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
+        . "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
+    else
+        set -x PATH "/home/monarch/miniconda3/bin" $PATH
+    end
+end
+# <<< conda initialize <<<
+
