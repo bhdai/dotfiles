@@ -6,7 +6,6 @@
   "workbench.productIconTheme": "fluent-icons",
   "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
-  "window.density.editorTabHeight": "compact",
   "workbench.colorTheme": "gruvboxConcoctis dark hard",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.sideBar.location": "right",
@@ -65,7 +64,11 @@
       "border-radius": "10px",
       "border": "1px solid var(--vscode-textSeparator-foreground) !important",
       "box-shadow": "0 0 60px 0 rgba(0,0,0,0.2) !important"
-    }
+    },
+    ".monaco-editor .monaco-hover": "border-radius: 12px;",
+    ".monaco-editor .parameter-hints-widget": "border-radius: 12px;",
+    ".monaco-editor .suggest-details, .monaco-editor .suggest-widget": "border-radius: 12px;",
+    ".monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused": "border-radius: 12px;"
   },
   // Jupyter settings
   "jupyter.widgetScriptSources": [
@@ -74,9 +77,9 @@
   ],
   "jupyter.enableExtendedPythonKernelCompletions": true,
   // Remote development settings
-  "security.allowedUNCHosts": [
-    "wsl.localhost"
-  ],
+  // "security.allowedUNCHosts": [
+  //   "wsl.localhost"
+  // ],
   "remote.SSH.configFile": "~/.ssh/config",
   "remote.SSH.remotePlatform": {
     "kaggle_notebook": "linux",
@@ -245,6 +248,9 @@
     "~/.config",
     "~/ghq",
     "~/Download",
-    "~/workplace"
-  ]
+    "~/workplace",
+    "~/"
+  ],
+  "window.density.editorTabHeight": "compact",
+  "workbench.editor.enablePreview": false
 }
