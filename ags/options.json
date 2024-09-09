@@ -1,6 +1,6 @@
 {
   "bar.battery.percentage": true,
-  "autotheme": true,
+  "autotheme": false,
   "theme.scheme": "dark",
   "font.size": 10,
   "bar.workspaces.workspaces": 5,

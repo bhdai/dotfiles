@@ -104,7 +104,7 @@ export default () =>
     on_scroll_down: () => (audio.speaker.volume -= 0.02),
     child: Widget.Box([
       ProfileIndicator(),
-      ModeIndicator(),
+      //ModeIndicator(),
       DNDIndicator(),
       BluetoothIndicator(),
       NetworkIndicator(),
