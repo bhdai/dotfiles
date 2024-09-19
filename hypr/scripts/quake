@@ -25,7 +25,7 @@ elif [ "$WORKSPACE" == "special:quake" ]; then
 	hyprctl activewindow | head -n1 | cut -f2 -d ' ' >/tmp/hypr-quake-address
 
 	# If the current active window is fullscreen, unfullscreen it
-	hyprctl activewindow | rg "fullscreen: 1" && hyprctl dispatch fullscreen
+	hyprctl activewindow | rg "fullscreen: 1" && hyprctl dispatch fullscreenstate 0 0
 
 	# Move the quake window to the current workspace, focus it, and bring it to the top
 	hyprctl dispatch movetoworkspacesilent "+0,^(quake)\$"
