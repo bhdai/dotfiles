@@ -1,6 +1,13 @@
+format = """
+[](fg:#1793d1) \
+$directory\
+$all\
+$character"""
 # Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are configuring is "character"
-success_symbol = '[   ➜ ](bold green)'     # The "symbol" segment is being set to "➜"
+# success_symbol = '[   ➜ ](bold green)'     # The "symbol" segment is being set to "➜"
+# success_symbol = '[   ❯](bold green)'     # The "symbol" segment is being set to "➜"
+success_symbol = '[❯](bold green)'     # The "symbol" segment is being set to "➜"
 error_symbol = '[✗](bold red) '  # Show "✖" when the command failed
 
 [custom.shell]
@@ -109,6 +116,9 @@ symbol = " "
 
 [nodejs]
 symbol = " "
+
+# [os]
+# disabled = false
 
 [os.symbols]
 Alpaquita = " "

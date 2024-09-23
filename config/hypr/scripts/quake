@@ -2,7 +2,7 @@
 
 WORKSPACE=$(hyprctl clients -j | jq -rec '.[] | select(.class == "quake") | .workspace .name')
 TERM_CMD="wezterm start --class quake"
-# TERM_CMD="kitty -1 --class quake -o background_opacity=0.60 -o hide_window_decorations=yes -o remember_window_size=no"
+# TERM_CMD="kitty -1 --class quake -o hide_window_decorations=yes -o remember_window_size=no"
 # TERM_CMD="alacritty --class quake"
 
 # hyprctl --batch '

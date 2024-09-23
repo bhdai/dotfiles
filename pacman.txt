@@ -5,6 +5,7 @@ archlinux-xdg-menu
 archlinuxcn-keyring
 ark
 asusctl
+atuin
 aylurs-gtk-shell-git
 base
 base-devel
@@ -13,6 +14,7 @@ bluedevil
 blueman
 bluez
 bluez-utils
+bottom
 breeze-gtk
 bridge-utils
 brightnessctl
@@ -48,7 +50,7 @@ git-delta
 gnome-bluetooth
 gnome-bluetooth-3.0
 gnome-keyring
-gpu-screen-recorder-git
+grc
 grim
 grimblast-git
 grub
@@ -57,10 +59,12 @@ gst-plugin-pipewire
 gst-plugins-good
 gst-plugins-ugly
 gtklock
+gum
 gvfs-afc
 gvfs-mtp
 gwenview
 htop
+hub
 hypridle
 hyprland
 hyprlock
@@ -97,7 +101,9 @@ mako
 man-db
 matugen-bin
 mdcat
+microsoft-edge-beta-bin
 mpv
+ncdu
 neofetch
 neovim
 network-manager-applet
@@ -107,8 +113,11 @@ npm
 nvidia
 nvidia-settings
 nvidia-utils
+nvtop
+nwg-clipman
 obsidian
 okular
+onefetch
 openbsd-netcat
 openssh
 openssl-1.1
@@ -144,9 +153,11 @@ rofi
 safeeyes-git
 sddm
 sddm-kcm
+shell-color-scripts-git
 slurp
 smartmontools
 snixembed
+speedtest-cli
 spice-vdagent
 spicetify-themes-git
 spotify-launcher
@@ -156,6 +167,7 @@ swappy
 swaylock-effects-git
 swtpm
 swww
+tealdeer
 tela-icon-theme-git
 thorium-browser-bin
 thunar
@@ -173,6 +185,7 @@ ttf-jetbrains-mono
 ttf-maple
 ttf-ms-win11-auto
 ttf-nerd-fonts-symbols
+ttf-roboto
 vde2
 vim
 virt-manager
@@ -182,7 +195,7 @@ vulkan-intel
 vulkan-tools
 waybar
 wayshot
-wezterm
+wezterm-git
 wf-recorder
 wget
 wine
@@ -191,6 +204,7 @@ wireplumber
 wl-clip-persist
 wl-clipboard
 wlogout
+xcb-imdkit
 xclip
 xdg-desktop-portal-hyprland
 yay
