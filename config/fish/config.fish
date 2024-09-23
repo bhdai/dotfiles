@@ -1,11 +1,10 @@
-set fish_greeting ""
 # Cursor styles
 set -gx fish_vi_force_cursor 1
 set -gx fish_cursor_default block
 set -gx fish_cursor_insert line blink
 set -gx fish_cursor_visual block
 set -gx fish_cursor_replace_one underscore
-set -gx TERM tmux-256color
+#set -gx TERM tmux-256color
 
 
 # aliases
@@ -27,13 +26,27 @@ set -gx EDITOR (which nvim)
 set -gx VISUAL $EDITOR
 set -gx SUDO_EDITOR $EDITOR
 
-set -gx PATH bin $PATH
-set -gx PATH ~/bin $PATH
-set -gx PATH ~/.local/bin $PATH
+# Path
+set -x fish_user_paths
+fish_add_path /bin
+fish_add_path ~/.local/bin
+fish_add_path ~/.cargo/bin
+fish_add_path /usr/local/sbin
 
+# Go
+set -x GOPATH ~/go
+fish_add_path ~/go/bin
+
+# Exports
+set -x LESS -rF
+set -x COMPOSE_DOCKER_CLI_BUILD 1
+set -x MANPAGER "nvim +Man!"
+set -x MANROFFOPT -c
 
 # Fish
 set fish_emoji_width 2
+alias ssh "TERM=xterm-256color command ssh"
+alias mosh "TERM=xterm-256color command mosh"
 
 set LOCAL_CONFIG (dirname (status --current-filename))/config-local.fish
 if test -f $LOCAL_CONFIG
@@ -43,6 +56,8 @@ end
 # Export
 set -x MANPAGER "nvim +Man!"
 
+# better -h flag
+abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
 
 # Tmux
 abbr t tmux
@@ -63,12 +78,32 @@ alias ls="eza --color=always --icons --group-directories-first"
 alias la 'eza --color=always --icons --group-directories-first --all'
 alias ll 'eza --color=always --icons --group-directories-first --all --long'
 abbr l ll
+abbr ncdu "ncdu --color dark"
+abbr git hub
 
 # Editor
 abbr v nvim
 
 alias lazygit "TERM=xterm-256color command lazygit"
 abbr gg lazygit
+abbr gl 'hub l --color | devmoji --log --color | less -rXF'
+abbr gs "hub st"
+abbr gb "hub checkout -b"
+abbr gc "hub commit"
+abbr gpr "hub pr checkout"
+abbr gm "hub branch -l main | rg main > /dev/null 2>&1 && hub checkout main || hub checkout master"
+abbr gcp "hub commit -p"
+abbr gpp "hub push"
+abbr gp "hub pull"
+
+# other
+abbr ytop btm
+abbr fda "fd -IH"
+abbr rga "rg -uu"
+abbr grep rg
+abbr weather "curl -s wttr.in/Hanoi | grep -v Follow"
+abbr show-cursor "tput cnorm"
+abbr hide-cursor "tput civis"
 
 # systemctl
 abbr s systemctl

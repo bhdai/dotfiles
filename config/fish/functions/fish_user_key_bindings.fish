@@ -6,6 +6,7 @@ function fish_user_key_bindings
 
   # fzf
   bind \cf fzf_change_directory
+  bind -M insert \ch __fzf_tldr
 
   bind -M visual -m default y 'fish_clipboard_copy; commandline -f end-selection repaint-mode'
   bind yy fish_clipboard_copy

@@ -2,35 +2,36 @@
 # VERSION: 3.0
 SETUVAR Z_DATA_DIR:/home/monarch/\x2elocal/share/z
 SETUVAR __fish_initialized:3400
+SETUVAR _fisher_franciscolourenco_2F_done_files:\x7e/\x2econfig/fish/conf\x2ed/done\x2efish
 SETUVAR _fisher_jorgebucaran_2F_autopair_2E_fish_files:\x7e/\x2econfig/fish/functions/_autopair_backspace\x2efish\x1e\x7e/\x2econfig/fish/functions/_autopair_insert_left\x2efish\x1e\x7e/\x2econfig/fish/functions/_autopair_insert_right\x2efish\x1e\x7e/\x2econfig/fish/functions/_autopair_insert_same\x2efish\x1e\x7e/\x2econfig/fish/functions/_autopair_tab\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/autopair\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fisher\x2efish\x1e\x7e/\x2econfig/fish/completions/fisher\x2efish
 SETUVAR _fisher_patrickf1_2F_fzf_2E_fish_files:\x7e/\x2econfig/fish/functions/_fzf_configure_bindings_help\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_extract_var_info\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_preview_changed_file\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_preview_file\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_report_diff_type\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_report_file_type\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_directory\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_git_log\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_git_status\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_history\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_processes\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_search_variables\x2efish\x1e\x7e/\x2econfig/fish/functions/_fzf_wrapper\x2efish\x1e\x7e/\x2econfig/fish/functions/fzf_configure_bindings\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/fzf\x2efish\x1e\x7e/\x2econfig/fish/completions/fzf_configure_bindings\x2efish
-SETUVAR _fisher_plugins:jorgebucaran/fisher\x1epatrickf1/fzf\x2efish\x1ejorgebucaran/autopair\x2efish
+SETUVAR _fisher_plugins:jorgebucaran/fisher\x1epatrickf1/fzf\x2efish\x1ejorgebucaran/autopair\x2efish\x1efranciscolourenco/done
 SETUVAR _fisher_upgraded_to_4_4:\x1d
-SETUVAR fish_color_autosuggestion:636da6
-SETUVAR fish_color_cancel:\x1d
-SETUVAR fish_color_command:86e1fc
-SETUVAR fish_color_comment:636da6
-SETUVAR fish_color_cwd:\x1d
-SETUVAR fish_color_cwd_root:red
-SETUVAR fish_color_end:ff966c
-SETUVAR fish_color_error:ff757f
-SETUVAR fish_color_escape:c099ff
-SETUVAR fish_color_history_current:\x2d\x2dbold
-SETUVAR fish_color_host:\x1d
-SETUVAR fish_color_host_remote:\x1d
-SETUVAR fish_color_keyword:c099ff
-SETUVAR fish_color_normal:c8d3f5
-SETUVAR fish_color_operator:c3e88d
-SETUVAR fish_color_option:c099ff
-SETUVAR fish_color_param:fca7ea
-SETUVAR fish_color_quote:ffc777
-SETUVAR fish_color_redirection:c8d3f5
-SETUVAR fish_color_search_match:\x2d\x2dbackground\x3d2d3f76
-SETUVAR fish_color_selection:\x2d\x2dbackground\x3d2d3f76
-SETUVAR fish_color_status:red
-SETUVAR fish_color_user:\x1d
-SETUVAR fish_color_valid_path:\x2d\x2dunderline
+SETUVAR --export fish_color_autosuggestion:636da6
+SETUVAR --export fish_color_cancel:\x1d
+SETUVAR --export fish_color_command:86e1fc
+SETUVAR --export fish_color_comment:636da6
+SETUVAR --export fish_color_cwd:\x1d
+SETUVAR --export fish_color_cwd_root:red
+SETUVAR --export fish_color_end:ff966c
+SETUVAR --export fish_color_error:ff757f
+SETUVAR --export fish_color_escape:c099ff
+SETUVAR --export fish_color_history_current:\x2d\x2dbold
+SETUVAR --export fish_color_host:\x1d
+SETUVAR --export fish_color_host_remote:\x1d
+SETUVAR --export fish_color_keyword:c099ff
+SETUVAR --export fish_color_normal:c8d3f5
+SETUVAR --export fish_color_operator:c3e88d
+SETUVAR --export fish_color_option:c099ff
+SETUVAR --export fish_color_param:fca7ea
+SETUVAR --export fish_color_quote:ffc777
+SETUVAR --export fish_color_redirection:c8d3f5
+SETUVAR --export fish_color_search_match:\x2d\x2dbackground\x3d2d3f76
+SETUVAR --export fish_color_selection:\x2d\x2dbackground\x3d2d3f76
+SETUVAR --export fish_color_status:red
+SETUVAR --export fish_color_user:\x1d
+SETUVAR --export fish_color_valid_path:\x2d\x2dunderline
 SETUVAR fish_key_bindings:fish_default_key_bindings
 SETUVAR fish_pager_color_background:\x1d
 SETUVAR fish_pager_color_completion:c8d3f5
@@ -45,3 +46,4 @@ SETUVAR fish_pager_color_selected_background:\x2d\x2dbackground\x3d2d3f76
 SETUVAR fish_pager_color_selected_completion:\x1d
 SETUVAR fish_pager_color_selected_description:\x1d
 SETUVAR fish_pager_color_selected_prefix:\x1d
+SETUVAR grc_plugin_execs:df\x1edig\x1eifconfig\x1emake\x1emount\x1emtr\x1enetstat\x1eping\x1eps\x1etail\x1etraceroute\x1ewdiff\x1eblkid\x1edu\x1ednf\x1eenv\x1eid\x1eip\x1eiostat\x1ejournalctl\x1ekubectl\x1elast\x1elsattr\x1elsblk\x1elspci\x1elsmod\x1elsof\x1egetfacl\x1egetsebool\x1eulimit\x1euptime\x1enmap\x1efdisk\x1efindmnt\x1efree\x1esemanage\x1esar\x1ess\x1esysctl\x1esystemctl\x1etcpdump\x1etune2fs\x1evmstat\x1ew\x1ewho\x1esockstat
