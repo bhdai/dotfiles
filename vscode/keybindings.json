@@ -50,6 +50,30 @@
     //----------------------------------------
     // rebind to neovim like
     {
+        "key": "j",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
+        "args": "gj"
+    },
+    {
+        "key": "k",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
+        "args": "gk"
+    },
+    {
+       "key": "ctrl+u",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.mode == 'normal'",
+        "args": "<C-u>zz"
+    },
+    {
+       "key": "ctrl+d",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.mode == 'normal'",
+        "args": "<C-d>zz"
+    },
+    {
         "key": "space shift+p",
         "command": "workbench.action.quickOpen",
         "when": "!editorTextFocus && !inputFocus"

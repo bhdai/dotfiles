@@ -6,12 +6,12 @@
   "workbench.productIconTheme": "fluent-icons",
   "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
-  "workbench.colorTheme": "gruvboxConcoctis dark hard",
+  "workbench.colorTheme": "Tokyo Night Storm",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.sideBar.location": "right",
   "symbols.hidesExplorerArrows": false,
   // Editor settings
-  "editor.fontFamily": "'BlexMono Nerd Font', Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "'BlexMono Nerd Font Medium', Consolas, 'Courier New', monospace",
   "editor.fontSize": 15,
   "editor.lineNumbers": "relative",
   "editor.fontLigatures": true,
@@ -247,10 +247,12 @@
     "./",
     "~/.config",
     "~/ghq",
-    "~/Download",
+    "~/Downloads",
     "~/workplace",
-    "~/"
+    "~/",
   ],
   "window.density.editorTabHeight": "compact",
-  "workbench.editor.enablePreview": false
+  "workbench.editor.enablePreview": false,
+  "code-runner.runInTerminal": true,
+  "editor.tabSize": 2
 }
