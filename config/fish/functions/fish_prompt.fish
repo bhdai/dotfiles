@@ -1,1 +1,1 @@
-/home/monarch/.local/share/omf/themes/slacker/fish_prompt.fish
+source (starship init fish --print-full-init | psub)
