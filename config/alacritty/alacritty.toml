@@ -1,5 +1,5 @@
 import = [
-"~/.config/alacritty/themes/tokyonight_storm.toml"
+"~/ghq/github.com/folke/tokyonight.nvim/extras/alacritty/tokyonight_storm.toml"
 ]
 
 [colors]
