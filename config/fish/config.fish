@@ -28,10 +28,13 @@ set -gx SUDO_EDITOR $EDITOR
 
 # Path
 set -x fish_user_paths
-fish_add_path /bin
-fish_add_path ~/.local/bin
+#fish_add_path /bin
+#fish_add_path ~/.local/bin
 fish_add_path ~/.cargo/bin
 fish_add_path /usr/local/sbin
+
+set -gx PATH ~/bin $PATH
+set -gx PATH ~/.local/bin $PATH
 
 # Go
 set -x GOPATH ~/go
@@ -47,11 +50,6 @@ set -x MANROFFOPT -c
 set fish_emoji_width 2
 alias ssh "TERM=xterm-256color command ssh"
 alias mosh "TERM=xterm-256color command mosh"
-
-set LOCAL_CONFIG (dirname (status --current-filename))/config-local.fish
-if test -f $LOCAL_CONFIG
-    source $LOCAL_CONFIG
-end
 
 # Export
 set -x MANPAGER "nvim +Man!"
