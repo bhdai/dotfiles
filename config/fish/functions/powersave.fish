@@ -1,9 +1,10 @@
-function powersave
+function powersave --description "Toggle power-saving mode"
   set -l USER monarch
+  set -l MIN_BRIGHTNESS 1000
 
   function run_as_user
     set -l DBUS "unix:path=/run/user/(id -u $USER)/bus"
-    cd /home/$USER || exit
+    cd /home/$USER || return 1
     sudo -u $USER DBUS_SESSION_BUS_ADDRESS="$DBUS" /usr/bin/systemd-run --user --property=TimeoutStopSec=1 --property=KillMode=mixed $argv
   end
 
@@ -13,22 +14,26 @@ function powersave
     return
   end
 
-  # Check if on battery
-  if test "$argv[1]" = "true"
-    brightnessctl -s set 1000 # save brightness
-    # tuned-adm profile laptop-battery-powersave
-    # powerprofilesctl set power-saver
-    hyprctl keyword decoration:drop_shadow false
-    hyprctl keyword decoration:blur:enabled false
-  else if test "$argv[1]" = "false"
-    brightnessctl -r # restore brightness
-    # powerprofilesctl set balanced
-    # tuned-adm profile laptop-ac-powersave
-    hyprctl keyword decoration:drop_shadow true
-    hyprctl keyword decoration:blur:enabled true
+  # Check for required commands
+  for cmd in brightnessctl hyprctl
+    if not command -v $cmd &>/dev/null
+      return 1
+    end
   end
 
-  # Reload waybar
-  # pkill waybar
-  # waybar
+  switch $argv[1]
+    case "true"
+      echo "Enabling power-saving mode"
+      brightnessctl -s set $MIN_BRIGHTNESS
+      hyprctl keyword decoration:drop_shadow false
+      hyprctl keyword decoration:blur:enabled false
+    case "false"
+      echo "Disabling power-saving mode"
+      brightnessctl -r
+      hyprctl keyword decoration:drop_shadow true
+      hyprctl keyword decoration:blur:enabled true
+    case '*'
+      echo "Invalid argument: $argv[1]. Use 'true' or 'false'."
+      return 1
+  end
 end
