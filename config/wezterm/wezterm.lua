@@ -24,7 +24,7 @@ config.colors = {
 	indexed = { [241] = "#65bcff" },
 }
 
--- config.underline_thickness = 3
+config.underline_thickness = 2
 config.cursor_thickness = 3
 -- config.underline_position = -6
 
