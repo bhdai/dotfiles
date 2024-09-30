@@ -1,13 +1,14 @@
 # compile and run c/c++ program
 function crun
+  set red (set_color red)
   set filename (basename $argv[1] .c)
   set compiler gcc
   set compile_flags
   set run_args
   set cyan (set_color cyan)
   set green (set_color green)
-  set red (set_color red)
   set normal (set_color normal)
+  set source_file $argv[1]
 
   if test (string match -r '\.cpp$' $argv[1])
     set compiler g++
@@ -30,7 +31,7 @@ function crun
   end
 
   # Compile
-  set compile_cmd $compiler -o $filename $filename.c $compile_flags
+  set compile_cmd $compiler -o $filename $source_file $compile_flags
   echo $cyan"[crun] Compiling with: $compile_cmd"$normal
   eval $compile_cmd
 
