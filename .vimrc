@@ -32,6 +32,7 @@ Plug 'wikitopian/hardmode'            " Disable arrow keys and similar
 " Text Manipulation
 Plug 'tpope/vim-sensible'             " Some better defaults
 Plug 'tpope/vim-unimpaired'           " Pairs of mappings
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'             " Surround with parentheses & co
 Plug 'joom/vim-commentary'            " To comment stuff out
 Plug 'terryma/vim-multiple-cursors'   " Multiple cursors like sublime
@@ -122,6 +123,7 @@ Plug 'patstockwell/vim-monokai-tasty'
 Plug 'sainnhe/sonokai'                 " Monokai Pro-like scheme
 Plug 'tanvirtin/monokai.nvim'
 Plug 'srcery-colors/srcery-vim'
+Plug 'ghifarit53/tokyonight-vim'
 
 " Writing
 Plug 'junegunn/goyo.vim'               " Distraction free mode
@@ -136,44 +138,44 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 if has('nvim-0.5')
-    Plug 'phaazon/hop.nvim'
-    Plug 'nvim-lua/popup.nvim'
-    Plug 'nvim-lua/plenary.nvim'
-    " Plug 'nvim-telescope/telescope.nvim'
+  Plug 'phaazon/hop.nvim'
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  " Plug 'nvim-telescope/telescope.nvim'
 
-    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-    " Plug 'p00f/nvim-ts-rainbow'
+  " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+  " Plug 'p00f/nvim-ts-rainbow'
 
-    " Plug 'kyazdani42/nvim-web-devicons' " for file icons
-    " Plug 'kyazdani42/nvim-tree.lua'
+  " Plug 'kyazdani42/nvim-web-devicons' " for file icons
+  " Plug 'kyazdani42/nvim-tree.lua'
 
-    " Plug 'TimUntersberger/neogit'
+  " Plug 'TimUntersberger/neogit'
 endif
 
 call plug#end()
 
 if isdirectory($HOME . "/.vim/plugged/coc.nvim")
-    call coc#add_extension(
-       \'coc-explorer',
-       \'coc-git',
-       \'coc-go',
-       \'coc-highlight',
-       \'coc-highlight',
-       \'coc-pyright',
-       \'coc-json',
-       \'coc-lua',
-       \'coc-prettier',
-       \'coc-rls',
-       \'coc-sh',
-       \'coc-tabnine',
-       \'coc-vimlsp',
-       \'coc-yaml',
-       \'coc-eslint',
-       \'coc-tsserver',
-       \'coc-xml',
-       \'coc-css',
-       \'coc-stylelint',
-     \)
+  call coc#add_extension(
+        \'coc-explorer',
+        \'coc-git',
+        \'coc-go',
+        \'coc-highlight',
+        \'coc-highlight',
+        \'coc-pyright',
+        \'coc-json',
+        \'coc-lua',
+        \'coc-prettier',
+        \'coc-rls',
+        \'coc-sh',
+        \'coc-tabnine',
+        \'coc-vimlsp',
+        \'coc-yaml',
+        \'coc-eslint',
+        \'coc-tsserver',
+        \'coc-xml',
+        \'coc-css',
+        \'coc-stylelint',
+        \)
 endif
 
 " =============================================================================
@@ -185,25 +187,29 @@ endif
 let g:molokai_original = 0
 
 if has('gui_running')
-    colorscheme base16-gruvbox-dark-hard
+  colorscheme base16-gruvbox-dark-hard
 elseif exists("+termguicolors")
-    set termguicolors
-    " The commands below are needed for tmux + termguicolors
-    " This is only necessary if you use "set termguicolors".
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+  " The commands below are needed for tmux + termguicolors
+  " This is only necessary if you use "set termguicolors".
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-    " fixes glitch? in colors when using vim with tmux
-    set background=dark
-    set t_Co=256
+  " fixes glitch? in colors when using vim with tmux
+  set background=dark
+  set t_Co=256
 
-    " colorscheme vim-monokai-tasty
-    colorscheme sonokai
-    let g:sonokai_style = 'shusia'
+  " colorscheme vim-monokai-tasty
+  " colorscheme sonokai
+  " let g:sonokai_style = 'shusia'
+
+  let g:tokyonight_style = 'storm'
+  let g:tokyonight_enabel_italic = 1
+  colorscheme tokyonight
 
 elseif &t_Co < 256
-    colorscheme molokai
-    set nocursorline " looks bad in this mode
+  colorscheme molokai
+  set nocursorline " looks bad in this mode
 endif
 
 " if &diff
@@ -217,11 +223,10 @@ syntax on           " enable syntax processing
 
 " Spaces & Tabs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set tabstop=4       " number of visual spaces per TAB
-set softtabstop=4   " number of spaces in tab when editing
-set shiftwidth=4    " Insert 4 spaces on a tab
+set tabstop=2       " number of visual spaces per TAB
+set softtabstop=2   " number of spaces in tab when editing
+set shiftwidth=2    " Insert 4 spaces on a tab
 set expandtab       " tabs are spaces, mainly because of python
-
 
 " UI Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -334,11 +339,11 @@ let mapleader=" "       " leader is space
 " Without these lines, tmux always uses block cursor mode.
 " allows cursor change in tmux mode
 if exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 else
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 
@@ -383,42 +388,42 @@ autocmd BufNewFile,BufRead *.yml.j2 set syntax=yaml   "Jinja yml (mostly for Ans
 
 " toggle between number and relativenumber
 function! ToggleLineNumber()
-    if(&relativenumber == 1)
-        set norelativenumber
-        set number
+  if(&relativenumber == 1)
+  set norelativenumber
+  set number
     else
-        set relativenumber
+      set relativenumber
     endif
 endfunc
 
 function! ToggleALEFix()
-    if(g:ale_fix_on_save == 1)
-        let g:ale_fix_on_save = 0
+  if(g:ale_fix_on_save == 1)
+  let g:ale_fix_on_save = 0
     else
-        let g:ale_fix_on_save = 1
+      let g:ale_fix_on_save = 1
     endif
 endfunc
 
 
 function! ToggleColorColumn()
-    if &colorcolumn == ""
-        set colorcolumn=88
-    else
-        set colorcolumn=
-    endif
+  if &colorcolumn == ""
+    set colorcolumn=88
+  else
+    set colorcolumn=
+  endif
 endfunction
 
 function! ToggleZoom(toggle)
   if exists("t:restore_zoom") && (t:restore_zoom.win != winnr() || a:toggle == v:true)
-      exec t:restore_zoom.cmd
-      unlet t:restore_zoom
+    exec t:restore_zoom.cmd
+    unlet t:restore_zoom
   elseif a:toggle
-      let t:restore_zoom = { 'win': winnr(), 'cmd': winrestcmd() }
-      vert resize | resize
+    let t:restore_zoom = { 'win': winnr(), 'cmd': winrestcmd() }
+    vert resize | resize
   endif
 endfunction
 augroup restorezoom
-    au WinEnter * silent! :call ToggleZoom(v:false)
+  au WinEnter * silent! :call ToggleZoom(v:false)
 augroup END
 
 
@@ -444,6 +449,7 @@ xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 " META: Disabled by default
 let g:gitgutter_enabled = 0          " vim-gitgutter
 let g:indentLine_enabled = 0         " indentline
+let g:indentLine_char = '│'          " change indent char
 let g:SignatureEnabledAtStartup = 0  " vim-signature
 let g:startify_custom_header =[]     " Disable startify header
 " Enabled by default
@@ -460,14 +466,14 @@ let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
 let g:ale_float_preview=1
 let g:ale_fixers = {
-    \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \   'javascript': ['prettier'],
-    \   'css': ['prettier'],
-    \   'html': ['prettier'],
-    \   'markdown': ['prettier'],
-    \   'json': ['prettier'],
-    \   'yaml': ['prettier'],
-    \}
+      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \   'javascript': ['prettier'],
+      \   'css': ['prettier'],
+      \   'html': ['prettier'],
+      \   'markdown': ['prettier'],
+      \   'json': ['prettier'],
+      \   'yaml': ['prettier'],
+      \}
 nmap <silent> [a <Plug>(ale_previous_wrap)
 nmap <silent> ]a <Plug>(ale_next_wrap)
 
@@ -481,75 +487,75 @@ set noshowmode
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !exists("*VSCodeNotify") && isdirectory($HOME . "/.vim/plugged/coc.nvim")
 
-    let g:coc_custom_config = '1'
-    " let g:coc_node_path = $HOME . '/.neovim/node/bin/node'
-    " let g:coc_disable_startup_warning = 1
+  let g:coc_custom_config = '1'
+  " let g:coc_node_path = $HOME . '/.neovim/node/bin/node'
+  " let g:coc_disable_startup_warning = 1
 
-    let g:vista_default_executive = 'coc'
+  let g:vista_default_executive = 'coc'
 
-    source ~/.vim/coc.vim
-    " Use autocmd to force lightline update.
-    autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+  source ~/.vim/coc.vim
+  " Use autocmd to force lightline update.
+  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
-    " Lightline mods for CoC compatibility
-    let g:lightline = {
-          \ 'active': {
-          \   'left': [ [ 'mode', 'paste' ],
-          \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified', 'fugitive' ] ],
-          \   'right': [ [ 'lineinfo' ],
-		  \              [ 'percent' ],
-		  \              [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok', 'filetype', 'fileencoding'] ]
-          \ },
-          \ 'component_function': {
-          \   'filename': 'LightlineFilename',
-          \   'cocstatus': 'coc#status',
-          \   'currentfunction': 'CocCurrentFunction'
-          \ },
-          \ }
-    function! LightlineFilename()
-      return expand('%:t') !=# '' ? @% : '[No Name]'
-    endfunction
+  " Lightline mods for CoC compatibility
+  let g:lightline = {
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified', 'fugitive' ] ],
+        \   'right': [ [ 'lineinfo' ],
+        \              [ 'percent' ],
+        \              [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok', 'filetype', 'fileencoding'] ]
+        \ },
+        \ 'component_function': {
+        \   'filename': 'LightlineFilename',
+        \   'cocstatus': 'coc#status',
+        \   'currentfunction': 'CocCurrentFunction'
+        \ },
+        \ }
+  function! LightlineFilename()
+    return expand('%:t') !=# '' ? @% : '[No Name]'
+  endfunction
 
-    function! CocCurrentFunction()
-        return get(b:, 'coc_current_function', '')
-    endfunction
+  function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+  endfunction
 
 
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
+  let g:lightline.component_expand = {
+        \  'linter_checking': 'lightline#ale#checking',
+        \  'linter_infos': 'lightline#ale#infos',
+        \  'linter_warnings': 'lightline#ale#warnings',
+        \  'linter_errors': 'lightline#ale#errors',
+        \  'linter_ok': 'lightline#ale#ok',
+        \ }
 
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
+  let g:lightline.component_expand = {
+        \  'linter_checking': 'lightline#ale#checking',
+        \  'linter_infos': 'lightline#ale#infos',
+        \  'linter_warnings': 'lightline#ale#warnings',
+        \  'linter_errors': 'lightline#ale#errors',
+        \  'linter_ok': 'lightline#ale#ok',
+        \ }
 
-    " vim-easymotion disturbs diagnostics
-    " See https://github.com/neoclide/coc.nvim/issues/110
-    " let g:easymotion#is_active = 0
-    " function! EasyMotionCoc() abort
-    "   if EasyMotion#is_active()
-    "     let g:easymotion#is_active = 1
-    "     CocDisable
-    "   else
-    "     if g:easymotion#is_active == 1
-    "       let g:easymotion#is_active = 0
-    "       CocEnable
-    "     endif
-    "   endif
-    " endfunction
-    " autocmd TextChanged,CursorMoved * call EasyMotionCoc()
+  " vim-easymotion disturbs diagnostics
+  " See https://github.com/neoclide/coc.nvim/issues/110
+  " let g:easymotion#is_active = 0
+  " function! EasyMotionCoc() abort
+  "   if EasyMotion#is_active()
+  "     let g:easymotion#is_active = 1
+  "     CocDisable
+  "   else
+  "     if g:easymotion#is_active == 1
+  "       let g:easymotion#is_active = 0
+  "       CocEnable
+  "     endif
+  "   endif
+  " endfunction
+  " autocmd TextChanged,CursorMoved * call EasyMotionCoc()
 
-   nnoremap <silent> <space>Y  :<C-u>CocList -A --normal yank<cr>
+  nnoremap <silent> <space>Y  :<C-u>CocList -A --normal yank<cr>
 
-   command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+  command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 
 endif
 
@@ -576,7 +582,7 @@ map zg/ <Plug>(incsearch-easymotion-stay)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " * Gundo
 if has('python3')
-    let g:gundo_prefer_python3 = 1
+  let g:gundo_prefer_python3 = 1
 endif
 
 " * NERDTree
@@ -617,17 +623,17 @@ nmap ga <Plug>(EasyAlign)
 
 " Secure Modelines
 let g:secure_modelines_allowed_items = [
-                \ "textwidth",   "tw",
-                \ "softtabstop", "sts",
-                \ "tabstop",     "ts",
-                \ "shiftwidth",  "sw",
-                \ "expandtab",   "et",   "noexpandtab", "noet",
-                \ "filetype",    "ft",
-                \ "foldmethod",  "fdm",
-                \ "readonly",    "ro",   "noreadonly", "noro",
-                \ "rightleft",   "rl",   "norightleft", "norl",
-                \ "colorcolumn"
-                \ ]
+      \ "textwidth",   "tw",
+      \ "softtabstop", "sts",
+      \ "tabstop",     "ts",
+      \ "shiftwidth",  "sw",
+      \ "expandtab",   "et",   "noexpandtab", "noet",
+      \ "filetype",    "ft",
+      \ "foldmethod",  "fdm",
+      \ "readonly",    "ro",   "noreadonly", "noro",
+      \ "rightleft",   "rl",   "norightleft", "norl",
+      \ "colorcolumn"
+      \ ]
 
 " remote yanks OSC52
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
@@ -752,46 +758,46 @@ nnoremap <Leader>x :tabclose<CR>
 " rn F a ac af U -- Conquer of Completion
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 if exists('g:coc_custom_config')
-    " Symbol renaming.
-    nmap <leader>rn <Plug>(coc-rename)
+  " Symbol renaming.
+  nmap <leader>rn <Plug>(coc-rename)
 
-    nmap <Leader>! :<C-u>CocList diagnostics<CR>
+  nmap <Leader>! :<C-u>CocList diagnostics<CR>
 
-    " TODO figure out
-    " Formatting selected code.
-    " xmap <leader>F  <Plug>(coc-format-selected)
-    " nmap <leader>F  <Plug>(coc-format-selected)
-    " Applying codeAction to the selected region.
-    " Example: `<leader>aap` for current paragraph
-    " xmap <leader>a  <Plug>(coc-codeaction-selected)
-    " nmap <leader>a  <Plug>(coc-codeaction-selected)
+  " TODO figure out
+  " Formatting selected code.
+  " xmap <leader>F  <Plug>(coc-format-selected)
+  " nmap <leader>F  <Plug>(coc-format-selected)
+  " Applying codeAction to the selected region.
+  " Example: `<leader>aap` for current paragraph
+  " xmap <leader>a  <Plug>(coc-codeaction-selected)
+  " nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-    " Remap keys for applying codeAction to the current buffer.
-    " nmap <leader>ac  <Plug>(coc-codeaction)
-    " Apply AutoFix to problem on the current line.
-    " nmap <leader>af  <Plug>(coc-fix-current)
+  " Remap keys for applying codeAction to the current buffer.
+  " nmap <leader>ac  <Plug>(coc-codeaction)
+  " Apply AutoFix to problem on the current line.
+  " nmap <leader>af  <Plug>(coc-fix-current)
 
-    """"""""""""" Coc-Git
-    " Undo git chunk (closest to linewise undo)
-    nmap <Leader>U :CocCommand git.chunkUndo<CR>
-    " Toggle GitGutter
-    nmap <Leader>og :CocCommand git.toggleGutters<CR>
-    " " navigate chunks of current buffer
-    nmap [c <Plug>(coc-git-prevchunk)
-    nmap ]c <Plug>(coc-git-nextchunk)
-    " show chunk diff at current position
-    nmap gs <Plug>(coc-git-chunkinfo)
-    " show commit contains current position
-    nmap gc <Plug>(coc-git-commit)
-    " " create text object for git chunks
-    omap ig <Plug>(coc-git-chunk-inner)
-    xmap ig <Plug>(coc-git-chunk-inner)
-    omap ag <Plug>(coc-git-chunk-outer)
-    xmap ag <Plug>(coc-git-chunk-outer)
+  """"""""""""" Coc-Git
+  " Undo git chunk (closest to linewise undo)
+  nmap <Leader>U :CocCommand git.chunkUndo<CR>
+  " Toggle GitGutter
+  nmap <Leader>og :CocCommand git.toggleGutters<CR>
+  " " navigate chunks of current buffer
+  nmap [c <Plug>(coc-git-prevchunk)
+  nmap ]c <Plug>(coc-git-nextchunk)
+  " show chunk diff at current position
+  nmap gs <Plug>(coc-git-chunkinfo)
+  " show commit contains current position
+  nmap gc <Plug>(coc-git-commit)
+  " " create text object for git chunks
+  omap ig <Plug>(coc-git-chunk-inner)
+  xmap ig <Plug>(coc-git-chunk-inner)
+  omap ag <Plug>(coc-git-chunk-outer)
+  xmap ag <Plug>(coc-git-chunk-outer)
 
-    " Play nicely with EasyMotion
-    autocmd User EasyMotionPromptBegin silent! CocDisable
-    autocmd User EasyMotionPromptEnd silent! CocEnable
+  " Play nicely with EasyMotion
+  autocmd User EasyMotionPromptBegin silent! CocDisable
+  autocmd User EasyMotionPromptEnd silent! CocEnable
 endif
 
 " nnoremap <Leader>s :call <SID>StripTrailingWhitespaces()<CR>
@@ -831,5 +837,5 @@ autocmd BufRead *.rss set filetype=xml
 " local customizations in ~/.vimrc_local
 let $LOCALFILE=expand("~/.vimrc_local")
 if filereadable($LOCALFILE)
-    source $LOCALFILE
+  source $LOCALFILE
 endif
