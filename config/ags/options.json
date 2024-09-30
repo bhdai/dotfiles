@@ -20,5 +20,6 @@
   "powermenu.layout": "box",
   "bar.media.monochrome": false,
   "bar.battery.bar": "regular",
-  "powermenu.labels": true
+  "powermenu.labels": true,
+  "quicksettings.media.monochromeIcon": true
 }

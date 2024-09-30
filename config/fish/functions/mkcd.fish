@@ -1,4 +1,5 @@
 # create a new directory and immediately cd to it
 function mkcd
-  mkdir -p $argv && cd $argv
+  mkdir -vp $argv && cd $argv
+  echo "cd: Change directory to '$argv'"
 end
