@@ -10,6 +10,7 @@ aylurs-gtk-shell-git
 base
 base-devel
 bat
+bc
 bluedevil
 blueman
 bluez
@@ -43,10 +44,12 @@ file-roller
 firefox
 fish
 fzf
+gdb
 ghq
 gimp
 git
 git-delta
+github-cli
 gnome-bluetooth
 gnome-bluetooth-3.0
 gnome-keyring
@@ -101,7 +104,6 @@ mako
 man-db
 matugen-bin
 mdcat
-microsoft-edge-beta-bin
 mpv
 ncdu
 neofetch
@@ -135,6 +137,7 @@ plasma-systemmonitor
 playerctl
 polkit-gnome
 powerdevil
+procs
 python-gpustat
 python-jinja
 python-materialyoucolor-git
@@ -145,7 +148,7 @@ qemu-base
 qemu-full
 qt5-wayland
 qt5ct
-qt6ct
+qt6ct-kde
 quarto-cli
 reflector
 ripgrep
@@ -177,6 +180,7 @@ timeshift
 timeshift-autosnap
 tmux
 tree
+ttf-fira-code
 ttf-firacode-nerd
 ttf-hack-nerd
 ttf-hannom
@@ -186,6 +190,7 @@ ttf-maple
 ttf-ms-win11-auto
 ttf-nerd-fonts-symbols
 ttf-roboto
+unrar
 vde2
 vim
 virt-manager
@@ -198,8 +203,6 @@ wayshot
 wezterm-git
 wf-recorder
 wget
-wine
-winetricks
 wireplumber
 wl-clip-persist
 wl-clipboard

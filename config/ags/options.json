@@ -13,13 +13,10 @@
   "bar.launcher.icon.colored": true,
   "bar.launcher.label.label": " Applications",
   "bar.taskbar.monochrome": false,
-  "bar.taskbar.exclusive": false,
-  "font.name": "Maple Mono",
+  "bar.taskbar.exclusive": true,
+  "font.name": "Fira Code",
   "theme.light.primary.bg": "#07b5ef",
-  "overview.monochromeIcon": true,
+  "overview.monochromeIcon": false,
   "powermenu.layout": "box",
-  "bar.media.monochrome": false,
-  "bar.battery.bar": "regular",
-  "powermenu.labels": true,
-  "quicksettings.media.monochromeIcon": true
+  "bar.media.monochrome": false
 }
