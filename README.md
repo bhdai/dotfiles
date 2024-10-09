@@ -2,6 +2,6 @@
 
 Serve as my back up
 
-![image](https://raw.githubusercontent.com/buidai123/dotfiles/69a482e2d0c6104e91aef52f99fd7eed53d61848/img1.png)
+![image](https://raw.githubusercontent.com/buidai123/dotfiles/1ec25de0c8f3012bd049d19bcdc8e727c4a14e1c/img1.png)
 
-![image](https://raw.githubusercontent.com/buidai123/dotfiles/4c9a63c08f45bee701e513481f1f8548fa126183/image.png)
+![image](https://raw.githubusercontent.com/buidai123/dotfiles/1ec25de0c8f3012bd049d19bcdc8e727c4a14e1c/img2.png)
