@@ -84,6 +84,7 @@ kdeplasma-addons
 kitty
 kscreen
 kvantum
+kwallet-pam
 lazygit
 lib32-alsa-plugins
 lib32-libpulse
@@ -105,14 +106,18 @@ man-db
 matugen-bin
 mdcat
 mpv
+navi
 ncdu
 neofetch
 neovim
 network-manager-applet
 networkmanager
+networkmanager-openconnect
+networkmanager-openvpn
+nmap
 noto-fonts-cjk
 npm
-nvidia
+nvidia-open
 nvidia-settings
 nvidia-utils
 nvtop
@@ -121,6 +126,7 @@ obsidian
 okular
 onefetch
 openbsd-netcat
+openmpi
 openssh
 openssl-1.1
 pamixer
@@ -153,6 +159,7 @@ quarto-cli
 reflector
 ripgrep
 rofi
+rog-control-center
 safeeyes-git
 sddm
 sddm-kcm
@@ -196,6 +203,7 @@ vim
 virt-manager
 virt-viewer
 visual-studio-code-bin
+vmware-workstation
 vulkan-intel
 vulkan-tools
 waybar
