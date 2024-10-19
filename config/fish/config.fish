@@ -8,11 +8,6 @@ set -gx fish_cursor_replace_one underscore
 
 
 # aliases
-alias ls "ls -p -G"
-alias la "ls -A"
-alias ll "ls -l"
-alias lla "ll -A"
-alias g git
 alias .. 'cd ..'
 alias ... 'cd ../..'
 alias .3 'cd ../../..'
@@ -77,12 +72,13 @@ alias la 'eza --color=always --icons --group-directories-first --all'
 alias ll 'eza --color=always --icons --group-directories-first --all --long'
 abbr l ll
 abbr ncdu "ncdu --color dark"
-abbr git hub
 
 # Editor
 abbr v nvim
 
 alias lazygit "TERM=xterm-256color command lazygit"
+alias g git
+abbr git hub
 abbr gg lazygit
 abbr gl 'hub l --color | devmoji --log --color | less -rXF'
 abbr gs "hub st"
@@ -139,4 +135,3 @@ else
     end
 end
 # <<< conda initialize <<<
-
