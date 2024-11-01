@@ -1,8 +1,8 @@
-import = [
+general.import = [
 "~/ghq/github.com/folke/tokyonight.nvim/extras/alacritty/tokyonight_storm.toml"
 ]
 
-live_config_reload = true
+general.live_config_reload = true
 
 [colors]
 draw_bold_text_with_bright_colors = true
@@ -18,10 +18,10 @@ decorations = "None"
 decorations_theme_variant = "Dark"
 
 [font]
-normal = { family = "BlexMono Nerd Font", style = "Medium"} 
-bold = { family = "BlexMono Nerd Font", style = "Bold"} 
-italic = { family = "BlexMono Nerd Font", style = "Italic"} 
-bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"} 
+normal = { family = "BlexMono Nerd Font", style = "Medium"}
+bold = { family = "BlexMono Nerd Font", style = "Bold"}
+italic = { family = "BlexMono Nerd Font", style = "Italic"}
+bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"}
 size = 13.0
 
 [cursor]
@@ -31,5 +31,5 @@ thickness = 0.4
 # [selection]
 # save_to_clipboard = true
 
-[shell]
+[terminal.shell]
 program="/usr/bin/fish"
