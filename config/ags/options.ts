@@ -155,9 +155,7 @@ const options = mkOptions(OPTIONS, {
     apps: {
       iconSize: opt(62),
       max: opt(6),
-      favorites: opt([
-        ["clash-verge", "thorium-browser", "wezterm", "thunar", "spotify"],
-      ]),
+      favorites: opt([["clash-verge", "spotify", "wezterm", "code", "firefox"]]),
     },
   },
 

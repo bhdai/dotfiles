@@ -19,7 +19,7 @@ export function icon(name: string | null, fallback = icons.missing) {
   const icon = substitutes[name] || name
   if (Utils.lookUpIcon(icon)) return icon
 
-  print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`)
+  // print(`no icon substitute "${icon}" for "${name}", fallback: "${fallback}"`)
   // print stack trace
   return fallback
 }
