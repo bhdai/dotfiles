@@ -28,5 +28,5 @@ function fish_title
         case pacman paru
             set cmd "📦 "
     end
-    echo "$cmd   $(prompt_pwd)"
+    echo "$cmd$(prompt_pwd)"
 end
