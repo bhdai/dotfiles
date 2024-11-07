@@ -33,7 +33,7 @@ function M.setup(config)
 		-- Move Tabs
 		{ mods = M.mod, key = ">", action = act.MoveTabRelative(1) },
 		{ mods = M.mod, key = "<", action = act.MoveTabRelative(-1) },
-		-- Acivate Tabs
+		-- Activate Tabs
 		{ mods = M.mod, key = "l", action = act({ ActivateTabRelative = 1 }) },
 		{ mods = M.mod, key = "h", action = act({ ActivateTabRelative = -1 }) },
 		{ mods = M.mod, key = "R", action = wezterm.action.RotatePanes("Clockwise") },
@@ -104,7 +104,9 @@ function M.split_nav(resize_or_move, mods, key, dir)
 end
 
 function M.is_nvim(pane)
-	return pane:get_user_vars().IS_NVIM == "true" or pane:get_foreground_process_name():find("n?vim")
+	return pane:get_user_vars().IS_NVIM == "true"
+		or pane:get_foreground_process_name():find("n?vim")
+		or pane:get_foreground_process_name():find("tmux")
 end
 
 return M
