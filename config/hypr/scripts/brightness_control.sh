@@ -11,14 +11,14 @@ step=$((max_brightness * 3 / 100))
 
 if [ "$1" = "up" ]; then
     new=$((current + step))
-    if [ $new -gt $max_brightness ]; then
         new=$max_brightness
     fi
+  if [ $new -gt "$max_brightness" ]; then
 else
     new=$((current - step))
-    if [ $new -lt $min_brightness ]; then
         new=$min_brightness
     fi
+  if [ $new -lt "$min_brightness" ]; then
 fi
 
 # Set the new brightness

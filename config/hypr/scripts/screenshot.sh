@@ -58,10 +58,10 @@ main() {
     screenshot_type=$1
 
     # Take the screenshot
-    take_screenshot $screenshot_type $save_dir $save_file
+  take_screenshot "$screenshot_type" "$save_dir" "$save_file"
 
     # Restore the shader
     restore_shader
 }
 
-main $1
+main "$1"
