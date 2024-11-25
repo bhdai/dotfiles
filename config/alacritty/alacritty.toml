@@ -17,12 +17,20 @@ padding.y = 10
 decorations = "None"
 decorations_theme_variant = "Dark"
 
+# [font]
+# normal = { family = "BlexMono Nerd Font", style = "Medium"}
+# bold = { family = "BlexMono Nerd Font", style = "Bold"}
+# italic = { family = "BlexMono Nerd Font", style = "Italic"}
+# bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"}
+# size = 10.5
+
+
 [font]
-normal = { family = "BlexMono Nerd Font", style = "Medium"}
-bold = { family = "BlexMono Nerd Font", style = "Bold"}
-italic = { family = "BlexMono Nerd Font", style = "Italic"}
-bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"}
-size = 13.0
+normal = { family = "FiraCode Nerd Font" }
+bold = { family = "Maple Mono", style = "Bold"}
+italic = { family = "Maple Mono", style = "Italic"}
+bold_italic = { family = "Maple Mono"}
+size = 10.5
 
 [cursor]
 thickness = 0.4

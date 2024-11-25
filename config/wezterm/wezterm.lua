@@ -47,10 +47,26 @@ else
 end
 
 -- Fonts
-config.font_size = 13
-config.font = wezterm.font("BlexMono Nerd Font", { weight = "Medium" })
+config.font_size = 10
+config.font = wezterm.font("FiraCode Nerd Font")
 config.bold_brightens_ansi_colors = true
-
+config.font_rules = {
+	{
+		intensity = "Bold",
+		italic = true,
+		font = wezterm.font({ family = "Maple Mono", weight = "Bold", style = "Italic" }),
+	},
+	{
+		italic = true,
+		intensity = "Half",
+		font = wezterm.font({ family = "Maple Mono", weight = "DemiBold", style = "Italic" }),
+	},
+	{
+		italic = true,
+		intensity = "Normal",
+		font = wezterm.font({ family = "Maple Mono", style = "Italic" }),
+	},
+}
 -- Cursor
 config.default_cursor_style = "BlinkingBar"
 config.force_reverse_video_cursor = false
