@@ -75,6 +75,8 @@ abbr ncdu "ncdu --color dark"
 
 # Editor
 abbr v nvim
+alias vimpager 'nvim - -c "lua require(\'core.utils.general\').colorize()"'
+alias bt "coredumpctl -1 gdb -A '-ex \"bt\" -q -batch' 2>/dev/null | awk '/Program terminated with signal/,0' | bat -l cpp --no-pager --style plain"
 
 alias lazygit "TERM=xterm-256color command lazygit"
 alias g git
@@ -126,12 +128,12 @@ set --export PATH $BUN_INSTALL/bin $PATH
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if test -f /home/monarch/miniconda3/bin/conda
-    eval /home/monarch/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+    eval /home/monarch/miniconda3/bin/conda "shell.fish" hook $argv | source
 else
     if test -f "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
         . "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH "/home/monarch/miniconda3/bin" $PATH
+        set -x PATH /home/monarch/miniconda3/bin $PATH
     end
 end
 # <<< conda initialize <<<
