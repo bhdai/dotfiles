@@ -1,5 +1,8 @@
 acpi
+agsv1
+agsv1-debug
 alacritty
+android-studio
 arc-gtk-theme
 archlinux-xdg-menu
 archlinuxcn-keyring
@@ -23,6 +26,7 @@ btop
 btrfs-progs
 bun-bin
 clash-verge-rev-bin
+clipboard-sync
 cliphist
 cpupower
 ctags-git
@@ -50,6 +54,7 @@ gimp
 git
 git-delta
 github-cli
+glances
 gnome-bluetooth
 gnome-bluetooth-3.0
 gnome-keyring
@@ -169,7 +174,6 @@ smartmontools
 snixembed
 speedtest-cli
 spice-vdagent
-spicetify-themes-git
 spotify-launcher
 sudo
 supergfxctl
@@ -179,6 +183,9 @@ swtpm
 swww
 tealdeer
 tela-icon-theme-git
+texlive-fontsrecommended
+texlive-latexextra
+texlive-xetex
 thorium-browser-bin
 thunar
 thunar-archive-plugin
@@ -197,6 +204,8 @@ ttf-maple
 ttf-ms-win11-auto
 ttf-nerd-fonts-symbols
 ttf-roboto
+ttf-victor-mono
+ttf-victor-mono-nerd
 unrar
 vde2
 vim
@@ -214,7 +223,9 @@ wget
 wireplumber
 wl-clip-persist
 wl-clipboard
+wl-clipboard-history-git
 wlogout
+wlr-randr
 xcb-imdkit
 xclip
 xdg-desktop-portal-hyprland
@@ -224,4 +235,6 @@ yazi
 zathura
 zathura-cb
 zathura-pdf-mupdf
+zen-browser-avx2-bin
 zoxide
+zrok-bin
