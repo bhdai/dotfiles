@@ -26,7 +26,7 @@ config.colors = {
 
 config.underline_thickness = 2
 config.cursor_thickness = 3
--- config.underline_position = -6
+config.underline_position = -1.6
 
 -- for windows
 if wezterm.target_triple:find("windows") then

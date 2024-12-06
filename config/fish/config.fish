@@ -46,9 +46,6 @@ set fish_emoji_width 2
 alias ssh "TERM=xterm-256color command ssh"
 alias mosh "TERM=xterm-256color command mosh"
 
-# Export
-set -x MANPAGER "nvim +Man!"
-
 # better -h flag
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
 
