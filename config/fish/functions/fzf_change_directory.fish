@@ -16,15 +16,26 @@ function _fzf_open_or_cd
 end
 
 function fzf_change_directory
+    # Check if current directory is not under /home
+    if not string match -q "/home/*" $PWD
+        echo "Error: Can only fzf within the /home directory."
+        return 1
+    end
+
     begin
         echo $HOME/.config
 
         find (ghq root) -maxdepth 4 \( -type d -name .git -prune \) -o \( -type f -o -type d \) | sed 's/\/\.git//'
 
-        # use find to list both files and directories in current directory and subdirectories
-        find . \( -type f -o -type d \) | sed -r "s#^\./##" | perl -pe "s#^#$PWD/#" | grep -v '\.git'
+        # for the current directory only search if it not the home directory(it's a pain though)
+        if test $PWD != $HOME
+            # use find to list both files and directories in current directory and subdirectories
+            find . \( -type f -o -type d \) | sed -r "s#^\./##" | perl -pe "s#^#$PWD/#" | grep -v '\.git'
+        end
 
-        find $HOME/Downloads -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
+        for dir in Documents Downloads
+            find $HOME/$dir -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
+        end
 
         find $HOME/.config -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
 
