@@ -72,6 +72,7 @@ abbr ncdu "ncdu --color dark"
 
 # Editor
 abbr v nvim
+alias lv "NVIM_APPNAME=nvim-profiles/lazyvim nvim"
 alias vimpager 'nvim - -c "lua require(\'core.utils.general\').colorize()"'
 alias bt "coredumpctl -1 gdb -A '-ex \"bt\" -q -batch' 2>/dev/null | awk '/Program terminated with signal/,0' | bat -l cpp --no-pager --style plain"
 
