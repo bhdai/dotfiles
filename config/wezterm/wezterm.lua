@@ -17,7 +17,7 @@ config.cursor_blink_ease_out = "Constant"
 
 -- Colorscheme
 config.color_scheme_dirs = { wezterm.home_dir .. "/ghq/github.com/folke/tokyonight.nvim/extras/wezterm/" }
-config.color_scheme = "tokyonight_storm"
+config.color_scheme = "tokyonight_moon"
 wezterm.add_to_config_reload_watch_list(config.color_scheme_dirs[1] .. config.color_scheme .. ".toml")
 
 config.colors = {
