@@ -3,12 +3,7 @@
     {
         "key": "ctrl+b",
         "command": "workbench.action.toggleSidebarVisibility",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'",
-    },
-    {
-        "key": "ctrl+.",
-        "command": "keyboard-quickfix.openQuickFix",
-        "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly",
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     },
     {
         "key": "Shift+.",
@@ -19,56 +14,17 @@
     {
         "key": "ctrl+shift+w",
         "command": "workbench.action.terminal.kill",
-        "when": "terminal.active",
+        "when": "terminal.active"
     },
-    // key binding for mini.move
-    //----------------------------------------
-    {
-        "key": "alt+h",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "<M-h>",
-    },
-    {
-        "key": "alt+j",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "<M-j>"
-    },
-    {
-        "key": "alt+k",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "<M-k>"
-    },
-    {
-        "key": "alt+l",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "<M-l>"
-    },
-    //----------------------------------------
     // rebind to neovim like
     {
-        "key": "j",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "gj"
-    },
-    {
-        "key": "k",
-        "command": "vscode-neovim.send",
-        "when": "editorTextFocus && (neovim.mode == 'normal' || neovim.mode == 'visual')",
-        "args": "gk"
-    },
-    {
-       "key": "ctrl+u",
+        "key": "ctrl+u",
         "command": "vscode-neovim.send",
         "when": "editorTextFocus && neovim.mode == 'normal'",
         "args": "<C-u>zz"
     },
     {
-       "key": "ctrl+d",
+        "key": "ctrl+d",
         "command": "vscode-neovim.send",
         "when": "editorTextFocus && neovim.mode == 'normal'",
         "args": "<C-d>zz"
@@ -97,5 +53,19 @@
         "key": "space f g",
         "command": "binocular.searchFileHistory",
         "when": "!editorTextFocus && !inputFocus"
+    },
+    {
+        "key": "ctrl+y",
+        "command": "acceptSelectedSuggestion", // use ctrl-y to accept suggestion as in nvim
+        "when": "acceptSuggestionOnEnter && suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus"
+    },
+    {
+        "key": "enter",
+        "command": "-acceptSelectedSuggestion" // unbind default enter key for accept suggestion
+    },
+    {
+        "key": "space c a",
+        "command": "editor.action.quickFix",
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     }
 ]
