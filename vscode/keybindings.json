@@ -30,29 +30,29 @@
         "args": "<C-d>zz"
     },
     {
-        "key": "space shift+p",
+        "key": "alt+shift+p",
         "command": "workbench.action.quickOpen",
-        "when": "!editorTextFocus && !inputFocus"
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     },
     {
         "key": "space space",
         "command": "whichkey.show",
-        "when": "!editorTextFocus && !inputFocus"
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert' && !inputFocus"
     },
     {
         "key": "space f f",
         "command": "binocular.searchFileConfiguredFolders",
-        "when": "!editorTextFocus && !inputFocus"
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     },
     {
         "key": "space f d",
         "command": "binocular.searchDirectoryConfiguredFolders",
-        "when": "!editorTextFocus && !inputFocus"
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     },
     {
         "key": "space f g",
         "command": "binocular.searchFileHistory",
-        "when": "!editorTextFocus && !inputFocus"
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     },
     {
         "key": "ctrl+y",
@@ -66,6 +66,11 @@
     {
         "key": "space c a",
         "command": "editor.action.quickFix",
+        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
+    },
+    {
+        "key": "space c r",
+        "command": "editor.action.rename",
         "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
     }
 ]
