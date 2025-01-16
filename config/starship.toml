@@ -3,10 +3,7 @@ format = """
 $directory\
 $all\
 $character"""
-# Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are configuring is "character"
-# success_symbol = '[   ➜ ](bold green)'     # The "symbol" segment is being set to "➜"
-# success_symbol = '[   ❯](bold green)'     # The "symbol" segment is being set to "➜"
 success_symbol = '[❯](bold green)'     # The "symbol" segment is being set to "➜"
 error_symbol = '[✗](bold red) '  # Show "✖" when the command failed
 
@@ -54,8 +51,14 @@ symbol = " "
 [c]
 symbol = " "
 
+[cmake]
+symbol = " "
+
 [conda]
 symbol = " "
+
+[crystal]
+symbol = " "
 
 [dart]
 symbol = " "
@@ -72,11 +75,17 @@ symbol = " "
 [elm]
 symbol = " "
 
+[fennel]
+symbol = " "
+
 [fossil_branch]
 symbol = " "
 
 [git_branch]
 symbol = " "
+
+[git_commit]
+tag_symbol = '  '
 
 [golang]
 symbol = " "
@@ -102,6 +111,9 @@ symbol = " "
 [julia]
 symbol = " "
 
+[kotlin]
+symbol = " "
+
 [memory_usage]
 symbol = "󰍛 "
 
@@ -117,16 +129,21 @@ symbol = " "
 [nodejs]
 symbol = " "
 
+[ocaml]
+symbol = " "
+
 # [os]
 # disabled = false
 
 [os.symbols]
 Alpaquita = " "
 Alpine = " "
+AlmaLinux = " "
 Amazon = " "
 Android = " "
 Arch = " "
 Artix = " "
+CachyOS = " "
 CentOS = " "
 Debian = " "
 DragonFly = " "
@@ -138,6 +155,7 @@ Garuda = "󰛓 "
 Gentoo = " "
 HardenedBSD = "󰞌 "
 Illumos = "󰈸 "
+Kali = " "
 Linux = " "
 Mabox = " "
 Macos = " "
@@ -147,6 +165,7 @@ MidnightBSD = " "
 Mint = " "
 NetBSD = " "
 NixOS = " "
+Nobara = " "
 OpenBSD = "󰈺 "
 openSUSE = " "
 OracleLinux = "󰌷 "
@@ -154,15 +173,23 @@ Pop = " "
 Raspbian = " "
 Redhat = " "
 RedHatEnterprise = " "
+RockyLinux = " "
 Redox = "󰀘 "
 Solus = "󰠳 "
 SUSE = " "
 Ubuntu = " "
 Unknown = " "
+Void = " "
 Windows = "󰍲 "
 
 [package]
 symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
 
 [pijul_channel]
 symbol = "🪺 "
@@ -182,5 +209,11 @@ symbol = " "
 [scala]
 symbol = " "
 
-[spack]
-symbol = "🅢 "
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[gradle]
+symbol = " "
