@@ -31,28 +31,69 @@
     },
     {
         "key": "alt+shift+p",
-        "command": "workbench.action.quickOpen",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
+        "command": "workbench.action.quickOpen"
     },
     {
         "key": "space space",
         "command": "whichkey.show",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert' && !inputFocus"
+        "when": "!editorTextFocus && !inputFocus"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space space",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<space><space>"
     },
     {
         "key": "space f f",
         "command": "binocular.searchFileConfiguredFolders",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
+        "when": "!editorTextFocus && !inputFocus"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space f f",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<space>ff"
     },
     {
         "key": "space f d",
         "command": "binocular.searchDirectoryConfiguredFolders",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
+        "when": "!editorTextFocus && !inputFocus"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space f d",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<space>fd"
     },
     {
         "key": "space f g",
         "command": "binocular.searchFileHistory",
-        "when": "editorTextFocus && neovim.init && neovim.mode != 'insert'"
+        "when": "!editorTextFocus && !inputFocus"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space f g",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<space>fg"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space p",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<space>P"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space d",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<leader>d"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "space D",
+        "when": "editorTextFocus && neovim.mode != 'insert'",
+        "args": "<leader>D"
     },
     {
         "key": "ctrl+y",
