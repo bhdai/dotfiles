@@ -44,11 +44,13 @@ fcitx5-configtool
 fcitx5-gtk
 fcitx5-qt
 fd
+figlet
 file-roller
 firefox
 fish
 fzf
 gdb
+ghostty
 ghq
 gimp
 git
@@ -73,13 +75,14 @@ gvfs-mtp
 gwenview
 htop
 hub
+hyperfine
 hypridle
 hyprland
+hyprland-qtutils
 hyprlock
 hyprpaper
 hyprpicker
 hyprshade
-ignis
 inotify-tools
 intel-ucode
 iptables-nft
@@ -113,7 +116,9 @@ mdcat
 mpv
 navi
 ncdu
+nekoray-git
 neofetch
+neovide
 neovim
 network-manager-applet
 networkmanager
@@ -141,6 +146,7 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
+pixi
 plasma-desktop
 plasma-nm
 plasma-pa
@@ -160,7 +166,7 @@ qemu-full
 qt5-wayland
 qt5ct
 qt6ct-kde
-quarto-cli
+quarto-cli-bin
 reflector
 ripgrep
 rofi
@@ -175,6 +181,7 @@ snixembed
 speedtest-cli
 spice-vdagent
 spotify-launcher
+starship
 sudo
 supergfxctl
 swappy
@@ -207,6 +214,7 @@ ttf-roboto
 ttf-victor-mono
 ttf-victor-mono-nerd
 unrar
+uv
 vde2
 vim
 virt-manager
@@ -226,6 +234,7 @@ wl-clipboard
 wl-clipboard-history-git
 wlogout
 wlr-randr
+write-good
 xcb-imdkit
 xclip
 xdg-desktop-portal-hyprland
@@ -235,6 +244,6 @@ yazi
 zathura
 zathura-cb
 zathura-pdf-mupdf
-zen-browser-avx2-bin
+zen-browser-bin
 zoxide
 zrok-bin
