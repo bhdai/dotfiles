@@ -3,6 +3,9 @@ format = """
 $directory\
 $all\
 $character"""
+
+command_timeout = 1000  # 1 seconds
+
 [character]      # The name of the module we are configuring is "character"
 success_symbol = '[❯](bold green)'     # The "symbol" segment is being set to "➜"
 error_symbol = '[✗](bold red) '  # Show "✖" when the command failed
@@ -20,7 +23,6 @@ shell =["bash"]
 # style = "green"
 # format = "[ $output ]($style)"
 # shell =["bash"]
-
 
 [git_status]
 untracked = '[ $count](bold yellow) '
