@@ -1,7 +1,7 @@
 # fonts
 font-size = 10
-font-family = "Symbols Nerd Font Mono"
 font-family = "FiraCode Nerd Font"
+font-family = "Symbols Nerd Font Mono"
 font-family-bold = "FiraCode Nerd Font"
 font-family-italic = "Maple Mono"
 font-family-bold-italic = "Maple Mono"
