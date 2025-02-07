@@ -23,13 +23,10 @@ set -gx SUDO_EDITOR $EDITOR
 
 # Path
 set -x fish_user_paths
-#fish_add_path /bin
-#fish_add_path ~/.local/bin
+fish_add_path /bin
+fish_add_path ~/.local/bin
 fish_add_path ~/.cargo/bin
 fish_add_path /usr/local/sbin
-
-set -gx PATH ~/bin $PATH
-set -gx PATH ~/.local/bin $PATH
 
 # Go
 set -x GOPATH ~/go
