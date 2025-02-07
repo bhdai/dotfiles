@@ -8,6 +8,7 @@ required = true
 [user]
 	email = ss1280dzzz@gmail.com
 	name = Bui Dai
+	signingkey = 196899953E89F08D
 
 [color]
 ui = true
@@ -19,7 +20,7 @@ co = checkout
 c = commit --short
 ci = commit --short
 p = push
-l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --decorate --date=short --color --decorate
+l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %CgreeBn(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --decorate --date=short --color --decorate
 
 [core]
 pager = delta
@@ -50,8 +51,8 @@ default = upstream
 user = buidai123
 [init]
 defaultBranch = main
-; [commit]
-; gpgsign = true
+[commit]
+gpgsign = true
 [credential]
 helper = cache
 [rebase]
@@ -62,3 +63,5 @@ helper = cache
 [credential "https://gist.github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
+[hub]
+	protocol = ssh
