@@ -14,7 +14,6 @@ base
 base-devel
 bat
 bc
-bluedevil
 blueman
 bluez
 bluez-utils
@@ -25,6 +24,7 @@ brightnessctl
 btop
 btrfs-progs
 bun-bin
+cheese
 clash-verge-rev-bin
 clipboard-sync
 cliphist
@@ -32,6 +32,7 @@ cpupower
 ctags-git
 dart-sass
 dash
+dmidecode
 dnsmasq
 dolphin
 duf
@@ -59,9 +60,6 @@ git-delta
 github-cli
 glances
 glow
-gnome-bluetooth
-gnome-bluetooth-3.0
-gnome-keyring
 grc
 grim
 grimblast-git
@@ -110,6 +108,7 @@ libva-nvidia-driver-git
 linux
 linux-firmware
 linux-headers
+lmstudio
 lshw
 lua51
 luarocks
@@ -138,8 +137,10 @@ nvidia-settings
 nvidia-utils
 nvtop
 nwg-clipman
+obs-studio
 obsidian
 okular
+ollama-cuda
 onefetch
 openbsd-netcat
 openmpi
@@ -151,7 +152,9 @@ pavucontrol
 pipewire
 pipewire-alsa
 pipewire-jack
+pipewire-libcamera
 pipewire-pulse
+pipewire-support
 pixi
 plasma-desktop
 plasma-nm
@@ -222,6 +225,7 @@ ttf-victor-mono-nerd
 typos
 unrar
 uv
+uwsm
 vde2
 vim
 virt-manager
