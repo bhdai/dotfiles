@@ -120,15 +120,19 @@ abbr ju "journalctl --unit"
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
 
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /home/monarch/.lmstudio/bin
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f /home/monarch/miniconda3/bin/conda
-    eval /home/monarch/miniconda3/bin/conda "shell.fish" hook $argv | source
+if test -f /home/monarch/miniforge3/bin/conda
+    eval /home/monarch/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 else
-    if test -f "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
-        . "/home/monarch/miniconda3/etc/fish/conf.d/conda.fish"
+    if test -f "/home/monarch/miniforge3/etc/fish/conf.d/conda.fish"
+        . "/home/monarch/miniforge3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH /home/monarch/miniconda3/bin $PATH
+        set -x PATH "/home/monarch/miniforge3/bin" $PATH
     end
 end
 # <<< conda initialize <<<
+
