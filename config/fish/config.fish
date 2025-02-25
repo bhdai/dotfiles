@@ -95,6 +95,7 @@ abbr grep rg
 abbr weather "curl -s wttr.in/Hanoi | grep -v Follow"
 abbr show-cursor "tput cnorm"
 abbr hide-cursor "tput civis"
+alias pkgInfo="pacman -Qq | fzf --preview 'pacman -Qil {} | bat -fpl yml' --layout=reverse --bind 'enter:execute(pacman -Qil {} | less)'"
 
 # systemctl
 abbr s systemctl
