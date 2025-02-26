@@ -1,7 +1,5 @@
 acpi
 ags-hyprpanel-git
-agsv1
-agsv1-debug
 alacritty
 android-studio
 arc-gtk-theme
@@ -163,6 +161,7 @@ plasma-systemmonitor
 playerctl
 polkit-gnome
 powerdevil
+pre-commit
 procs
 python-gpustat
 python-jinja
@@ -206,6 +205,7 @@ thorium-browser-bin
 thunar
 thunar-archive-plugin
 thunar-volman
+thunderbird
 timeshift
 timeshift-autosnap
 tmux
