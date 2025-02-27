@@ -10,11 +10,11 @@ draw_bold_text_with_bright_colors = true
 [window]
 
 opacity = 1
-dimensions = { columns = 140, lines = 33}
-position = { x = 200, y = 100}
+# dimensions = { columns = 140, lines = 33}
+# position = { x = 200, y = 100}
 padding.x = 10
 padding.y = 10
-decorations = "None"
+# decorations = "None"
 decorations_theme_variant = "Dark"
 
 # [font]

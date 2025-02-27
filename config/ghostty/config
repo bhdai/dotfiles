@@ -48,7 +48,7 @@ gtk-tabs-location = bottom
 gtk-wide-tabs = false
 window-padding-y = 2,0
 window-padding-balance = true
-window-decoration = false
+window-decoration = true
 
 # Other
 copy-on-select = clipboard
