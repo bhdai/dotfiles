@@ -477,5 +477,6 @@
   "menus.clock.weather.key": "2f07117d24104562988112557250602",
   "menus.dashboard.directories.left.directory3.label": "󰚝 Workplace",
   "bar.customModules.hyprsunset.temperature": "2500k",
-  "theme.bar.buttons.dashboard.enableBorder": false
+  "theme.bar.buttons.dashboard.enableBorder": false,
+  "theme.bar.buttons.systray.enableBorder": false
 }
