@@ -478,5 +478,6 @@
   "menus.dashboard.directories.left.directory3.label": "󰚝 Workplace",
   "bar.customModules.hyprsunset.temperature": "2500k",
   "theme.bar.buttons.dashboard.enableBorder": false,
-  "theme.bar.buttons.systray.enableBorder": false
+  "theme.bar.buttons.systray.enableBorder": false,
+  "menus.dashboard.shortcuts.left.shortcut3.command": "discord --use-gl=desktop"
 }
