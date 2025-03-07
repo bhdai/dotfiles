@@ -1,25 +1,16 @@
-function on_touchpad
+function tog_touchpad
     set config_file ~/.config/hypr/touchpad.conf
-    sed -i 's/enabled = false/enabled = true/' $config_file
-    echo "switching touchpad on"
-    hyprctl reload
-end
+    set state (rg -oP "(?<=enabled = )(true|false)" $config_file)
 
-function off_touchpad
-    set config_file ~/.config/hypr/touchpad.conf
-    sed -i 's/enabled = true/enabled = false/' $config_file
-    echo "switching touchpad off"
-    hyprctl reload
-end
-
-
-function tog_touchpad -a cmd
-    switch $cmd
-        case on
-            on_touchpad
-        case off
-            off_touchpad
-        case '*'
-            return 1
+    if test "$state" = false
+        # enable touch pad
+        sed -i 's/enabled = false/enabled = true/' $config_file
+        echo "touchpaed enabled"
+    else
+        # disable touchpad
+        sed -i 's/enabled = true/enabled = false/' $config_file
+        echo "touchpad disabled"
     end
+
+    hyprctl reload
 end
