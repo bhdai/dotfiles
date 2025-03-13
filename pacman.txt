@@ -119,7 +119,6 @@ lxappearance
 mako
 man-db
 matugen-bin
-maven
 mdcat
 mousam
 mpv
