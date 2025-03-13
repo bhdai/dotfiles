@@ -1,6 +1,7 @@
 acpi
 ags-hyprpanel-git
 alacritty
+alsa-utils
 android-studio
 arc-gtk-theme
 archlinux-xdg-menu
@@ -23,13 +24,13 @@ btop
 btrfs-progs
 bun-bin
 cheese
-clash-verge-rev-bin
 clipboard-sync
 cliphist
 cpupower
 ctags-git
 dart-sass
 dash
+discord
 dmidecode
 dnsmasq
 dolphin
@@ -43,6 +44,7 @@ fcitx5-configtool
 fcitx5-gtk
 fcitx5-qt
 fd
+ffmpegthumbnailer
 figlet
 file-roller
 firefox
@@ -74,6 +76,7 @@ gwenview
 howdy-beta-git
 htop
 hub
+hunspell-en_us
 hyperfine
 hypridle
 hyprland
@@ -86,10 +89,12 @@ hyprsunset
 inotify-tools
 intel-ucode
 iptables-nft
+jdk-openjdk
 just
 kate
 kde-gtk-config
 kdeplasma-addons
+keyd
 kitty
 kscreen
 kvantum
@@ -102,11 +107,11 @@ lib32-openal
 libguestfs
 libreoffice-extension-texmaths
 libreoffice-fresh
-libva-nvidia-driver-git
+libva-nvidia-driver
+libva-utils
 linux
 linux-firmware
 linux-headers
-lmstudio
 lshw
 lua51
 luarocks
@@ -114,6 +119,7 @@ lxappearance
 mako
 man-db
 matugen-bin
+maven
 mdcat
 mousam
 mpv
@@ -131,6 +137,7 @@ nmap
 noto-fonts-cjk
 npm
 nvidia-open
+nvidia-prime
 nvidia-settings
 nvidia-utils
 nvtop
@@ -145,7 +152,7 @@ openmpi
 openssh
 openssl-1.1
 pamixer
-papirus-icon-theme-git
+papirus-icon-theme
 pavucontrol
 pipewire
 pipewire-alsa
@@ -177,7 +184,7 @@ qt6ct-kde
 quarto-cli-bin
 reflector
 ripgrep
-rofi
+rofi-wayland
 rog-control-center
 safeeyes-git
 sddm
@@ -185,7 +192,6 @@ sddm-kcm
 shell-color-scripts-git
 slurp
 smartmontools
-snixembed
 speedtest-cli
 spice-vdagent
 spotify-launcher
@@ -197,7 +203,6 @@ swaylock-effects-git
 swtpm
 swww
 tealdeer
-tela-icon-theme-git
 texlive-fontsrecommended
 texlive-latexextra
 texlive-xetex
@@ -222,11 +227,13 @@ ttf-nerd-fonts-symbols
 ttf-roboto
 ttf-victor-mono
 ttf-victor-mono-nerd
+tumbler
 typos
 unrar
 uv
 uwsm
 vde2
+vdpauinfo
 vim
 virt-manager
 virt-viewer
@@ -235,6 +242,7 @@ vmware-workstation
 vulkan-intel
 vulkan-tools
 waybar
+waypaper
 wayshot
 wev
 wezterm-git
@@ -246,6 +254,7 @@ wl-clipboard
 wl-clipboard-history-git
 wlogout
 wlr-randr
+wlrctl
 write-good
 xcb-imdkit
 xclip
@@ -257,5 +266,6 @@ zathura
 zathura-cb
 zathura-pdf-mupdf
 zen-browser-bin
+zoom
 zoxide
 zrok-bin
