@@ -44,6 +44,6 @@ map <S-Space> <Action>(GotoNextError)
 map <leader>b <Action>(ToggleLineBreakpoint)
 map <leader>o <Action>(FileStructurePopup)
 
-map sa ys
-map sr cs
-map sd ds
+map gza ys
+map gzr cs
+map gzd ds
