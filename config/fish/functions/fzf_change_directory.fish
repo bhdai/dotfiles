@@ -11,7 +11,8 @@ function _fzf_open_or_cd
             commandline -f repaint
         end
     else
-        commandline ''
+        commandline -r ''
+        commandline -f repaint
     end
 end
 
