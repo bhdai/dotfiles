@@ -7,13 +7,10 @@ function _fzf_open_or_cd
         else if test -d "$result"
             # if it a directory cd to it
             builtin cd "$result"
-            commandline -r ''
-            commandline -f repaint
         end
-    else
-        commandline -r ''
-        commandline -f repaint
     end
+    commandline -r ''
+    commandline -f repaint
 end
 
 function fzf_change_directory
