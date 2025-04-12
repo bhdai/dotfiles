@@ -479,5 +479,6 @@
   "bar.customModules.hyprsunset.temperature": "2500k",
   "theme.bar.buttons.dashboard.enableBorder": false,
   "theme.bar.buttons.systray.enableBorder": false,
-  "menus.dashboard.shortcuts.left.shortcut3.command": "discord --use-gl=desktop"
+  "menus.dashboard.shortcuts.left.shortcut3.command": "discord --use-gl=desktop",
+  "bar.workspaces.applicationIconOncePerWorkspace": true
 }

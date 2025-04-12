@@ -25,7 +25,7 @@ config.colors = {
 }
 
 config.underline_thickness = 2
-config.cursor_thickness = 3
+config.cursor_thickness = 2
 config.underline_position = -1.6
 
 -- for windows

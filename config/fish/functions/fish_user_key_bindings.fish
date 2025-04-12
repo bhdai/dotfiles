@@ -13,7 +13,3 @@ function fish_user_key_bindings
   bind yy fish_clipboard_copy
   bind p fish_clipboard_paste
 end
-# fzf plugin
-fzf_configure_bindings --directory=\co
-
-fzf --fish | source

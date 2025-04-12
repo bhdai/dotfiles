@@ -12,25 +12,17 @@ draw_bold_text_with_bright_colors = true
 opacity = 1
 # dimensions = { columns = 140, lines = 33}
 # position = { x = 200, y = 100}
-padding.x = 10
-padding.y = 10
+padding.x = 2
+# padding.y = 10
 # decorations = "None"
 decorations_theme_variant = "Dark"
 
-# [font]
-# normal = { family = "BlexMono Nerd Font", style = "Medium"}
-# bold = { family = "BlexMono Nerd Font", style = "Bold"}
-# italic = { family = "BlexMono Nerd Font", style = "Italic"}
-# bold_italic = { family = "BlexMono Nerd Font", style = "Bold Italic"}
-# size = 10.5
-
-
 [font]
 normal = { family = "FiraCode Nerd Font" }
-bold = { family = "Maple Mono", style = "Bold"}
+bold = { family = "FiraCode Nerd Font", style = "Bold"}
 italic = { family = "Maple Mono", style = "Italic"}
-bold_italic = { family = "Maple Mono"}
-size = 10.5
+bold_italic = { family = "Maple Mono", style = "Bold Italic"}
+size = 10
 
 [cursor]
 thickness = 0.4
