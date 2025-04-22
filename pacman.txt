@@ -5,7 +5,6 @@ alsa-utils
 android-studio
 arc-gtk-theme
 archlinux-xdg-menu
-archlinuxcn-keyring
 ark
 asusctl
 atuin
@@ -48,6 +47,7 @@ ffmpegthumbnailer
 figlet
 file-roller
 firefox
+firefox-tridactyl-native
 fish
 fzf
 fzy
@@ -104,7 +104,6 @@ lib32-alsa-plugins
 lib32-libpulse
 lib32-nvidia-utils
 lib32-openal
-libguestfs
 libreoffice-extension-texmaths
 libreoffice-fresh
 libva-nvidia-driver
@@ -118,13 +117,13 @@ luarocks
 lxappearance
 mako
 man-db
+maplemono-ttf
 matugen-bin
 mdcat
 mousam
 mpv
 navi
 ncdu
-nekoray-git
 neofetch
 neovide
 neovim
@@ -173,10 +172,9 @@ python-gpustat
 python-jinja
 python-materialyoucolor-git
 python-pillow
+python-pipx
 python-pywal
 python-requests
-qemu-base
-qemu-full
 qt5-wayland
 qt5ct
 qt6ct-kde
@@ -201,6 +199,7 @@ swappy
 swaylock-effects-git
 swtpm
 swww
+sysfsutils
 tealdeer
 texlive-fontsrecommended
 texlive-latexextra
@@ -220,7 +219,6 @@ ttf-hack-nerd
 ttf-hannom
 ttf-ibmplex-mono-nerd
 ttf-jetbrains-mono
-ttf-maple
 ttf-ms-win11-auto
 ttf-nerd-fonts-symbols
 ttf-roboto
@@ -234,7 +232,6 @@ uwsm
 vde2
 vdpauinfo
 vim
-virt-manager
 virt-viewer
 visual-studio-code-bin
 vmware-workstation
