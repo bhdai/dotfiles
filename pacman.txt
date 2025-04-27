@@ -3,6 +3,7 @@ ags-hyprpanel-git
 alacritty
 alsa-utils
 android-studio
+apache-spark
 arc-gtk-theme
 archlinux-xdg-menu
 ark
@@ -32,6 +33,7 @@ dash
 discord
 dmidecode
 dnsmasq
+docker
 dolphin
 duf
 efibootmgr
@@ -120,6 +122,7 @@ man-db
 maplemono-ttf
 matugen-bin
 mdcat
+mongodb-bin
 mousam
 mpv
 navi
@@ -165,6 +168,7 @@ plasma-pa
 plasma-systemmonitor
 playerctl
 polkit-gnome
+postgresql
 powerdevil
 pre-commit
 procs
@@ -201,6 +205,7 @@ swtpm
 swww
 sysfsutils
 tealdeer
+tesseract-data-eng
 texlive-fontsrecommended
 texlive-latexextra
 texlive-xetex
@@ -256,7 +261,6 @@ xcb-imdkit
 xclip
 xdg-desktop-portal-hyprland
 yay
-yay-debug
 yazi
 zathura
 zathura-cb
