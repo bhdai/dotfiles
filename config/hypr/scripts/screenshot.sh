@@ -16,16 +16,16 @@ take_screenshot() {
 
   case $type in
   "area_clipboard")
-    grimblast --wait 1 copy area
+    grimblast copy area
     ;;
   "area_file")
-    grimblast --wait 1 save area "${save_dir}/${save_file}"
+    grimblast save area "${save_dir}/${save_file}"
     ;;
   "screen_clipboard")
-    grimblast --wait 1 copy screen
+    grimblast copy screen
     ;;
   "screen_file")
-    grimblast --wait 1 save screen "${save_dir}/${save_file}"
+    grimblast save screen "${save_dir}/${save_file}"
     ;;
   *)
     echo "Invalid screenshot type!"
