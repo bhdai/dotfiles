@@ -1,7 +1,7 @@
 configuration {
 
   font               : "FiraCode Nerd Font 12";
-  modi               : "run,drun,window";
+  modi               : "drun";
   disable-history    : false;
   display-run        : " ";
   display-drun       : " ";
@@ -12,6 +12,5 @@ configuration {
   hide-scrollbar     : true;
   location           : 0;
   show-icons         : true;
-  sidebar-mode       : true;
   terminal           : "ghostty";
 }

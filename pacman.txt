@@ -51,6 +51,7 @@ file-roller
 firefox
 firefox-tridactyl-native
 fish
+freetds
 fzf
 fzy
 gdb
@@ -86,7 +87,6 @@ hyprland-qtutils
 hyprlock
 hyprpaper
 hyprpicker
-hyprshade
 hyprsunset
 inotify-tools
 intel-ucode
@@ -169,6 +169,7 @@ plasma-systemmonitor
 playerctl
 polkit-gnome
 postgresql
+power-profiles-daemon
 powerdevil
 pre-commit
 procs
@@ -209,7 +210,6 @@ tesseract-data-eng
 texlive-fontsrecommended
 texlive-latexextra
 texlive-xetex
-thorium-browser-bin
 thunar
 thunar-archive-plugin
 thunar-volman
