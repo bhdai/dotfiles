@@ -1,14 +1,6 @@
-/**
- *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
- * 
- * Rofi Theme File
- * Rofi Version: 1.7.3
- **/
-
-/*****----- Configuration -----*****/
 configuration {
+
+  font               : "FiraCode Nerd Font 12";
   modi               : "run,drun,window";
   disable-history    : false;
   display-run        : " ";
@@ -23,5 +15,3 @@ configuration {
   sidebar-mode       : true;
   terminal           : "ghostty";
 }
-
-// @theme "theme.rasi"
