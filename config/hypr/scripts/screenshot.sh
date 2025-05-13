@@ -1,13 +1,5 @@
 #!/bin/bash
 
-shader=$(hyprshade current)
-
-restore_shader() {
-  if [ -n "$shader" ]; then
-    hyprshade on "$shader"
-  fi
-}
-
 # Take a screenshot based on the type
 take_screenshot() {
   local type=$1
@@ -29,7 +21,6 @@ take_screenshot() {
     ;;
   *)
     echo "Invalid screenshot type!"
-    restore_shader
     exit 1
     ;;
   esac
@@ -59,9 +50,6 @@ main() {
 
   # Take the screenshot
   take_screenshot "$screenshot_type" "$save_dir" "$save_file"
-
-  # Restore the shader
-  restore_shader
 }
 
 main "$1"
