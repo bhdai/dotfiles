@@ -394,8 +394,8 @@
   "theme.bar.buttons.background_hover_opacity": 75,
   "theme.bar.menus.buttons.radius": "0.4em",
   "theme.bar.menus.border.radius": "0.7em",
-  "theme.bar.buttons.radius": "0.6em",
-  "theme.bar.buttons.padding_x": "0.8rem",
+  "theme.bar.buttons.radius": "1em",
+  "theme.bar.buttons.padding_x": "0.7rem",
   "bar.layouts": {
     "0": {
       "left": [
