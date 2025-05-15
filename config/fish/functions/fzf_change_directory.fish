@@ -37,7 +37,7 @@ function fzf_change_directory
 
         find $HOME/.config -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
 
-        find $HOME/ghq/github.com/buidai123/dotfiles/config/ -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
+        find $HOME/ghq/github.com/bhdai/dotfiles/config/ -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
 
         find $HOME/workplace -maxdepth 2 \( -type f -o -type d \) | grep -v '\.git'
     end | sed -e 's/\/$//' | awk '!a[$0]++' | _fzf_open_or_cd $argv

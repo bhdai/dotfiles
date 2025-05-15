@@ -1,5 +1,5 @@
 function _dot_add -a name
-    set -l src ~/ghq/github.com/buidai123/dotfiles/config/$name
+    set -l src ~/ghq/github.com/bhdai/dotfiles/config/$name
     set -l dest ~/.config/$name
 
     # src should exist and be a file or a directory
@@ -20,7 +20,7 @@ end
 
 function _dot_del -a name
     # remove the symlink and move the directory back
-    set -l src ~/ghq/github.com/buidai123/dotfiles/config/$name
+    set -l src ~/ghq/github.com/bhdai/dotfiles/config/$name
     set -l dest ~/.config/$name
 
     if not test -e $src

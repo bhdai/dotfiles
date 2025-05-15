@@ -48,7 +48,7 @@ rebase = true
 [push]
 default = upstream
 [github]
-user = buidai123
+user = bhdai
 [init]
 defaultBranch = main
 [commit]
