@@ -70,7 +70,7 @@ config.font_rules = {
 -- Cursor
 config.default_cursor_style = "BlinkingBar"
 config.force_reverse_video_cursor = false
-config.window_padding = { left = 10, right = 0, top = 10, bottom = 4 }
+config.window_padding = { left = 2, right = 0, top = 0, bottom = 0 }
 config.window_background_opacity = 1
 -- cell_width = 0.9,
 config.scrollback_lines = 10000
