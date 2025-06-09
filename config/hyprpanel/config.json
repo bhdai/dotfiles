@@ -473,6 +473,13 @@
   "bar.workspaces.showApplicationIcons": false,
   "bar.workspaces.ignored": "-.*",
   "bar.windowtitle.class_name": false,
+  "bar.windowtitle.title_map": [
+    [
+      "dai.quake",
+      "",
+      "Terminal"
+    ]
+  ],
   "menus.dashboard.powermenu.avatar.image": "/home/monarch/Pictures/profile/bird_profile.png",
   "menus.clock.weather.key": "2f07117d24104562988112557250602",
   "menus.dashboard.directories.left.directory3.label": "󰚝 Workplace",
@@ -480,5 +487,8 @@
   "theme.bar.buttons.dashboard.enableBorder": false,
   "theme.bar.buttons.systray.enableBorder": false,
   "menus.dashboard.shortcuts.left.shortcut3.command": "discord --use-gl=desktop",
-  "bar.workspaces.applicationIconOncePerWorkspace": true
+  "bar.workspaces.applicationIconOncePerWorkspace": true,
+  "bar.customModules.storage.paths": [
+    "/"
+  ]
 }
