@@ -3,6 +3,7 @@ ags-hyprpanel-git
 alacritty
 alsa-utils
 android-studio
+ant
 apache-spark
 arc-gtk-theme
 archlinux-xdg-menu
@@ -13,6 +14,7 @@ base
 base-devel
 bat
 bc
+bind
 blueman
 bluez
 bluez-utils
@@ -34,6 +36,7 @@ discord
 dmidecode
 dnsmasq
 docker
+docker-compose
 dolphin
 duf
 efibootmgr
@@ -63,6 +66,7 @@ git-delta
 github-cli
 glances
 glow
+gnuplot
 grc
 grim
 grimblast-git
@@ -120,8 +124,11 @@ lxappearance
 mako
 man-db
 maplemono-ttf
+mariadb
 matugen-bin
+maven
 mdcat
+mermaid-cli
 mongodb-bin
 mousam
 mpv
@@ -130,10 +137,13 @@ ncdu
 neofetch
 neovide
 neovim
+net-tools
+netbeans
 network-manager-applet
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
+ngrok
 nmap
 noto-fonts-cjk
 npm
@@ -206,6 +216,7 @@ swtpm
 swww
 sysfsutils
 tealdeer
+tectonic
 tesseract-data-eng
 texlive-fontsrecommended
 texlive-latexextra
@@ -217,6 +228,7 @@ thunderbird
 timeshift
 timeshift-autosnap
 tmux
+traceroute
 tree
 ttf-fira-code
 ttf-firacode-nerd
@@ -224,7 +236,6 @@ ttf-hack-nerd
 ttf-hannom
 ttf-ibmplex-mono-nerd
 ttf-jetbrains-mono
-ttf-ms-win11-auto
 ttf-nerd-fonts-symbols
 ttf-roboto
 ttf-victor-mono
@@ -250,6 +261,7 @@ wezterm-git
 wf-recorder
 wget
 wireplumber
+wireshark-qt
 wl-clip-persist
 wl-clipboard
 wl-clipboard-history-git
