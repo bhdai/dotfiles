@@ -14,3 +14,5 @@ configuration {
   show-icons         : true;
   terminal           : "ghostty";
 }
+
+@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
