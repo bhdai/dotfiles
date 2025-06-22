@@ -1,10 +1,23 @@
 #!/bin/bash
 
-song_info=$(playerctl metadata --format '{{title}}      {{artist}}')
+player=$(playerctl -l 2>/dev/null | head -n 1)
+title=$(playerctl metadata --format '{{title}}' 2>/dev/null)
+artist=$(playerctl metadata --format '{{artist}}' 2>/dev/null)
 
-# if the artist is missing, append a non-breaking space to keep layout
-if [[ "$song_info" =~ [[:space:]]*$ ]]; then
-  song_info="${song_info} "
+if [[ -z "$title" ]]; then
+ exit 0
 fi
 
-echo "$song_info"
+case "$player" in
+*spotify*) icon="" ;;
+*firefox*) icon="" ;;
+*chrome* | *chromium*) icon="" ;;
+*) icon="" ;; # fallback to headphone
+esac
+
+# output format
+if [[ -n "$artist" ]]; then
+ echo "$title  $icon    $artist"
+else
+ echo "$title  $icon " # non-breaking space after icon
+fi
