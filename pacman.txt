@@ -123,6 +123,7 @@ luarocks
 lxappearance
 mako
 man-db
+man-pages
 maplemono-ttf
 mariadb
 matugen-bin
@@ -137,8 +138,8 @@ ncdu
 neofetch
 neovide
 neovim
+nerdshade
 net-tools
-netbeans
 network-manager-applet
 networkmanager
 networkmanager-openconnect
@@ -163,6 +164,7 @@ openmpi
 openssh
 openssl-1.1
 pamixer
+pandoc-cli
 papirus-icon-theme
 pavucontrol
 pipewire
@@ -227,6 +229,7 @@ thunar-volman
 thunderbird
 timeshift
 timeshift-autosnap
+tk
 tmux
 traceroute
 tree
@@ -245,6 +248,7 @@ typos
 unrar
 uv
 uwsm
+valgrind
 vde2
 vdpauinfo
 vim
@@ -272,6 +276,7 @@ write-good
 xcb-imdkit
 xclip
 xdg-desktop-portal-hyprland
+xorg-xhost
 yay
 yazi
 zathura
