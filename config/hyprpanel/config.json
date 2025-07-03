@@ -228,8 +228,8 @@
   "theme.bar.buttons.windowtitle.background": "#ffffff",
   "theme.bar.buttons.workspaces.active": "#5aa5f6",
   "theme.bar.buttons.workspaces.occupied": "#ffffff",
-  "theme.bar.buttons.workspaces.available": "#282b3a",
-  "theme.bar.buttons.workspaces.hover": "#414868",
+  "theme.bar.buttons.workspaces.available": "#77767b",
+  "theme.bar.buttons.workspaces.hover": "#62a0ea",
   "theme.bar.buttons.workspaces.background": "#ffffff",
   "theme.bar.buttons.dashboard.icon": "#0e94d2",
   "theme.bar.buttons.dashboard.background": "#ffffff",
@@ -456,7 +456,7 @@
   "menus.dashboard.shortcuts.left.shortcut1.icon": "",
   "scalingPriority": "hyprland",
   "theme.bar.outer_spacing": "0.2em",
-  "bar.customModules.hyprsunset.offIcon": "",
+  "bar.customModules.hyprsunset.offIcon": "󰖨",
   "bar.customModules.hyprsunset.onIcon": "󰽥",
   "bar.customModules.hypridle.label": false,
   "bar.customModules.hyprsunset.label": false,
@@ -490,5 +490,10 @@
   "bar.workspaces.applicationIconOncePerWorkspace": true,
   "bar.customModules.storage.paths": [
     "/"
-  ]
+  ],
+  "theme.bar.buttons.workspaces.pill.active_width": "8em",
+  "theme.bar.buttons.workspaces.pill.height": "4em",
+  "theme.bar.buttons.workspaces.pill.width": "4em",
+  "theme.bar.buttons.workspaces.fontSize": "1.2em",
+  "bar.workspaces.scroll_speed": 5
 }
