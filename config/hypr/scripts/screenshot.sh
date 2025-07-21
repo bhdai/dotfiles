@@ -5,25 +5,34 @@ take_screenshot() {
   local type=$1
   local save_dir=$2
   local save_file=$3
+  local status=0
 
   case $type in
   "area_clipboard")
     grimblast copy area
+    status=$?
     ;;
   "area_file")
     grimblast save area "${save_dir}/${save_file}"
+    status=$?
     ;;
   "screen_clipboard")
     grimblast copy screen
+    status=$?
     ;;
   "screen_file")
     grimblast save screen "${save_dir}/${save_file}"
+    status=$?
     ;;
   *)
     echo "Invalid screenshot type!"
     exit 1
     ;;
   esac
+
+  if [ $status -ne 0 ]; then
+    return $status
+  fi
 
   # If saving to a file, check if it was saved successfully
   if [ -f "${save_dir}/${save_file}" ]; then
