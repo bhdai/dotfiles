@@ -3,6 +3,7 @@ ags-hyprpanel-git
 alacritty
 alsa-utils
 android-studio
+android-tools
 ant
 apache-spark
 arc-gtk-theme
@@ -28,6 +29,7 @@ bun-bin
 cheese
 clipboard-sync
 cliphist
+cloudflare-warp-bin
 cpupower
 ctags-git
 dart-sass
@@ -80,6 +82,7 @@ gum
 gvfs-afc
 gvfs-mtp
 gwenview
+heimdall
 howdy-beta-git
 htop
 hub
@@ -154,6 +157,7 @@ nvidia-settings
 nvidia-utils
 nvtop
 nwg-clipman
+nyx
 obs-studio
 obsidian
 okular
@@ -197,6 +201,7 @@ qt5ct
 qt6ct-kde
 quarto-cli-bin
 reflector
+repo
 ripgrep
 rofi-wayland
 rog-control-center
@@ -208,8 +213,8 @@ slurp
 smartmontools
 speedtest-cli
 spice-vdagent
-spotify-launcher
 starship
+stremio
 sudo
 supergfxctl
 swappy
@@ -231,6 +236,7 @@ timeshift
 timeshift-autosnap
 tk
 tmux
+tor
 traceroute
 tree
 ttf-fira-code
