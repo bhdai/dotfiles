@@ -10,8 +10,8 @@ adjust-underline-position = 4
 # mouse
 mouse-hide-while-typing = true
 
-# cursor
-adjust-cursor-thickness = 2
+# # cursor
+# adjust-cursor-thickness = 2
 
 # theme
 theme = /home/monarch/ghq/github.com/folke/tokyonight.nvim/extras/ghostty/tokyonight_moon
