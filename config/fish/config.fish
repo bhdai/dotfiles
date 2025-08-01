@@ -93,7 +93,7 @@ abbr gp "hub pull"
 abbr ytop btm
 abbr fda "fd -IH"
 abbr rga "rg -uu"
-abbr grep rg
+# abbr grep rg
 abbr weather "curl -s wttr.in/Hanoi | grep -v Follow"
 abbr show-cursor "tput cnorm"
 abbr hide-cursor "tput civis"
