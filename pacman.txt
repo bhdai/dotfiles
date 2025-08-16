@@ -7,6 +7,8 @@ android-tools
 ant
 apache-spark
 arc-gtk-theme
+arch-audit
+arch-wiki-docs
 archlinux-xdg-menu
 ark
 asusctl
@@ -27,7 +29,6 @@ btop
 btrfs-progs
 bun-bin
 cheese
-clipboard-sync
 cliphist
 cloudflare-warp-bin
 cpupower
@@ -65,6 +66,7 @@ ghq
 gimp
 git
 git-delta
+git-lfs
 github-cli
 glances
 glow
@@ -83,7 +85,6 @@ gvfs-afc
 gvfs-mtp
 gwenview
 heimdall
-howdy-beta-git
 htop
 hub
 hunspell-en_us
@@ -103,6 +104,7 @@ just
 kate
 kde-gtk-config
 kdeplasma-addons
+keepassxc
 keyd
 kitty
 kscreen
@@ -167,6 +169,7 @@ openbsd-netcat
 openmpi
 openssh
 openssl-1.1
+pacman-contrib
 pamixer
 pandoc-cli
 papirus-icon-theme
@@ -185,8 +188,8 @@ plasma-systemmonitor
 playerctl
 polkit-gnome
 postgresql
-power-profiles-daemon
 powerdevil
+powertop
 pre-commit
 procs
 python-gpustat
@@ -200,6 +203,7 @@ qt5-wayland
 qt5ct
 qt6ct-kde
 quarto-cli-bin
+rclone
 reflector
 repo
 ripgrep
@@ -235,6 +239,7 @@ thunderbird
 timeshift
 timeshift-autosnap
 tk
+tlp
 tmux
 tor
 traceroute
@@ -289,6 +294,5 @@ zathura
 zathura-cb
 zathura-pdf-mupdf
 zen-browser-bin
-zoom
 zoxide
 zrok-bin
