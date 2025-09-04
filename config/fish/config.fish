@@ -140,3 +140,5 @@ else
 end
 # <<< conda initialize <<<
 
+#nvm
+set -gx nvm_default_version lts
