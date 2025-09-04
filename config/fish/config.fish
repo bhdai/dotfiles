@@ -6,14 +6,12 @@ set -gx fish_cursor_visual block
 set -gx fish_cursor_replace_one underscore
 #set -gx TERM tmux-256color
 
-
 # aliases
 alias .. 'cd ..'
 alias ... 'cd ../..'
 alias .3 'cd ../../..'
 alias .4 'cd ../../../..'
 alias .5 'cd ../../../../..'
-
 
 # command -qv nvim && alias vim nvim
 
@@ -22,8 +20,6 @@ set -gx VISUAL $EDITOR
 set -gx SUDO_EDITOR $EDITOR
 
 # Path
-set -x fish_user_paths
-fish_add_path /bin
 fish_add_path ~/.local/bin
 fish_add_path ~/.cargo/bin
 fish_add_path /usr/local/sbin
@@ -39,6 +35,7 @@ set -x LESS -rF
 set -x COMPOSE_DOCKER_CLI_BUILD 1
 set -x MANPAGER "nvim +Man!"
 set -x MANROFFOPT -c
+set -x XDG_SCREENSHOTS_DIR ~/Pictures/Screenshots/
 
 # Fish
 set fish_emoji_width 2
@@ -77,7 +74,7 @@ alias bt "coredumpctl -1 gdb -A '-ex \"bt\" -q -batch' 2>/dev/null | awk '/Progr
 
 alias lazygit "TERM=xterm-256color command lazygit"
 alias g git
-abbr git hub
+# abbr git hub
 abbr gg lazygit
 abbr gl 'hub l --color | devmoji --log --color | less -rXF'
 abbr gs "hub st"
@@ -120,22 +117,15 @@ abbr jg "journalctl -b --grep"
 abbr ju "journalctl --unit"
 
 
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH
-
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH /home/monarch/.lmstudio/bin
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if test -f /home/monarch/miniforge3/bin/conda
-    eval /home/monarch/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+    eval /home/monarch/miniforge3/bin/conda "shell.fish" hook $argv | source
 else
     if test -f "/home/monarch/miniforge3/etc/fish/conf.d/conda.fish"
         . "/home/monarch/miniforge3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH "/home/monarch/miniforge3/bin" $PATH
+        set -x PATH /home/monarch/miniforge3/bin $PATH
     end
 end
 # <<< conda initialize <<<
