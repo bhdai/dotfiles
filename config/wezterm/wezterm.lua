@@ -24,9 +24,9 @@ config.colors = {
 	indexed = { [241] = "#65bcff" },
 }
 
-config.underline_thickness = 2
-config.cursor_thickness = 2
-config.underline_position = -1.6
+config.underline_thickness = 1
+config.cursor_thickness = 0.5
+config.underline_position = -3.0
 
 -- for windows
 if wezterm.target_triple:find("windows") then
