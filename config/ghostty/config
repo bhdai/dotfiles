@@ -53,3 +53,4 @@ window-decoration = true
 # Other
 copy-on-select = clipboard
 shell-integration-features = cursor,sudo,no-title
+app-notifications = no-clipboard-copy
