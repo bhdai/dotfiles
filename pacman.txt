@@ -5,7 +5,6 @@ alsa-utils
 android-studio
 android-tools
 ant
-apache-spark
 arc-gtk-theme
 arch-audit
 arch-wiki-docs
@@ -27,8 +26,6 @@ bridge-utils
 brightnessctl
 btop
 btrfs-progs
-bun-bin
-cheese
 cliphist
 cloudflare-warp-bin
 cpupower
@@ -199,6 +196,7 @@ python-pillow
 python-pipx
 python-pywal
 python-requests
+qbittorrent
 qt5-wayland
 qt5ct
 qt6ct-kde
@@ -207,7 +205,7 @@ rclone
 reflector
 repo
 ripgrep
-rofi-wayland
+rofi
 rog-control-center
 safeeyes-git
 sddm
@@ -289,7 +287,6 @@ xclip
 xdg-desktop-portal-hyprland
 xorg-xhost
 yay
-yazi
 zathura
 zathura-cb
 zathura-pdf-mupdf
