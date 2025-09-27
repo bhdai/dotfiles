@@ -9,7 +9,6 @@ arc-gtk-theme
 arch-audit
 arch-wiki-docs
 archlinux-xdg-menu
-ark
 asusctl
 atuin
 base
@@ -17,11 +16,11 @@ base-devel
 bat
 bc
 bind
+bluedevil
 blueman
 bluez
 bluez-utils
 bottom
-breeze-gtk
 bridge-utils
 brightnessctl
 btop
@@ -68,6 +67,7 @@ github-cli
 glances
 glow
 gnuplot
+go
 grc
 grim
 grimblast-git
@@ -80,7 +80,6 @@ gtklock
 gum
 gvfs-afc
 gvfs-mtp
-gwenview
 heimdall
 htop
 hub
@@ -97,16 +96,12 @@ inotify-tools
 intel-ucode
 iptables-nft
 jdk-openjdk
+journalctl-desktop-notification
 just
-kate
-kde-gtk-config
-kdeplasma-addons
 keepassxc
 keyd
 kitty
-kscreen
 kvantum
-kwallet-pam
 lazygit
 lib32-alsa-plugins
 lib32-libpulse
@@ -133,6 +128,7 @@ maven
 mdcat
 mermaid-cli
 mongodb-bin
+mosh
 mousam
 mpv
 navi
@@ -156,10 +152,10 @@ nvidia-settings
 nvidia-utils
 nvtop
 nwg-clipman
+nwg-displays
 nyx
 obs-studio
 obsidian
-okular
 ollama-cuda
 onefetch
 openbsd-netcat
@@ -178,14 +174,11 @@ pipewire-libcamera
 pipewire-pulse
 pipewire-support
 pixi
-plasma-desktop
 plasma-nm
-plasma-pa
-plasma-systemmonitor
 playerctl
 polkit-gnome
+polkit-kde-agent
 postgresql
-powerdevil
 powertop
 pre-commit
 procs
@@ -199,8 +192,9 @@ python-requests
 qbittorrent
 qt5-wayland
 qt5ct
-qt6ct-kde
+qt6ct
 quarto-cli-bin
+quickshell
 rclone
 reflector
 repo
@@ -209,7 +203,6 @@ rofi
 rog-control-center
 safeeyes-git
 sddm
-sddm-kcm
 shell-color-scripts-git
 slurp
 smartmontools
@@ -224,6 +217,7 @@ swaylock-effects-git
 swtpm
 swww
 sysfsutils
+systemsettings
 tealdeer
 tectonic
 tesseract-data-eng
@@ -242,6 +236,7 @@ tmux
 tor
 traceroute
 tree
+tree-sitter-cli
 ttf-fira-code
 ttf-firacode-nerd
 ttf-hack-nerd
@@ -263,6 +258,7 @@ vdpauinfo
 vim
 virt-viewer
 visual-studio-code-bin
+vlc
 vmware-workstation
 vulkan-intel
 vulkan-tools

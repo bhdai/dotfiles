@@ -116,7 +116,6 @@ abbr jf "journalctl --follow"
 abbr jg "journalctl -b --grep"
 abbr ju "journalctl --unit"
 
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if test -f /home/monarch/miniforge3/bin/conda
