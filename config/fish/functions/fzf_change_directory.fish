@@ -1,5 +1,6 @@
 function _fzf_open_or_cd
-    fzf | perl -pe 's/([ ()])/\\\\$1/g' | read -l result
+    # fzf --preview 'sh -c '\''if [ -d "$1" ]; then eza --color=always --icons --group-directories-first "$1"; else bat --color=always --style=plain "$1"; fi'\'' sh {}' | read -l result
+    fzf | read -l result
     if test -n "$result"
         if test -f "$result"
             # if it's a file open it with neovim
@@ -15,30 +16,24 @@ end
 
 function fzf_change_directory
     # Check if current directory is not under /home
-    if not string match -q "/home/*" $PWD
+    if not string match -rq "^$HOME(/|\$)" $PWD
         echo "Error: Can only fzf within the /home directory."
         return 1
     end
 
     begin
-        echo $HOME/.config
+        fd . $HOME -d 1 --type d --type f -H
+        fd . $HOME/.config -d 1 --type d --type f -H
+        fd . $HOME/Downloads -d 1 --type d --type f -H
+        fd . $HOME/Documents/ -d 1 --type d --type f -H
 
-        find (ghq root) -maxdepth 4 \( -type d -name .git -prune \) -o \( -type f -o -type d \) | sed 's/\/\.git//'
+        fd -t f -t d -H --exclude .git -E .cache -d 4 . (ghq root)
+        fd -t f -t d -H --exclude .git -E .cache -d 2 . $HOME/workplace
 
         # for the current directory only search if it not the home directory(it's a pain though)
         if test $PWD != $HOME
-            # use find to list both files and directories in current directory and subdirectories
-            find . \( -type f -o -type d \) | sed -r "s#^\./##" | perl -pe "s#^#$PWD/#" | grep -v '\.git'
+            fd -t f -t d -H -E .git .
         end
 
-        for dir in Documents Downloads
-            find $HOME/$dir -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
-        end
-
-        find $HOME/.config -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
-
-        find $HOME/ghq/github.com/bhdai/dotfiles/config/ -maxdepth 1 \( -type f -o -type d \) | grep -v '\.git'
-
-        find $HOME/workplace -maxdepth 2 \( -type f -o -type d \) | grep -v '\.git'
     end | sed -e 's/\/$//' | awk '!a[$0]++' | _fzf_open_or_cd $argv
 end
