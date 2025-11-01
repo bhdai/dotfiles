@@ -1,5 +1,4 @@
 acpi
-ags-hyprpanel-git
 alacritty
 alsa-utils
 android-studio
@@ -25,6 +24,7 @@ bridge-utils
 brightnessctl
 btop
 btrfs-progs
+clang
 cliphist
 cloudflare-warp-bin
 cpupower
@@ -38,6 +38,7 @@ docker
 docker-compose
 dolphin
 duf
+easyeffects-git
 efibootmgr
 eza
 fastfetch
@@ -98,6 +99,7 @@ iptables-nft
 jdk-openjdk
 journalctl-desktop-notification
 just
+kdeconnect
 keepassxc
 keyd
 kitty
@@ -131,6 +133,7 @@ mongodb-bin
 mosh
 mousam
 mpv
+mysql-workbench
 navi
 ncdu
 neofetch
@@ -174,11 +177,13 @@ pipewire-libcamera
 pipewire-pulse
 pipewire-support
 pixi
+plasma-browser-integration
 plasma-nm
 playerctl
 polkit-gnome
 polkit-kde-agent
 postgresql
+power-profiles-daemon
 powertop
 pre-commit
 procs
@@ -194,13 +199,14 @@ qt5-wayland
 qt5ct
 qt6ct
 quarto-cli-bin
-quickshell
+quickshell-git
 rclone
 reflector
 repo
 ripgrep
 rofi
 rog-control-center
+rust
 safeeyes-git
 sddm
 shell-color-scripts-git
@@ -231,8 +237,8 @@ thunderbird
 timeshift
 timeshift-autosnap
 tk
-tlp
 tmux
+tomcat10
 tor
 traceroute
 tree
@@ -243,6 +249,7 @@ ttf-hack-nerd
 ttf-hannom
 ttf-ibmplex-mono-nerd
 ttf-jetbrains-mono
+ttf-material-symbols-variable-git
 ttf-nerd-fonts-symbols
 ttf-roboto
 ttf-victor-mono
