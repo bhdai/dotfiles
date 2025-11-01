@@ -1,3 +1,5 @@
+status is-interactive; or exit
+
 bind -M insert \ch __fzf_tldr
 
 source ~/ghq/github.com/folke/tokyonight.nvim/extras/fzf/tokyonight_moon.sh
