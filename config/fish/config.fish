@@ -45,7 +45,7 @@ alias mosh "TERM=xterm-256color command mosh"
 abbr -a --position anywhere --set-cursor -- -h "-h 2>&1 | bat --plain --language=help"
 
 # Tmux
-abbr t tmux
+# abbr t tmux
 abbr tc 'tmux attach'
 abbr ta 'tmux attach -t'
 abbr tad 'tmux attach -d -t'
@@ -73,17 +73,16 @@ alias bt "coredumpctl -1 gdb -A '-ex \"bt\" -q -batch' 2>/dev/null | awk '/Progr
 
 alias lazygit "TERM=xterm-256color command lazygit"
 alias g git
-# abbr git hub
 abbr gg lazygit
-abbr gl 'hub l --color | devmoji --log --color | less -rXF'
-abbr gs "hub st"
-abbr gb "hub checkout -b"
-abbr gc "hub commit"
-abbr gpr "hub pr checkout"
-abbr gm "hub branch -l main | rg main > /dev/null 2>&1 && hub checkout main || hub checkout master"
-abbr gcp "hub commit -p"
-abbr gpp "hub push"
-abbr gp "hub pull"
+abbr gl 'git l --color | devmoji --log --color | less -rXF'
+abbr gs "git st"
+abbr gb "git checkout -b"
+abbr gc "git commit"
+abbr gpr "git pr checkout"
+abbr gm "git branch -l main | rg main > /dev/null 2>&1 && git checkout main || git checkout master"
+abbr gcp "git commit -p"
+abbr gpp "git push"
+abbr gp "git pull"
 
 # other
 abbr ytop btm
@@ -111,9 +110,10 @@ abbr sf "systemctl --failed --all"
 
 # journalctl
 abbr jb "journalctl -b"
-abbr jf "journalctl --follow"
+abbr jf "journalctl --follow -n 100"
 abbr jg "journalctl -b --grep"
-abbr ju "journalctl --unit"
+abbr ju "journalctl --all --follow -n 100 --unit"
+abbr juu "journalctl --all --follow -n 100 --user-unit"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
