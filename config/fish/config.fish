@@ -21,7 +21,6 @@ set -gx SUDO_EDITOR $EDITOR
 
 # Path
 fish_add_path ~/.local/bin
-fish_add_path ~/.cargo/bin
 fish_add_path /usr/local/sbin
 fish_add_path /opt/apache-spark/bin/
 fish_add_path /opt/apache-spark/sbin/
