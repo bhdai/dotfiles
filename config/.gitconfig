@@ -1,8 +1,8 @@
 [filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 
 
 [user]
@@ -11,57 +11,101 @@ required = true
 	signingkey = 196899953E89F08D
 
 [color]
-ui = true
+  ui = auto
 
 
 [alias]
-st = status -sb
-co = checkout
-c = commit --short
-ci = commit --short
-p = push
-l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --decorate --date=short --color --decorate
+  st = status -sb
+  co = checkout
+  sw = switch
+  br = branch
+  c = commit --short
+  ci = commit --short
+  p = push
+  l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --decorate --date=short --color --decorate
+  uncommit = reset --soft HEAD^
+  amend = commit --amend --no-edit
+  unstage = reset HEAD --
 
 [core]
-pager = delta
+  pager = delta
+  editor = nvim
+  autocrlf = input
+
 
 [interactive]
-diffFilter = delta --color-only
+  diffFilter = delta --color-only
 
 [include]
-path = ~/ghq/github.com/folke/tokyonight.nvim/extras/delta/tokyonight_moon.gitconfig
+  path = ~/ghq/github.com/folke/tokyonight.nvim/extras/delta/tokyonight_moon.gitconfig
 
 [delta]
-navigate = true    # use n and N to move between diff sections
-light = false      # set to true if you're in a terminal with a light background color (e.g. the default macOS terminal)
-side-by-side = false
-line-numbers = true
+  navigate = true    # use n and N to move between diff sections
+  light = false      # set to true if you're in a terminal with a light background color (e.g. the default macOS terminal)
+  side-by-side = false
+  line-numbers = true
+
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none
 
 [merge]
-conflictstyle = diff3
+  conflictstyle = zdiff3
+  tool = nvimdiff
 
 [diff]
-colorMoved = default
+  algorithm = histogram
+  colorMoved = default
+  tool = nvimdiff
+  submodule = log
 
 [pull]
-rebase = true
+  rebase = true
+
 [push]
-default = upstream
+  default = current
+  autoSetupRemote = true
+  followTags = true
+
+[fetch]
+  prune = true
+  pruneTag = true
+
+[rebase]
+  autoStash = true
+  autoSquash = true
+  updateRefs = true
+
 [github]
-user = bhdai
+  user = bhdai
+
 [init]
-defaultBranch = main
+  defaultBranch = main
+
 [commit]
-gpgsign = true
+  gpgsign = true
+  verbose = true
+
 [credential]
 helper = cache
-[rebase]
-	autoStash = true
+
+[tag]
+  gpgsign = true
+
 [credential "https://github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
+
+; [url "ssh://git@github.com/"]
+;   insteadOf = https://github.com/
+
 [credential "https://gist.github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
-[hub]
-	protocol = ssh
+
+[help]
+  autocorrect = prompt
+
+[log]
+  date = auto:human
