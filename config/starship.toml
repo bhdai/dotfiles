@@ -34,6 +34,9 @@ behind = '[ ](bold purple) '
 ahead = '[ ](bold purple) '
 format = '([$all_status$ahead_behind]($style))'
 
+[gcloud]
+disabled = true
+
 [[battery.display]]
 threshold = 50
 
