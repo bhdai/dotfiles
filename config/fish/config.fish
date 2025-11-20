@@ -115,6 +115,22 @@ abbr jg "journalctl -b --grep"
 abbr ju "journalctl --all --follow -n 100 --unit"
 abbr juu "journalctl --all --follow -n 100 --user-unit"
 
+# Docker
+abbr lad lazydocker
+abbr d docker
+abbr dc docker compose
+abbr dcu "docker compose up -d"
+abbr dcd "docker compose down"
+abbr dcl "docker compose logs -f"
+abbr dps "docker ps"
+abbr dpsa "docker ps -a"
+abbr di "docker images"
+abbr dex "docker exec -it"
+abbr dl "docker logs -f"
+abbr dprune "docker system prune -af"
+abbr drm "docker rm -f"
+abbr drmi "docker rmi"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if test -f /home/monarch/miniforge3/bin/conda
