@@ -25,7 +25,7 @@ function fish_title
             set cmd "🛠️ "
         case node
             set cmd "🌲 "
-        case pacman paru
+        case pacman yay
             set cmd "📦 "
     end
     echo "$cmd$(prompt_pwd)"
