@@ -1,7 +1,6 @@
 acpi
 alacritty
 alsa-utils
-android-studio
 android-tools
 ant
 arc-gtk-theme
@@ -67,8 +66,10 @@ git-lfs
 github-cli
 glances
 glow
+gnome-keyring
 gnuplot
 go
+google-cloud-cli
 grc
 grim
 grimblast-git
@@ -88,7 +89,7 @@ hunspell-en_us
 hyperfine
 hypridle
 hyprland
-hyprland-qtutils
+hyprland-guiutils
 hyprlock
 hyprpaper
 hyprpicker
@@ -97,6 +98,7 @@ inotify-tools
 intel-ucode
 iptables-nft
 jdk-openjdk
+jdk21-openjdk
 journalctl-desktop-notification
 just
 kdeconnect
@@ -104,6 +106,7 @@ keepassxc
 keyd
 kitty
 kvantum
+lazydocker
 lazygit
 lib32-alsa-plugins
 lib32-libpulse
@@ -133,6 +136,7 @@ mongodb-bin
 mosh
 mousam
 mpv
+mycli
 mysql-workbench
 navi
 ncdu
@@ -148,6 +152,7 @@ networkmanager-openvpn
 ngrok
 nmap
 noto-fonts-cjk
+noto-fonts-emoji
 npm
 nvidia-open
 nvidia-prime
@@ -170,6 +175,8 @@ pamixer
 pandoc-cli
 papirus-icon-theme
 pavucontrol
+pgadmin4-desktop
+pgcli
 pipewire
 pipewire-alsa
 pipewire-jack
@@ -206,6 +213,8 @@ repo
 ripgrep
 rofi
 rog-control-center
+ruby-bundler
+ruby-stdlib
 rust
 safeeyes-git
 sddm
@@ -227,6 +236,7 @@ systemsettings
 tealdeer
 tectonic
 tesseract-data-eng
+texlive-binextra
 texlive-fontsrecommended
 texlive-latexextra
 texlive-xetex
