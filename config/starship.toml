@@ -6,23 +6,12 @@ $character"""
 
 command_timeout = 1000  # 1 seconds
 
-[character]      # The name of the module we are configuring is "character"
-success_symbol = '[❯](bold green)'     # The "symbol" segment is being set to "➜"
-error_symbol = '[✗](bold red) '  # Show "✖" when the command failed
-
 [custom.shell]
 command = "echo $STARSHIP_SHELL"  # shows output of command
 when = """ test "$STARSHIP_SHELL" != "fish" """
 style = "dimmed blue"
 format = "[$output]($style)"
 shell =["bash"]
-
-# [custom.neovim]
-# command = 'bob ls | rg Used | awk "{print \$2}"'  # shows output of command
-# detect_folders = ["lua"]
-# style = "green"
-# format = "[ $output ]($style)"
-# shell =["bash"]
 
 [git_status]
 untracked = '[ $count](bold yellow) '
