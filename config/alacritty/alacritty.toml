@@ -1,5 +1,5 @@
 general.import = [
-"~/ghq/github.com/folke/tokyonight.nvim/extras/alacritty/tokyonight_storm.toml"
+"~/ghq/github.com/folke/tokyonight.nvim/extras/alacritty/tokyonight_night.toml"
 ]
 
 general.live_config_reload = true
@@ -22,7 +22,7 @@ normal = { family = "FiraCode Nerd Font" }
 bold = { family = "FiraCode Nerd Font", style = "Bold"}
 italic = { family = "Maple Mono", style = "Italic"}
 bold_italic = { family = "Maple Mono", style = "Bold Italic"}
-size = 10
+size = 9.5
 
 [cursor]
 thickness = 0.4

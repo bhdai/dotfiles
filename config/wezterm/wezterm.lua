@@ -17,7 +17,7 @@ config.cursor_blink_ease_out = "Constant"
 
 -- Colorscheme
 config.color_scheme_dirs = { wezterm.home_dir .. "/ghq/github.com/folke/tokyonight.nvim/extras/wezterm/" }
-config.color_scheme = "tokyonight_moon"
+config.color_scheme = "tokyonight_night"
 wezterm.add_to_config_reload_watch_list(config.color_scheme_dirs[1] .. config.color_scheme .. ".toml")
 
 config.colors = {
@@ -47,7 +47,7 @@ else
 end
 
 -- Fonts
-config.font_size = 10
+config.font_size = 9.5
 config.font = wezterm.font("FiraCode Nerd Font")
 config.bold_brightens_ansi_colors = true
 config.font_rules = {

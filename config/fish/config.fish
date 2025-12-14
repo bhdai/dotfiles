@@ -132,6 +132,9 @@ abbr dprune "docker system prune -af"
 abbr drm "docker rm -f"
 abbr drmi "docker rmi"
 
+# yay
+abbr yay "yay --sudoloop"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if test -f /home/monarch/miniforge3/bin/conda
@@ -144,6 +147,3 @@ else
     end
 end
 # <<< conda initialize <<<
-
-#nvm
-set -gx nvm_default_version lts

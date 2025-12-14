@@ -51,15 +51,15 @@ function tm
     if not tmux has-session -t="$session_name" 2>/dev/null
         # 1. Create session detached
         tmux new-session -d -s "$session_name" -c "$project_dir"
-        
+
         # 2. Run nvim in the first window (the one just created)
         #    Using :^ makes it target the first window of the session regardless of index
         tmux send-keys -t "$session_name:^" "nvim ." C-m
-        
+
         # 3. Create 2nd and 3rd windows
         tmux new-window -t "$session_name" -c "$project_dir"
         tmux new-window -t "$session_name" -c "$project_dir"
-        
+
         # 4. Focus back on the first window (neovim)
         tmux select-window -t "$session_name:^"
     end
@@ -71,3 +71,4 @@ function tm
         tmux attach-session -t "$session_name"
     end
 end
+
