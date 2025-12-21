@@ -3,6 +3,7 @@ alacritty
 alsa-utils
 android-tools
 ant
+antigravity
 arc-gtk-theme
 arch-audit
 arch-wiki-docs
@@ -12,6 +13,10 @@ atuin
 base
 base-devel
 bat
+bats
+bats-assert
+bats-file
+bats-support
 bc
 bind
 bluedevil
@@ -26,6 +31,7 @@ btrfs-progs
 clang
 cliphist
 cloudflare-warp-bin
+cloudflared
 cpupower
 ctags-git
 dart-sass
@@ -219,6 +225,7 @@ rust
 safeeyes-git
 sddm
 shell-color-scripts-git
+shellcheck
 slurp
 smartmontools
 speedtest-cli
@@ -252,7 +259,6 @@ tomcat10
 tor
 traceroute
 tree
-tree-sitter-cli
 ttf-fira-code
 ttf-firacode-nerd
 ttf-hack-nerd
@@ -274,7 +280,7 @@ vde2
 vdpauinfo
 vim
 virt-viewer
-visual-studio-code-bin
+visual-studio-code-insiders-bin
 vlc
 vmware-workstation
 vulkan-intel
