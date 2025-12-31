@@ -2,7 +2,7 @@ status is-interactive; or exit
 
 bind -M insert \ch __fzf_tldr
 
-source ~/ghq/github.com/folke/tokyonight.nvim/extras/fzf/tokyonight_moon.sh
+source ~/ghq/github.com/folke/tokyonight.nvim/extras/fzf/tokyonight_night.sh
 
 set -x FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS 
   --cycle
