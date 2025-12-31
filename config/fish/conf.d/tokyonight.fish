@@ -1,4 +1,4 @@
-set style moon
+set style night
 set theme tokyonight_{$style}
 
 set src ~/ghq/github.com/folke/tokyonight.nvim/extras/fish_themes/{$theme}.theme
