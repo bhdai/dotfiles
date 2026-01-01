@@ -1,5 +1,5 @@
 function powersave --description "Toggle power-saving mode"
-  set -l USER monarch
+  set -l USER dai
   set -l MIN_BRIGHTNESS 1000
 
   function run_as_user
