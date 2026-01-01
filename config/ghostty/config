@@ -14,7 +14,7 @@ mouse-hide-while-typing = true
 # adjust-cursor-thickness = 2
 
 # theme
-theme = /home/monarch/ghq/github.com/folke/tokyonight.nvim/extras/ghostty/tokyonight_night
+theme = /home/dai/ghq/github.com/folke/tokyonight.nvim/extras/ghostty/tokyonight_night
 cursor-invert-fg-bg = false
 background-opacity = 1
 window-theme = ghostty

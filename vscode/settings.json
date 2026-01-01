@@ -273,6 +273,6 @@
         "*.sdb": "${capture}.${extname}-*",
         "*.s3db": "${capture}.${extname}-*"
     },
-    "python.defaultInterpreterPath": "/home/monarch/miniconda3/bin/python"
+    "python.defaultInterpreterPath": "/home/dai/miniconda3/bin/python"
 }
 

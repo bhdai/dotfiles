@@ -8,7 +8,7 @@
 [user]
 	email = ss1280dzzz@gmail.com
 	name = Bui Dai
-	signingkey = 196899953E89F08D
+	signingkey = 2383928C77C94A3874AD3C4E366883735C5016C3
 
 [color]
   ui = auto
@@ -84,7 +84,7 @@
   defaultBranch = main
 
 [commit]
-  gpgsign = true
+	gpgsign = true
   verbose = true
 
 [credential]
