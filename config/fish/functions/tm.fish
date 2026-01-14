@@ -47,6 +47,23 @@ function tm
     # Sanitize session name: lowercase and replace dots with underscores
     set -l session_name (string lower "$project_name" | string replace -a "." "_")
 
+    # Check if session exists but points to a DIFFERENT directory (name collision)
+    if tmux has-session -t="$session_name" 2>/dev/null
+        # Get the current path of the existing session
+        set -l existing_path (tmux list-sessions -F "#{session_name}:#{pane_current_path}" 2>/dev/null | grep "^$session_name:" | head -1 | cut -d: -f2-)
+        
+        # Extract the base project path from existing session (owner/repo level)
+        set -l existing_parts (string split "/" (string replace "$search_dir/" "" "$existing_path"))
+        set -l existing_project_root "$search_dir/$existing_parts[1]/$existing_parts[2]"
+        
+        # If paths differ, we have a collision - add owner prefix
+        if test "$existing_project_root" != "$project_dir"
+            set -l rel_path (string replace "$search_dir/" "" "$project_dir")
+            set -l owner (string split "/" $rel_path)[1]
+            set session_name (string lower "$owner"_"$project_name" | string replace -a "." "_")
+        end
+    end
+
     # Check if session exists; if not, create it with the 3-window layout
     if not tmux has-session -t="$session_name" 2>/dev/null
         # 1. Create session detached
