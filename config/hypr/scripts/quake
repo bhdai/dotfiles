@@ -1,42 +1,43 @@
-#!/bin/env bash
+#!/usr/bin/env bash
+#
+# Quake-style terminal toggle for Hyprland (Lua/0.55+ dispatcher syntax).
+# All hyprctl dispatch calls use hl.dsp.* Lua expressions, which is required
+# since Hyprland now evaluates dispatch arguments as Lua.
 
-WORKSPACE=$(hyprctl clients -j | jq -rec '.[] | select(.class == "dai.quake") | .workspace .name')
-# TERM_CMD="wezterm --config window_background_opacity=1 start --class dai.quake"
-TERM_CMD="ghostty --class=\"dai.quake\""
+WORKSPACE=$(hyprctl clients -j | jq -rec '.[] | select(.class == "dai.quake") | .workspace.name')
 
-# hyprctl --batch '
-# keyword windowrulev2 float,class:quake ;
-# keyword windowrulev2 center,class:quake ;
-# keyword windowrulev2 dimaround,class:quake ;
-# keyword windowrulev2 size 1600 1000,class:quake ;
-# keyword windowrulev2 pin,class:quake ;
-# '
 echo "WORKSPACE: $WORKSPACE"
 
 if [ -z "$WORKSPACE" ]; then
   echo "start"
-  # hyprctl dispatch -- exec "[float;size 1600 1000;center] $TERM_CMD"
-  hyprctl dispatch -- exec "$TERM_CMD"
+  # Save the current active window so HIDE can restore focus to it later
+  hyprctl activewindow | head -n1 | cut -f2 -d ' ' >/tmp/hypr-quake-address
+  hyprctl dispatch 'hl.dsp.exec_cmd("ghostty --class=dai.quake")'
+
 elif [ "$WORKSPACE" == "special:quake" ]; then
   echo "show"
 
-  # Store the current active window address
+  # Store the current active window address before switching to quake
   hyprctl activewindow | head -n1 | cut -f2 -d ' ' >/tmp/hypr-quake-address
 
-  # If the current active window is fullscreen, unfullscreen it
-  hyprctl activewindow | rg "fullscreen: 1" && hyprctl dispatch fullscreenstate 0 0
+  # If the current active window is fullscreen, unfullscreen it first
+  hyprctl activewindow | rg "fullscreen: 1" && \
+    hyprctl dispatch 'hl.dsp.window.fullscreen_state({ internal = 0, client = 0 })'
 
   # Move the quake window to the current workspace, focus it, and bring it to the top
-  hyprctl dispatch movetoworkspacesilent "+0,class:^(dai\.quake)\$"
-  hyprctl dispatch focuswindow "class:^(dai\.quake)\$"
-  hyprctl dispatch bringactivetotop
+  CUR_WS=$(hyprctl activeworkspace -j | jq -r '.id')
+  hyprctl dispatch "hl.dsp.window.move({ workspace = $CUR_WS, window = \"class:^(dai\\\\.quake)$\" })"
+  hyprctl dispatch 'hl.dsp.focus({ window = "class:^(dai\\.quake)$" })'
+  hyprctl dispatch 'hl.dsp.window.bring_to_top()'
+
 else
   echo "hide"
 
   # Move the quake window to the special workspace
-  hyprctl dispatch movetoworkspacesilent "special:quake,class:^(dai\.quake)\$"
+  hyprctl dispatch 'hl.dsp.window.move({ workspace = "special:quake", window = "class:^(dai\\.quake)$" })'
 
   # Focus the previously active window and bring it to the top
-  hyprctl dispatch focuswindow "address:0x$(cat /tmp/hypr-quake-address)"
-  hyprctl dispatch bringactivetotop
+  ADDR=$(cat /tmp/hypr-quake-address 2>/dev/null)
+  [ -n "$ADDR" ] && hyprctl dispatch "hl.dsp.focus({ window = \"address:0x$ADDR\" })"
+  hyprctl dispatch 'hl.dsp.window.bring_to_top()'
 fi
