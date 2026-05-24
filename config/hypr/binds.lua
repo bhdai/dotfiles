@@ -151,10 +151,18 @@ hl.bind("SUPER + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = t
 hl.bind("SUPER + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }))
 
 -- -------------------------------------------------------------------------
--- Zoom (Quickshell IPC)
+-- Zoom
 -- -------------------------------------------------------------------------
-hl.bind("SUPER + ALT + Minus", hl.dsp.exec_cmd("qs ipc call zoom zoomOut"), { repeating = true })
-hl.bind("SUPER + ALT + Equal", hl.dsp.exec_cmd("qs ipc call zoom zoomIn"), { repeating = true })
+local function zoom(delta)
+	local current = hl.get_config("cursor:zoom_factor")
+	hl.config({ cursor = { zoom_factor = math.max(1.0, math.min(3.0, current + delta)) } })
+end
+hl.bind("SUPER + ALT + Minus", function()
+	zoom(-0.3)
+end, { repeating = true })
+hl.bind("SUPER + ALT + Equal", function()
+	zoom(0.3)
+end, { repeating = true })
 
 -- -------------------------------------------------------------------------
 -- Gestures
