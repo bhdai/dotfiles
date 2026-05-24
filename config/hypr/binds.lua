@@ -160,6 +160,27 @@ hl.bind("SUPER + ALT + Equal", function()
 end, { repeating = true })
 
 -- -------------------------------------------------------------------------
+-- VM Submap
+-- -------------------------------------------------------------------------
+hl.define_submap("vm", function()
+	hl.bind("SUPER + ALT + F1", function()
+		if hl.get_current_submap() == "vm" then
+			hl.dispatch(
+				hl.dsp.exec_cmd("notify-send 'Exited Virtual Machine submap' 'Keybinds re-enabled' -a 'Hyprland'")
+			)
+			hl.dispatch(hl.dsp.submap("reset"))
+		else
+			hl.dispatch(
+				hl.dsp.exec_cmd(
+					"notify-send 'Entered Virtual Machine submap' 'Keybinds disabled. Hit Super+Alt+F1 to escape' -a 'Hyprland'"
+				)
+			)
+			hl.dispatch(hl.dsp.submap("vm"))
+		end
+	end, { submap_universal = true })
+end)
+
+-- -------------------------------------------------------------------------
 -- Gestures
 -- -------------------------------------------------------------------------
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
