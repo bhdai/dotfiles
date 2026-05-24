@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(which:*)",
+      "Bash(echo:*)",
+      "Bash(pwd)",
+      "Bash(tree:*)",
+      "Bash(gh:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git show-ref:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(nvim --version:*)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  },
+  "theme": "dark",
+  "skipAutoPermissionPrompt": true,
+  "effortLevel": "high"
+}
