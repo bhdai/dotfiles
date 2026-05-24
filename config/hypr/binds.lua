@@ -107,18 +107,19 @@ hl.bind("SUPER + Minus", hl.dsp.layout("colresize -0.1"))
 hl.bind("SUPER + Equal", hl.dsp.layout("colresize +0.1"))
 
 -- -------------------------------------------------------------------------
--- Focus Movement (vim-style)
+-- Focus / Move / Resize (vim-style, H J K L)
 -- -------------------------------------------------------------------------
-hl.bind("SUPER + H", hl.dsp.focus({ direction = "l" }))
-hl.bind("SUPER + J", hl.dsp.focus({ direction = "d" }))
-hl.bind("SUPER + K", hl.dsp.focus({ direction = "u" }))
-hl.bind("SUPER + L", hl.dsp.focus({ direction = "r" }))
-
--- Window movement
-hl.bind("SUPER + ALT + H", hl.dsp.window.move({ direction = "l" }))
-hl.bind("SUPER + ALT + J", hl.dsp.window.move({ direction = "d" }))
-hl.bind("SUPER + ALT + K", hl.dsp.window.move({ direction = "u" }))
-hl.bind("SUPER + ALT + L", hl.dsp.window.move({ direction = "r" }))
+local vim_dirs = {
+	H = { dir = "l", x = -30, y = 0 },
+	J = { dir = "d", x = 0, y = 30 },
+	K = { dir = "u", x = 0, y = -30 },
+	L = { dir = "r", x = 30, y = 0 },
+}
+for key, d in pairs(vim_dirs) do
+	hl.bind("SUPER + " .. key, hl.dsp.focus({ direction = d.dir }))
+	hl.bind("SUPER + ALT + " .. key, hl.dsp.window.move({ direction = d.dir }))
+	hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.resize({ x = d.x, y = d.y, relative = true }))
+end
 
 -- -------------------------------------------------------------------------
 -- Workspaces
@@ -143,12 +144,6 @@ hl.bind("SUPER + bracketright", hl.dsp.focus({ workspace = "e+1" }))
 -- -------------------------------------------------------------------------
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + ALT + mouse:272", hl.dsp.window.resize(), { mouse = true })
-
--- Resize active window with keyboard
-hl.bind("SUPER + SHIFT + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }))
-hl.bind("SUPER + SHIFT + H", hl.dsp.window.resize({ x = -30, y = 0, relative = true }))
-hl.bind("SUPER + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }))
-hl.bind("SUPER + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }))
 
 -- -------------------------------------------------------------------------
 -- Zoom
