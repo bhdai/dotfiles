@@ -16,7 +16,7 @@ sufficient. **Do not write your accomplishments into this file.**
 
 ## Python Guidelines (using `uv`)
 
-- **Managing Dependencies**: Use `uv add` to add dependencies to your project. This ensures your `pyproject.toml` and lockfile are updated efficiently.
+- **Managing Dependencies**: Use `uv add` to add dependencies to your project. This ensures your `pyproject.toml` and lockfile are updated efficiently (do not edit dependencies field in pyproject.toml manually use uv add instead).
 - **Error Handling**: When using libraries like `pydantic` or custom exception wrappers, consistently wrap calls that might fail in a `try/except` block and raise a custom exception with a clear message.
   - Context messages should be in the **simple present tense** to complete the sentence "while attempting to...".
   - _Example_: `raise RuntimeError("fetch user data") from e`
@@ -110,40 +110,6 @@ Avoid over-documenting:
 - Simple utility functions where intent is clear from the signature
 - Trivial getters/setters or obvious wrapper code
 - Code that's primarily syntactic sugar over well-known patterns
-
-## Github Copilot run command in fish shell insights
-
-Github copilot have a problem running multiple lines command in fish shell
-
-For example:
-
-```bash
-
-uv run python -c "
-import sys
-sys.stdout.flush()
-import torch
-import torch.nn as nn
-from src.losses import DiceFocalLoss
-from src.models.attention_unet import ConvBlock, UpConv, AttentionGate
-print('step 1', flush=True)
-filters = [64, 128, 256, 512, 1024]
-c1 = ConvBlock(3, filters[0])
-print('step 2', flush=True)
-c5 = ConvBlock(filters[3], filters[4])
-print('step 3', flush=True)
-up5 = UpConv(filters[4], filters[3])
-print('step 4', flush=True)
-att5 = AttentionGate(F_g=filters[3], F_l=filters[3], F_int=filters[2])
-print('step 5', flush=True)
-loss = DiceFocalLoss(alpha=0.75, gamma=2.0, dice_weight=0.5, focal_weight=0.5)
-print('step 6 all done', flush=True)
-"
-```
-
-This will not work in fish shell if run this through github copilot interface it will split the lines and run each lines as separate command in vscode github copilot terminal
-
-If you need to run the multiple lines commands please write to a file in tmp/ folder and run the file from there
 
 ### Prefer temp files over pipes for sub-agent CLI testing
 
