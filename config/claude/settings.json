@@ -33,7 +33,8 @@
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
+  "effortLevel": "high",
   "theme": "dark",
   "skipAutoPermissionPrompt": true,
-  "effortLevel": "high"
+  "model": "opus"
 }

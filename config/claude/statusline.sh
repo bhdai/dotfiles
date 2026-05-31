@@ -3,6 +3,18 @@ input=$(cat)
 
 git_info=$(echo "$input" | bash ~/.claude/statusline-git.sh)
 
+model_display=$(echo "$input" | node -e "
+const d = JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'));
+const m = d.model || {};
+const name = m.display_name || m.id || '';
+if (!name) process.exit(0);
+const short = name.replace(/^Claude\s+/i, '');
+const fast = d.fast_mode || m.fast || m.fast_mode || d.fast
+          || (m.id && /fast/i.test(m.id)) || (m.display_name && /fast/i.test(m.display_name));
+const suffix = fast ? ' ⚡' : '';
+process.stdout.write('\x1b[90m' + short + suffix + '\x1b[0m');
+")
+
 token_display=$(echo "$input" | node -e "
 const d = JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'));
 const cw = d.context_window || {};
@@ -17,8 +29,12 @@ const color = pct < 50 ? '\x1b[32m' : pct < 80 ? '\x1b[33m' : '\x1b[31m';
 process.stdout.write(color + k + ' (' + pctStr + '%)\x1b[0m');
 ")
 
-if [ -n "$token_display" ]; then
-  printf '%s | %s' "$git_info" "$token_display"
-else
-  printf '%s' "$git_info"
-fi
+parts=()
+[ -n "$model_display" ] && parts+=("$model_display")
+[ -n "$git_info" ] && parts+=("$git_info")
+[ -n "$token_display" ] && parts+=("$token_display")
+
+printf '%s' "${parts[0]}"
+for ((i=1; i<${#parts[@]}; i++)); do
+  printf ' | %s' "${parts[$i]}"
+done
