@@ -12,7 +12,10 @@ const short = name.replace(/^Claude\s+/i, '');
 const fast = d.fast_mode || m.fast || m.fast_mode || d.fast
           || (m.id && /fast/i.test(m.id)) || (m.display_name && /fast/i.test(m.display_name));
 const suffix = fast ? ' ⚡' : '';
-process.stdout.write('\x1b[90m' + short + suffix + '\x1b[0m');
+// Use the default foreground colour (no SGR colour) so the model name
+// reads as clearly as the plain 'on' separator in statusline-git.sh,
+// instead of the dim bright-black (\x1b[90m) it used before.
+process.stdout.write(short + suffix);
 ")
 
 token_display=$(echo "$input" | node -e "

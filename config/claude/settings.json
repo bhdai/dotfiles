@@ -29,12 +29,13 @@
       "Bash(nvim --version:*)"
     ]
   },
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "theme": "dark",
-  "skipAutoPermissionPrompt": true,
-  "model": "opus"
+  "editorMode": "vim",
+  "skipAutoPermissionPrompt": true
 }
