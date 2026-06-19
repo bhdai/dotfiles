@@ -21,8 +21,15 @@ hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark
 -- -------------------------------------------------------------------------
 hl.on("hyprland.start", function()
 	-- Session/environment setup
-	hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY")
+	-- Import env first, then bring up graphical-session.target via hyprland-session.target.
+	-- xdg-desktop-portal >= 1.22 has Requisite=graphical-session.target, so the portal
+	-- (screen sharing picker) won't start unless that target is active. Chained so the
+	-- target only starts after the env is in place.
+	hl.exec_cmd(
+		"systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && "
+			.. "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XAUTHORITY && "
+			.. "systemctl --user start hyprland-session.target"
+	)
 
 	-- Desktop services
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
