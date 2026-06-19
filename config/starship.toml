@@ -1,5 +1,4 @@
 format = """
-[](fg:#1793d1) \
 $directory\
 $all\
 $character"""
