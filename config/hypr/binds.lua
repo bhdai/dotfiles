@@ -43,12 +43,12 @@ hl.bind(
 -- -------------------------------------------------------------------------
 hl.bind("XF86PowerOff", hl.dsp.exec_cmd("qs ipc call session open"))
 hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("qs ipc call session open"))
-hl.bind("SUPER + space", hl.dsp.exec_cmd("qs ipc call launcher toggle"))
+hl.bind("SUPER + space", hl.dsp.global("quickshell:launcherToggle"))
 hl.bind("SUPER + F1", hl.dsp.exec_cmd("qs ipc call gamingMode toggle"))
 
 -- Brightness with Quickshell fallback
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("qs ipc call brightness decrement || brightnessctl s 5%+"))
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("qs ipc call brightness increment || brightnessctl s 5%-"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("qs ipc call brightness decrement || brightnessctl s 5%-"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("qs ipc call brightness increment || brightnessctl s 5%+"))
 
 -- Power profile
 hl.bind("XF86Launch4", hl.dsp.exec_cmd("qs ipc call powerProfile cycle || asusctl profile --next"))
