@@ -73,6 +73,25 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Test: `uv run pytest -q` Types: `uv run mypy app` (note that commands here are just example)
 - Ask before adding any dependency. Prefer the stdlib.
 
+## Version control
+
+### Branch
+
+- Always work on a branch named `feat/issue-N-short-desc` (e.g. `feat/issue-3-approve-arm`).
+- Never commit directly to `main`.
+
+### Commits
+
+- Commit after each meaningful unit of work — don't batch the whole issue into one commit.
+- Use Conventional Commits: `type(scope): imperative description` (under 50 chars).
+- Common types: feat · fix · test · refactor · chore · docs.
+
+### Pull request
+
+- Open a Draft PR on the first push. Do not wait until the work is finished.
+- Mark the PR ready for review only when CI is green.
+- Do not merge. The human reviews the diff and merges (squash) when satisfied.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
