@@ -1,4 +1,4 @@
-antigravity
+antigravity-cli
 arc-gtk-theme
 arch-wiki-docs
 archlinux-xdg-menu
@@ -11,15 +11,18 @@ bat
 biber
 bind
 bluez
+bluez-tools
 bluez-utils
 breeze
 brightnessctl
 btop
 btrfs-progs
 clang
+claude-code
 cliphist
 cloudflare-warp-bin
 cronie
+d2
 docker
 docker-buildx
 docker-compose
@@ -41,7 +44,9 @@ ghq
 git
 git-delta
 github-cli
+glab
 gnome-keyring
+google-chrome
 grc
 grim
 grimblast-git
@@ -100,8 +105,11 @@ nvidia-settings
 nvidia-utils
 nvtop
 obs-studio
+obsidian
 okular
+openai-codex
 openbsd-netcat
+opencode
 papirus-icon-theme
 pavucontrol-qt
 pgadmin4-desktop-bin
@@ -110,6 +118,7 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
+pkgfile
 plasma-browser-integration
 plasma-nm
 playerctl
@@ -132,6 +141,7 @@ smartmontools
 sof-firmware
 starship
 steam
+stremio-service-bin
 supergfxctl
 systemsettings
 tealdeer
@@ -168,6 +178,7 @@ vulkan-radeon
 wev
 wget
 winboat-bin
+windscribe-v2-bin
 wireless_tools
 wireplumber
 wl-clip-persist
@@ -183,12 +194,13 @@ xf86-video-nouveau
 xorg-server
 xorg-xinit
 yay
-yay-debug
 yt-dlp
+zapret-git
 zathura
 zathura-pdf-mupdf
 zen-browser-bin
 zip
+zmk-studio-bin
 zoxide
 zram-generator
 zrok-bin
