@@ -92,6 +92,11 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Mark the PR ready for review only when CI is green.
 - Do not merge. The human reviews the diff and merges (squash) when satisfied.
 
+### Sub-issues (gh CLI)
+
+- Create under a parent: `gh issue create --parent N ...`
+- Link an existing issue: `gh issue edit N --add-sub-issue M` (unlink: `--remove-sub-issue` / `--remove-parent`).
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
