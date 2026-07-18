@@ -1,6 +1,7 @@
 {
   "includeCoAuthoredBy": false,
   "permissions": {
+    "defaultMode": "auto",
     "allow": [
       "WebSearch",
       "WebFetch",
@@ -36,9 +37,9 @@
     "command": "bash ~/.claude/statusline.sh"
   },
   "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
   "editorMode": "vim",
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipAutoPermissionPrompt": true
 }
