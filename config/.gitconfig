@@ -8,7 +8,16 @@
 [user]
 	email = ss1280dzzz@gmail.com
 	name = Bui Dai
-	signingkey = 2383928C77C94A3874AD3C4E366883735C5016C3
+	signingkey = ~/.ssh/id_ed25519.pub
+
+; Signs with the SSH key instead of GPG key 4D94FA03, which stays on GitHub so
+; commits signed before this switch keep verifying. Unlike GPG, verifying other
+; people's signatures needs their key listed in allowedSignersFile by hand.
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  allowedSignersFile = ~/.ssh/allowed_signers
 
 [color]
   ui = auto
@@ -110,3 +119,10 @@ helper = cache
 
 [log]
   date = auto:human
+
+; Work identities live outside this repo because it is public and they carry
+; employer names, addresses, and internal hostnames. Missing include paths are
+; ignored by git, so this stays valid on machines that have no work setup.
+; Must remain last: conditional includes only override [user] if read after it.
+[include]
+  path = ~/.config/git/local.gitconfig
