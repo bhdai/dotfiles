@@ -1,8 +1,8 @@
 [submodule "nvim"]
-	path = nvim
-	url = git@github.com:buidai123/nvim_config.git
+	path = config/nvim
+	url = git@github.com:bhdai/nvim_config.git
 	branch = main
 [submodule "quickshell"]
-	path = quickshell
+	path = config/quickshell
 	url = git@github.com:bhdai/quickshell_config.git
 	branch = main
