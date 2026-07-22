@@ -1,0 +1,4 @@
+# Domains that get the split-@1 treatment. Everything not listed here is
+# passed through untouched. Matching is by domain suffix, so this one line
+# also covers www., api., img. and every other sofascore.com subdomain.
+sofascore.com
