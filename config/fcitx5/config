@@ -1,0 +1,37 @@
+[Hotkey]
+# Modifier-only chords only fire if released within this window. The stock 250ms
+# is tight for a two-key chord like Alt+Shift; 500ms is comfortable without
+# being so long that a held Alt starts toggling by accident.
+ModifierOnlyKeyTimeout=500
+EnumerateWithTriggerKeys=True
+EnumerateSkipFirst=False
+
+# Toggle Vietnamese <-> English. All four spellings so it fires on either Alt,
+# either Shift, and in either press order: fcitx matches the *second* key as the
+# keysym and the first as a modifier state bit, so Alt-then-Shift and
+# Shift-then-Alt are genuinely different keys to it.
+[Hotkey/TriggerKeys]
+0=Alt+Shift_L
+1=Alt+Shift_R
+2=Shift+Alt_L
+3=Shift+Alt_R
+
+# Cleared. Defaults to a bare Shift_L "temporarily toggle", which collides with
+# the Shift in the chord above and makes toggling feel nondeterministic.
+[Hotkey/AltTriggerKeys]
+
+# Cleared. Defaults to Super+space / Super+Shift+space, which is the quickshell
+# launcher in hypr/binds.lua:46. Only one group is configured anyway.
+[Hotkey/EnumerateGroupForwardKeys]
+
+[Hotkey/EnumerateGroupBackwardKeys]
+
+[Behavior]
+# Start in English; Alt+Shift into Vietnamese on demand.
+ActiveByDefault=False
+# Per-application input state, so a terminal staying English doesn't force the
+# browser out of Vietnamese.
+ShareInputState=No
+PreeditEnabledByDefault=True
+ShowInputMethodInformation=True
+CompactInputMethodInformation=True
