@@ -28,7 +28,7 @@ function fzf_change_directory
         fd . $HOME/Documents/ -d 1 --type d --type f -H
 
         fd -t f -t d -H --exclude .git -E .cache -d 4 . (ghq root)
-        fd -t f -t d -H --exclude .git -E .cache -d 2 . $HOME/workplace
+        fd -t f -t d -H --exclude .git -E .cache -d 2 . $HOME/Projects
 
         # for the current directory only search if it not the home directory(it's a pain though)
         if test $PWD != $HOME
