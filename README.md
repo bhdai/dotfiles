@@ -31,6 +31,23 @@ ln -sfn ~/ghq/github.com/bhdai/dotfiles/agentic/claude/skills/deep-research ~/.c
 Use `ln -sfn`, not `ln -s`: the target directories already exist, and plain `ln -s`
 silently creates the link *inside* them instead of failing.
 
+## KDE default terminal
+
+Dolphin launches `Terminal=true` desktop entries (Neovim, etc.) through KDE's
+`KTerminalLauncherJob`, which hardcodes konsole and errors with `Terminal konsole
+not found` when konsole is absent. The installed KIO (Plasma 6.7) predates
+`xdg-terminal-exec` support, so `xdg-terminals.list` and `$TERMINAL` are ignored —
+the only knob it reads is `TerminalApplication` in `kdeglobals`. KDE rewrites that
+file on every settings change, so it isn't symlinked; add these two keys to the
+`[General]` group in `~/.config/kdeglobals` by hand (KDE preserves keys it doesn't
+manage):
+
+```ini
+[General]
+TerminalApplication=ghostty
+TerminalService=com.mitchellh.ghostty.desktop
+```
+
 ## keyd
 
 `keyd` config lives at `/etc/keyd/default.conf` (system-level, root-owned), so it
@@ -63,6 +80,23 @@ unmodified. No tunnel, no proxy, real exit IP.
 Adding a domain is an edit to the hostlist plus `sudo systemctl restart zapret`.
 After a zapret upgrade, `diff system/zapret/config /opt/zapret/config` shows
 whether upstream changed the defaults underneath our five `[dotfiles]` edits.
+
+## tlp
+
+Battery charge thresholds for the X1 Carbon Gen 11 (start 65%, stop 70%) via a
+`/etc/tlp.d/` drop-in. `tlp.conf` overrides `tlp.d/` for the same key, so this only
+works because every `*_CHARGE_THRESH_*` line in `tlp.conf` stays commented. Needs
+the `tlp-pd` package (pulls in `tlp`); it's hardware-specific (`BAT0`, natacpi).
+Deploy with:
+
+```bash
+sudo install -Dm644 system/tlp/10-battery-care.conf /etc/tlp.d/10-battery-care.conf &&
+sudo tlp start
+```
+
+Verify with `sudo tlp-stat -b` (`stopThreshold = 70`). Raise the stop threshold for a
+day away from power with `sudo tlp setcharge 0 100 BAT0`; it reverts on the next
+`tlp start` or reboot. Drift check: `diff system/tlp/10-battery-care.conf /etc/tlp.d/10-battery-care.conf`.
 
 ## PAM policies for the quickshell lock screen
 

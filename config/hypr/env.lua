@@ -24,9 +24,9 @@ hl.env("GTK_THEME", shared.system_theme)
 hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("XDG_MENU_PREFIX", "plasma-")
 
--- Nvidia
-hl.env("LIBVA_DRIVER_NAME", "nvidia")
-hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+-- -- Nvidia
+-- hl.env("LIBVA_DRIVER_NAME", "nvidia")
+-- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 
 -- Cursors
 hl.env("HYPRCURSOR_SIZE", tostring(shared.cursor_size))

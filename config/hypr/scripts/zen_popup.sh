@@ -144,16 +144,26 @@ handle_event() {
 }
 
 # Dependency Check
-for cmd in nc jq; do
-  if ! command -v $cmd &>/dev/null; then
-    echo "Error: '$cmd' is required but not installed." >&2
-    exit 1
-  fi
-done
+if ! command -v jq &>/dev/null; then
+  echo "Error: 'jq' is required but not installed." >&2
+  exit 1
+fi
 
 # Socket Setup
 socket_path="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 log "Socket path: $socket_path"
+
+# Socket reader: prefer socat, fall back to netcat
+if command -v socat &>/dev/null; then
+  reader=(socat -U - UNIX-CONNECT:"$socket_path")
+elif command -v nc &>/dev/null; then
+  reader=(nc -U "$socket_path")
+else
+  echo "Error: neither 'socat' nor 'nc' is installed." >&2
+  exit 1
+fi
+log "Reader: ${reader[*]}"
+
 log "Starting zen_popup listener..."
 
 # Pre-populate list (Optional: Mark all currently existing windows as "Old")
@@ -162,7 +172,7 @@ log "Starting zen_popup listener..."
 # We essentially strictly enforce that we only float windows we SAW getting created.
 
 # Listen
-nc -U "$socket_path" | while read -r line; do
+"${reader[@]}" | while read -r line; do
   event="${line%%>>*}"
   payload="${line#*>>}"
   handle_event "$event" "$payload"

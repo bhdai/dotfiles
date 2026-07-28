@@ -1,7 +1,6 @@
 {
   "includeCoAuthoredBy": false,
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "WebSearch",
       "WebFetch",
@@ -29,7 +28,8 @@
       "Bash(node:*)",
       "Bash(npm:*)",
       "Bash(nvim --version:*)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus",
   "statusLine": {

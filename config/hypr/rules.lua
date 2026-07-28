@@ -80,3 +80,13 @@ hl.window_rule({ match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" }, pin = true
 hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
 -- hl.layer_rule({ match = { namespace = "quickshell:.*" }, blur = true })
 hl.layer_rule({ match = { namespace = "bar-1" }, blur = true })
+
+-- hyprpicker's fullscreen freeze layer (used both by the color picker and by
+-- grimblast --freeze for screenshots) otherwise inherits the popin layersIn/Out
+-- animation, which scales the whole screen in and out.
+hl.layer_rule({ match = { namespace = "hyprpicker" }, no_anim = true })
+
+-- slurp's area-selection box. grimblast tries to disable its animation at
+-- runtime, but `hyprctl keyword layerrule` is rejected under the Lua parser
+-- ("keyword can't work with non-legacy parsers"), so it must be set here.
+hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })

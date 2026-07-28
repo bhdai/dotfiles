@@ -33,6 +33,7 @@ hl.on("hyprland.start", function()
 
 	-- Desktop services
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+	hl.exec_cmd("kded6")
 	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 	hl.exec_cmd("fcitx5")
 	hl.exec_cmd("sleep 3 && quickshell")
