@@ -145,7 +145,7 @@ Do the setup **before** the first edit, not after something breaks. PAM logs con
 errors to syslog and shows nothing in the UI, so watch the journal throughout.
 
 ```bash
-sudo pacman -S --needed pamtester            # the CLI gate; not installed by default
+yay -S --needed pamtester                    # the CLI gate; AUR, not in the official repos
 sha256sum /etc/pam.d/{system-auth,system-login,system-local-login,sudo,su,other} > /tmp/pam-before
 pkill hypridle                               # nothing locks the screen mid-edit
 journalctl -f &                              # PAM config errors only ever land here
@@ -154,9 +154,14 @@ journalctl -f &                              # PAM config errors only ever land 
 There is no `polkit-1` service file here, so polkit resolves through `other` — that
 is why `other` is in the snapshot and `polkit-1` is not.
 
-Then open a **root shell on another VT** (`Ctrl+Alt+F2`, log in as root) and leave it
-open for the whole session. Every check below runs as your normal user, against the
-policy in isolation — never against your live session.
+If you skipped the snapshot, `pacman -Qkk pambase sudo util-linux` checks the same
+thing after the fact and more strictly, against the package database rather than
+against your own earlier copy.
+
+Then open a **root shell on another VT** — `Ctrl+Alt+F3`, log in as root — and leave
+it open for the whole session. **F2 is sddm on this machine, not a free TTY.** Every
+check below runs as your normal user, against the policy in isolation — never
+against your live session.
 
 ```bash
 # password: correct passes, empty fails
@@ -165,7 +170,8 @@ pamtester quickshell-lock $USER authenticate
 # lockout text after the deny=3 default is exceeded — the 4th attempt is the one
 # that reports it, so run this four times with a wrong password
 pamtester -v quickshell-lock $USER authenticate
-faillock --reset                             # unprivileged for your own user; do this between rounds
+faillock --user $USER --reset                # between rounds; bare `faillock --reset` also
+                                             # tries root's tally and errors on it
 
 # fingerprint: enrolled finger passes, any other finger fails
 pamtester quickshell-fprint $USER authenticate
@@ -182,5 +188,23 @@ sha256sum -c /tmp/pam-before                 # every line must say OK
 grep -rl pam_fprintd /etc/pam.d/             # must print quickshell-fprint and nothing else
 ```
 
-Restart hypridle (`hyprctl dispatch exec hypridle`) and close the root VT when the
-run is clean.
+Restart hypridle with `setsid hypridle >/dev/null 2>&1 &`, and close the root VT when
+the run is clean. `hyprctl dispatch exec hypridle` does **not** work here — the Lua
+config parses the dispatch argument as Lua and rejects the bare word.
+
+What a green run looks like, observed 2026-07-28:
+
+| Check | Expected |
+|---|---|
+| Correct password | `authentication successful` |
+| Empty password | `Authentication token manipulation error`, exit 1 |
+| 4× wrong password | `Authentication failure` each time; the 4th **also** prints `The account is locked due to 3 failed logins. (10 minutes left to unlock)` |
+| Enrolled finger | passes; any other finger fails |
+| `quickshell-nope` | `Authentication failure` with **no prompt at all** — unknown services fall through to `/etc/pam.d/other`, which is `pam_deny` + `pam_warn` |
+
+Two log lines that look like faults and are not: `pam_faillock: Error sending audit
+message: Operation not permitted` is pamtester running unprivileged and unable to
+write audit records — the tally and the lockout both still work, and Quickshell will
+produce the same line for the same reason. And `pam_unix` does not log successful
+authentications at the default level, so a clean run leaves no positive trace in the
+journal; absence of a success line is not evidence of failure.
