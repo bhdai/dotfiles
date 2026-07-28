@@ -1,0 +1,6 @@
+#%PAM-1.0
+# Quickshell lock screen. Only the auth stack is ever used — PamContext
+# calls pam_authenticate and nothing else, so account/password/session
+# are never evaluated.
+
+auth      include   system-auth
