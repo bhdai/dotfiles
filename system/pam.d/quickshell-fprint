@@ -1,0 +1,10 @@
+#%PAM-1.0
+# Fingerprint-only auth, run as a second concurrent PamContext.
+# max-tries=1 stops the module blocking in its D-Bus verify loop for up
+# to 90s; QML drives the retry loop instead.
+# Deliberately no pam_faillock: a password lockout must not disable the
+# reader, and finger failures never increment the tally regardless.
+# Leading '-' only silences the syslog entry if the module is missing —
+# the stack still fails closed.
+
+-auth     required    pam_fprintd.so    max-tries=1
