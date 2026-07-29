@@ -16,7 +16,11 @@ hl.bind("SUPER + D", hl.dsp.exec_cmd("discord"))
 -- -------------------------------------------------------------------------
 -- Session Actions
 -- -------------------------------------------------------------------------
-hl.bind(meh .. " + L", hl.dsp.exec_cmd("hyprlock"))
+-- Through logind rather than a locker directly, so the keybind, the idle timeout and
+-- pre-sleep all converge on one dbus lock event, one lock_cmd and one fallback chain —
+-- and logind's LockedHint gets set. Routing through hypridle is the cost; a dead
+-- hypridle already means no idle lock and no lock before suspend.
+hl.bind(meh .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
 hl.bind(meh .. " + N", hl.dsp.exec_cmd("makoctl dismiss -a"))
 
 -- -------------------------------------------------------------------------
