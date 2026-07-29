@@ -263,3 +263,16 @@ hyprctl reload                                      # picks up binds.lua
 
 `hyprctl dispatch exec hypridle` does **not** work here, for the reason given in the safe
 test procedure above.
+
+Pulling the `config/quickshell` submodule does **not** reliably reload the running shell.
+Observed on the cutover pull: the watcher fired part-way through the checkout, failed with
+`module "qs.modules.lock" is not installed` because `shell.qml` had landed before the
+module directory, and then went quiet — leaving the shell serving the *old* generation with
+no sign anything was wrong. git also writes many files by rename, which this watcher
+ignores. Force a clean reload by rewriting one file's contents in place, and confirm it took:
+
+```bash
+cd ~/.config/quickshell && cp shell.qml /tmp/s && cat /tmp/s > shell.qml
+qs log | tail -5          # want a trailing "Configuration Loaded", not an error
+qs ipc call lock isLocked # want "false", not "Target not found."
+```
