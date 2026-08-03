@@ -38,7 +38,11 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("fcitx5")
 	hl.exec_cmd("sleep 3 && quickshell")
 	hl.exec_cmd("hypridle")
-	hl.exec_cmd("hyprpaper")
+	-- Hyprpaper does not autostart because Quickshell owns the wallpaper. Offline recovery:
+	-- systemctl --user unmask hyprpaper.service
+	-- hyprpaper &
+	-- hyprctl hyprpaper preload "$HOME/Pictures/wall/leaves.jpg"
+	-- hyprctl hyprpaper wallpaper "eDP-1,$HOME/Pictures/wall/leaves.jpg"
 	hl.exec_cmd("hyprsunset")
 
 	-- App launches pinned to workspaces
