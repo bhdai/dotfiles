@@ -36,7 +36,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("kded6")
 	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 	hl.exec_cmd("fcitx5")
-	hl.exec_cmd("sleep 3 && quickshell")
+	hl.exec_cmd("quickshell")
 	hl.exec_cmd("hypridle")
 	-- Hyprpaper does not autostart because Quickshell owns the wallpaper. Offline recovery:
 	-- systemctl --user unmask hyprpaper.service
