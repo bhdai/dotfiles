@@ -51,9 +51,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("ghostty", { workspace = "2 silent" })
 	hl.exec_cmd("thunderbird", { workspace = "3 silent" })
 
-	-- Helper scripts
-	hl.exec_cmd(shared.scripts_path .. "/zen_popup.sh")
-
 	-- Clipboard persistence and history
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	hl.exec_cmd("wl-paste --type text --watch cliphist store")

@@ -16,12 +16,65 @@ hl.window_rule({
 	tag = "+dialog",
 })
 hl.window_rule({
-	match = { title = ".*(Extension.*Bitwarden|.*File Upload.*).*" },
+	match = { title = ".*File Upload.*" },
 	tag = "+dialog",
 })
 hl.window_rule({ match = { tag = "dialog" }, float = true })
 hl.window_rule({ match = { tag = "dialog" }, center = true })
 hl.window_rule({ match = { tag = "dialog" }, size = { "monitor_w*0.60", "monitor_h*0.65" } })
+
+-- -------------------------------------------------------------------------
+-- Zen browser popups
+-- -------------------------------------------------------------------------
+-- Live Hyprland 0.56.1 probe: `window.title` yielded `1 arg(s): userdata`,
+-- whose address, class, and title fields were readable. Go: use HL.Window directly.
+local window_birthdays = {}
+local processed_popups = {}
+
+hl.on("window.open", function(window)
+	window_birthdays[window.address] = os.time()
+end)
+
+hl.on("window.close", function(window)
+	window_birthdays[window.address] = nil
+	processed_popups[window.address] = nil
+end)
+
+hl.on("window.title", function(window)
+	local address = window.address
+	local birthday = window_birthdays[address]
+	if not birthday or processed_popups[address] then
+		return
+	end
+
+	local title = window.title
+	local is_popup = title:find("Sign in - Google Accounts —", 1, true) == 1
+		or title:find("Extension:", 1, true) == 1
+	if not is_popup or window.class:find("zen", 1, true) ~= 1 then
+		return
+	end
+
+	-- Matching titles also appear when an existing tab navigates. Limiting the action
+	-- to windows seen opening in the last five seconds distinguishes new popups and
+	-- prevents a config reload from reclassifying windows that already existed.
+	if os.time() - birthday > 5 then
+		return
+	end
+
+	processed_popups[address] = true
+
+	local monitor = hl.get_active_monitor()
+	local target = "address:" .. address
+	hl.dispatch(hl.dsp.window.float({ action = "on", window = target }))
+	hl.dispatch(hl.dsp.window.resize({
+		x = monitor.width * 0.30,
+		y = monitor.height * 0.60,
+		relative = false,
+		window = target,
+	}))
+	hl.dispatch(hl.dsp.focus({ window = target }))
+	hl.dispatch(hl.dsp.window.center({ window = target }))
+end)
 
 -- -------------------------------------------------------------------------
 -- Librepods
