@@ -3,6 +3,7 @@
 -- ==============================================================================
 
 local shared = require("shared")
+local qs = require("qs")
 local meh = shared.meh
 
 -- -------------------------------------------------------------------------
@@ -45,22 +46,22 @@ hl.bind(
 -- -------------------------------------------------------------------------
 -- Quickshell IPC
 -- -------------------------------------------------------------------------
-hl.bind("XF86PowerOff", hl.dsp.exec_cmd("qs ipc call session open"))
-hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("qs ipc call session open"))
-hl.bind("SUPER + space", hl.dsp.global("quickshell:launcherToggle"))
-hl.bind("SUPER + F1", hl.dsp.exec_cmd("qs ipc call gamingMode toggle"))
+hl.bind("XF86PowerOff", qs.call("session", "open"))
+hl.bind("SUPER + SHIFT + S", qs.call("session", "open"))
+hl.bind("SUPER + space", qs.global("launcherToggle"))
+hl.bind("SUPER + F1", qs.call("gamingMode", "toggle"))
 
 -- Wallpaper (Quickshell owns the surface; see quickshell_config #92).
 -- Not meh: shared.meh already contains SHIFT, so meh + W and meh + SHIFT + W are one chord.
-hl.bind("CONTROL + ALT + W", hl.dsp.exec_cmd("qs ipc call wallpaper next"))
-hl.bind("CONTROL + ALT + SHIFT + W", hl.dsp.exec_cmd("qs ipc call wallpaper prev"))
+hl.bind("CONTROL + ALT + W", qs.call("wallpaper", "next"))
+hl.bind("CONTROL + ALT + SHIFT + W", qs.call("wallpaper", "prev"))
 
 -- Brightness with Quickshell fallback
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("qs ipc call brightness decrement || brightnessctl s 5%-"))
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("qs ipc call brightness increment || brightnessctl s 5%+"))
+hl.bind("XF86MonBrightnessDown", qs.call("brightness", "decrement", { fallback = "brightnessctl s 5%-" }))
+hl.bind("XF86MonBrightnessUp", qs.call("brightness", "increment", { fallback = "brightnessctl s 5%+" }))
 
 -- Power profile
-hl.bind("XF86Launch4", hl.dsp.exec_cmd("qs ipc call powerProfile cycle || asusctl profile --next"))
+hl.bind("XF86Launch4", qs.call("powerProfile", "cycle", { fallback = "asusctl profile --next" }))
 
 -- -------------------------------------------------------------------------
 -- Media and Volume

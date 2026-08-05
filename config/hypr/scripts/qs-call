@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+#
+# Honest exit status for `qs ipc call`.
+#
+# `qs ipc call` exits 0 even when the target or the function does not exist, so a
+# plain `qs ipc call ... || fallback` never reaches its fallback on a shell that is
+# running but failed to load the module being called. Only a shell that is not
+# running at all exits non-zero. This wrapper collapses every failure into one
+# status:
+#
+#   qs not installed                 127 from the shell        -> 1
+#   no instance running              255 from qs               -> 1
+#   target or function missing       0 + a sentinel on stdout  -> 1
+#   --expect given and value differs 0 + the wrong value       -> 1
+#   otherwise                                                  -> 0
+#
+# The sentinels below are Quickshell's own wording, and they arrive on stdout —
+# the same stream as return values — so they are compared as whole lines. A
+# function may legitimately return text that merely contains them.
+#
+# Usage: qs-call <target> <function> [arg...] [--expect VALUE] [--notify]
+#
+#   --expect VALUE  Require this exact returned value. Without it any value,
+#                   including `false`, counts as success — `getState` returning
+#                   false is an answer, not a failure.
+#   --notify        Report failure with notify-send. Meant for calls that have no
+#                   fallback, where the alternative is a keypress doing nothing.
+
+set -u
+
+target=""
+fn=""
+expect=""
+expect_set=0
+notify=0
+args=()
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+	--expect)
+		expect="${2:-}"
+		expect_set=1
+		shift 2
+		;;
+	--notify)
+		notify=1
+		shift
+		;;
+	*)
+		if [ -z "$target" ]; then
+			target="$1"
+		elif [ -z "$fn" ]; then
+			fn="$1"
+		else
+			args+=("$1")
+		fi
+		shift
+		;;
+	esac
+done
+
+if [ -z "$target" ] || [ -z "$fn" ]; then
+	echo "usage: qs-call <target> <function> [arg...] [--expect VALUE] [--notify]" >&2
+	exit 2
+fi
+
+fail() {
+	if [ "$notify" -eq 1 ] && command -v notify-send >/dev/null 2>&1; then
+		notify-send "Quickshell unavailable" "$target.$fn did not respond" -a "Hyprland"
+	fi
+	exit 1
+}
+
+out=$(qs ipc call "$target" "$fn" ${args[@]+"${args[@]}"})
+rc=$?
+
+[ "$rc" -ne 0 ] && fail
+
+case "$out" in
+"Target not found." | "Function not found.") fail ;;
+esac
+
+if [ "$expect_set" -eq 1 ] && [ "$out" != "$expect" ]; then
+	fail
+fi
+
+[ -n "$out" ] && printf '%s\n' "$out"
+exit 0

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+#
+# Exercises qs-call's failure classification against a stub `qs` placed earlier on
+# PATH, so the cases that only occur on a broken shell can be checked without
+# breaking the shell. Run by hand: ./qs-call.test
+
+set -u
+
+here=$(cd "$(dirname "$0")" && pwd)
+stub_dir=$(mktemp -d)
+trap 'rm -rf "$stub_dir"' EXIT
+
+cat >"$stub_dir/qs" <<'EOF'
+#!/usr/bin/env bash
+[ -n "${STUB_OUT:-}" ] && printf '%s\n' "$STUB_OUT"
+exit "${STUB_RC:-0}"
+EOF
+chmod +x "$stub_dir/qs"
+
+PATH="$stub_dir:$PATH"
+export PATH STUB_OUT STUB_RC
+
+passed=0
+failed=0
+
+check() {
+	local desc=$1 want=$2
+	shift 2
+	"$here/qs-call" "$@" >/dev/null 2>&1
+	local got=$?
+	if [ "$got" -eq "$want" ]; then
+		passed=$((passed + 1))
+		printf 'ok   %s\n' "$desc"
+	else
+		failed=$((failed + 1))
+		printf 'FAIL %s — want rc=%s, got rc=%s\n' "$desc" "$want" "$got"
+	fi
+}
+
+STUB_RC=255 STUB_OUT=""
+check "no running instance" 1 gamingMode toggle
+
+STUB_RC=0 STUB_OUT="Target not found."
+check "target missing on a live shell" 1 gamingMode toggle
+
+STUB_RC=0 STUB_OUT="Function not found."
+check "function missing on a live shell" 1 gamingMode nosuchfn
+
+STUB_RC=0 STUB_OUT="false"
+check "--expect mismatch" 1 lock lock --expect true
+
+STUB_RC=0 STUB_OUT="true"
+check "--expect match" 0 lock lock --expect true
+
+STUB_RC=0 STUB_OUT=""
+check "void function returning nothing" 0 session open
+
+STUB_RC=0 STUB_OUT="false"
+check "false is a value, not a failure" 0 gamingMode getState
+
+STUB_RC=0 STUB_OUT="Target not found. (in the wallpaper path)"
+check "sentinel as a substring is still a value" 0 wallpaper get
+
+printf '\n%s passed, %s failed\n' "$passed" "$failed"
+[ "$failed" -eq 0 ]
