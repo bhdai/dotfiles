@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+#
+# Exercises the Lua module through its public interface with a stub Hyprland API,
+# and checks that the executable seam delegates exactly one evaluation request.
+# Run by hand: ./quake.test
+
+set -u
+
+here=$(cd "$(dirname "$0")" && pwd)
+config_dir=$(cd "$here/.." && pwd)
+stub_dir=$(mktemp -d)
+trap 'rm -rf "$stub_dir"' EXIT
+
+cat >"$stub_dir/hyprctl" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$@"
+EOF
+chmod +x "$stub_dir/hyprctl"
+
+adapter_out=$(PATH="$stub_dir:$PATH" "$here/quake")
+if [ "$adapter_out" != $'eval\nrequire("quake").toggle()' ]; then
+	printf 'FAIL executable adapter sent:\n%s\n' "$adapter_out"
+	exit 1
+fi
+printf 'ok   executable adapter\n'
+
+lua - "$config_dir" <<'EOF'
+local config_dir = assert(arg[1])
+package.path = config_dir .. "/?.lua;" .. package.path
+
+local rules = {}
+local dispatched = {}
+local windows = {}
+local active_window = nil
+local active_workspace = { id = 1, name = "1" }
+
+local function dispatcher(kind)
+	return function(spec)
+		return { kind = kind, spec = spec }
+	end
+end
+
+hl = {
+	window_rule = function(rule)
+		table.insert(rules, rule)
+	end,
+	get_windows = function()
+		return windows
+	end,
+	get_active_window = function()
+		return active_window
+	end,
+	get_active_workspace = function()
+		return active_workspace
+	end,
+	dispatch = function(action)
+		table.insert(dispatched, action)
+	end,
+	dsp = {
+		exec_cmd = function(command)
+			return { kind = "exec", command = command }
+		end,
+		focus = dispatcher("focus"),
+		window = {
+			fullscreen_state = dispatcher("fullscreen_state"),
+			move = dispatcher("move"),
+			bring_to_top = function()
+				return { kind = "bring_to_top" }
+			end,
+		},
+	},
+}
+
+local quake = require("quake")
+
+quake.register_rules()
+assert(#rules == 7)
+assert(rules[1].tag == "+quake")
+for i = 2, #rules do
+	assert(rules[i].match.tag == "quake")
+end
+assert(rules[7].size[1] == 1400 and rules[7].size[2] == 875)
+print("ok   tag-first rules")
+
+local normal_window = { class = "zen", fullscreen = 0, workspace = active_workspace }
+active_window = normal_window
+quake.toggle()
+assert(#dispatched == 1)
+assert(dispatched[1].kind == "exec")
+local quake_class = assert(dispatched[1].command:match("^ghostty %-%-class=(.+)$"))
+local class_pattern = "(" .. quake_class:gsub("([^%w])", "\\%1") .. ")"
+assert(rules[1].match.class == class_pattern)
+print("ok   launch")
+
+local quake_window = {
+	class = quake_class,
+	fullscreen = 0,
+	workspace = { id = -98, name = "special:quake" },
+}
+windows = { quake_window }
+dispatched = {}
+quake.toggle()
+assert(#dispatched == 3)
+assert(dispatched[1].kind == "move")
+assert(dispatched[1].spec.workspace == active_workspace)
+assert(dispatched[1].spec.window == quake_window)
+assert(dispatched[2].kind == "focus" and dispatched[2].spec.window == quake_window)
+assert(dispatched[3].kind == "bring_to_top")
+print("ok   show")
+
+quake_window.workspace = active_workspace
+active_window = quake_window
+dispatched = {}
+quake.toggle()
+assert(#dispatched == 3)
+assert(dispatched[1].kind == "move")
+assert(dispatched[1].spec.workspace == "special:quake")
+assert(dispatched[2].kind == "focus" and dispatched[2].spec.window == normal_window)
+assert(dispatched[3].kind == "bring_to_top")
+print("ok   hide and restore focus")
+
+local fullscreen_window = { class = "zen", fullscreen = 2, workspace = active_workspace }
+quake_window.workspace = { id = -98, name = "special:quake" }
+active_window = fullscreen_window
+dispatched = {}
+quake.toggle()
+assert(#dispatched == 4)
+assert(dispatched[1].kind == "fullscreen_state")
+assert(dispatched[1].spec.internal == 0 and dispatched[1].spec.client == 0)
+assert(dispatched[1].spec.window == fullscreen_window)
+print("ok   unfullscreen before show")
+EOF

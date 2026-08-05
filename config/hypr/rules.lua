@@ -4,6 +4,8 @@
 --
 -- Rule order matters: evaluated top to bottom (named rules before anonymous).
 
+local quake = require("quake")
+
 -- -------------------------------------------------------------------------
 -- Dialog windows
 -- Tag-first pattern: match on class/title, apply tag, then downstream rules
@@ -93,14 +95,9 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
 
 -- -------------------------------------------------------------------------
--- Quake terminal (dai.quake)
+-- Quake terminal
 -- -------------------------------------------------------------------------
-hl.window_rule({ match = { class = "(dai\\.quake)" }, float = true })
-hl.window_rule({ match = { class = "(dai\\.quake)" }, center = true })
-hl.window_rule({ match = { class = "(dai\\.quake)" }, decorate = false })
-hl.window_rule({ match = { class = "(dai\\.quake)" }, dim_around = true })
-hl.window_rule({ match = { class = "(dai\\.quake)" }, no_anim = true })
-hl.window_rule({ match = { class = "(dai\\.quake)" }, size = { 1400, 875 } })
+quake.register_rules()
 
 -- -------------------------------------------------------------------------
 -- Idle inhibit: prevent screen lock while fullscreen in browsers
@@ -115,17 +112,21 @@ hl.window_rule({ match = { title = "Rofi" }, animation = "popin" })
 -- -------------------------------------------------------------------------
 -- Picture-in-Picture
 -- -------------------------------------------------------------------------
-hl.window_rule({ match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" }, float = true })
-hl.window_rule({ match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" }, keep_aspect_ratio = true })
 hl.window_rule({
 	match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" },
+	tag = "+picture-in-picture",
+})
+hl.window_rule({ match = { tag = "picture-in-picture" }, float = true })
+hl.window_rule({ match = { tag = "picture-in-picture" }, keep_aspect_ratio = true })
+hl.window_rule({
+	match = { tag = "picture-in-picture" },
 	move = { "monitor_w*0.73", "monitor_h*0.72" },
 })
 hl.window_rule({
-	match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" },
+	match = { tag = "picture-in-picture" },
 	size = { "monitor_w*0.25", "monitor_h*0.25" },
 })
-hl.window_rule({ match = { title = "[Pp]icture.?[Ii]n.?[Pp]icture" }, pin = true })
+hl.window_rule({ match = { tag = "picture-in-picture" }, pin = true })
 
 -- -------------------------------------------------------------------------
 -- Layer Rules
