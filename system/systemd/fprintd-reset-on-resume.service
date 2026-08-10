@@ -1,0 +1,21 @@
+# The Prometheus reader disconnects and re-enumerates under a new USB device number
+# across a resume. If fprintd is resident when that happens, it can be left holding a
+# device object bound to the dead handle, with a claim that leaked because the release
+# failed on I/O. pam_fprintd takes GetDevices()[0] and that corpse can be the entry it
+# lands on, so every scan is refused before a finger is ever read.
+
+[Unit]
+Description=Drop fprintd across sleep so a stranded device object cannot outlive a resume
+After=sleep.target
+
+[Service]
+Type=oneshot
+
+# stop, not restart: a daemon started here enumerates while the reader is still
+# re-appearing on the bus, which is the condition that strands an object in the first
+# place. fprintd is D-Bus activated, so the next fingerprint use gets a fresh instance
+# once the bus has settled.
+ExecStart=/usr/bin/systemctl stop fprintd.service
+
+[Install]
+WantedBy=sleep.target
