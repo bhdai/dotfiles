@@ -1,7 +1,3 @@
--- ==============================================================================
--- Quickshell
--- ==============================================================================
---
 -- The two ways this config reaches the shell, behind one interface.
 --
 -- Callers must know: a call with no fallback reports its own failure, a call with

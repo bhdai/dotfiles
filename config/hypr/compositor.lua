@@ -1,28 +1,13 @@
--- ==============================================================================
--- Compositor Settings
--- ==============================================================================
---
--- All non-visual compositor config blocks: input, cursor, general, layouts,
--- gestures, misc, xwayland, and the binds-behavior section.
-
 hl.config({
-
-	-- -------------------------------------------------------------------------
-	-- Cursor
-	-- -------------------------------------------------------------------------
 	cursor = {
-		no_hardware_cursors = 0, -- 0 = use hw cursors if possible
+		no_hardware_cursors = 0, -- 0 = use hardware cursors when the driver supports them
 		inactive_timeout = 10,
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Input
-	-- -------------------------------------------------------------------------
 	input = {
 		kb_layout = "us",
 		kb_variant = "",
 		kb_model = "",
-		-- kb_options = "caps:swapescape",
 		kb_rules = "",
 
 		float_switch_override_focus = 0,
@@ -41,9 +26,6 @@ hl.config({
 		},
 	},
 
-	-- -------------------------------------------------------------------------
-	-- General
-	-- -------------------------------------------------------------------------
 	general = {
 		allow_tearing = true,
 		gaps_in = 4,
@@ -62,19 +44,12 @@ hl.config({
 		},
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Scrolling layout
-	-- -------------------------------------------------------------------------
 	scrolling = {
 		fullscreen_on_one_column = true,
-		-- column_width = 0.45,
 		focus_fit_method = 1,
 		explicit_column_widths = "0.333, 0.5, 0.667",
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Misc
-	-- -------------------------------------------------------------------------
 	misc = {
 		disable_hyprland_logo = true,
 		disable_splash_rendering = true,
@@ -84,28 +59,19 @@ hl.config({
 		vrr = 1,
 	},
 
-	-- -------------------------------------------------------------------------
-	-- XWayland
-	-- Avoid blurry XWayland apps by forcing 1:1 scaling.
-	-- -------------------------------------------------------------------------
+	-- Forcing 1:1 scaling keeps XWayland apps from rendering blurry.
 	xwayland = {
 		force_zero_scaling = true,
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Gestures (config values only; the gesture itself is in binds.lua)
-	-- -------------------------------------------------------------------------
+	-- Tuning only; the gesture itself is declared in binds.lua.
 	gestures = {
 		workspace_swipe_cancel_ratio = 0.2,
 		workspace_swipe_min_speed_to_force = 5,
 		workspace_swipe_direction_lock = true,
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Dwindle and Master
-	-- Kept for layout-switch compatibility even though active layout is
-	-- scrolling.
-	-- -------------------------------------------------------------------------
+	-- Kept so switching away from the scrolling layout still lands somewhere sane.
 	dwindle = {
 		preserve_split = true,
 		smart_split = false,
@@ -116,9 +82,6 @@ hl.config({
 		new_status = "master",
 	},
 
-	-- -------------------------------------------------------------------------
-	-- Binds behavior
-	-- -------------------------------------------------------------------------
 	binds = {
 		allow_workspace_cycles = true,
 		movefocus_cycles_fullscreen = true,
