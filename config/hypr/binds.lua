@@ -76,7 +76,6 @@ hl.bind("SUPER + Tab", hl.dsp.focus({ workspace = "previous" }))
 hl.bind("SUPER + backslash", quake.toggle)
 hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("hyprpicker -a"))
 
-hl.bind("SUPER + R", hl.dsp.layout("colresize +conf")) -- cycle preset widths, as niri Mod+R
 hl.bind("SUPER + period", hl.dsp.layout("move +col"))
 hl.bind("SUPER + comma", hl.dsp.layout("move -col"))
 hl.bind("SUPER + SHIFT + period", hl.dsp.layout("swapcol r"))

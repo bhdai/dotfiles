@@ -47,7 +47,6 @@ hl.config({
 	scrolling = {
 		fullscreen_on_one_column = true,
 		focus_fit_method = 1,
-		explicit_column_widths = "0.333, 0.5, 0.667",
 	},
 
 	misc = {

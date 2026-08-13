@@ -38,6 +38,16 @@ quake.register_rules()
 
 hl.window_rule({ match = { class = "(firefox|zen)" }, idle_inhibit = "fullscreen" })
 
+-- A column stores its width once, at open time. scrolling:column_width defaults to
+-- 0.5, and fullscreen_on_one_column only *draws* a lone column full-bleed, so these
+-- would visibly snap to half the moment a second column appears. 1.0 makes the
+-- stored width match what they already look like alone, so nothing snaps.
+hl.window_rule({ match = { class = "(firefox|zen)" }, scrolling_width = 1.0 })
+hl.window_rule({ match = { class = "org.mozilla.Thunderbird" }, scrolling_width = 1.0 })
+-- Only the regular terminal; the quake dropdown runs under class dai.quake and
+-- floats, so it never enters a column.
+hl.window_rule({ match = { class = "com.mitchellh.ghostty" }, scrolling_width = 1.0 })
+
 hl.window_rule({ match = { title = "Rofi" }, animation = "popin" })
 
 hl.window_rule({
