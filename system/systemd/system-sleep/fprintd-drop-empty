@@ -1,0 +1,57 @@
+#!/bin/sh
+# Runs from systemd-sleep(8) at every suspend/resume boundary.
+#
+# fprintd enumerates readers once, at startup, and serves that answer until it exits. The
+# lock screen re-arms the reader the instant user.slice thaws, and that D-Bus-activates
+# fprintd about a second before the Prometheus has finished re-enumerating on the USB bus.
+# The instance that then answers for the rest of the lock session holds an empty device
+# list and refuses every scan, so the lock screen spends its retry budget and takes the
+# fingerprint chip away. Dropping that instance lets the next scan activate a fresh one
+# against a bus that has settled.
+#
+# Only an instance with no reader is dropped. A healthy fprintd is left alone, so a scan
+# already in flight is never killed underneath the user.
+
+set -eu
+
+FPRINT=net.reactivated.Fprint
+
+# How long the reader takes to become usable is not knowable in advance. Measured across
+# five resumes on this machine it ranged from 200ms before the resume was announced to
+# 1.2s after it, tracking whether the sleep was long enough for the port to drop power. So
+# this polls for an instance to drop rather than guessing one moment to look: a single
+# well-chosen check is right for one of those resumes and wrong for the next.
+INTERVAL=2
+TICKS=10
+
+case "${1:-}" in
+post)
+    # Fire and forget. This hook blocks the resume until it returns, and it runs with
+    # user.slice still frozen, so the waiting cannot happen here: fprintd has not been
+    # activated yet, and sleeping would delay the resume by however long we slept. The
+    # transient unit does the waiting after the resume has completed.
+    systemd-run --quiet --collect --unit=fprintd-drop-empty "$0" --poll || true
+    ;;
+--poll)
+    i=0
+    while [ "$i" -lt "$TICKS" ]; do
+        i=$((i + 1))
+        sleep "$INTERVAL"
+
+        # Nothing running means the lock screen has not asked yet, or it has not yet
+        # re-activated one this tick dropped. Either way there is nothing to judge, and
+        # busctl below would start an instance merely to ask about it.
+        systemctl is-active --quiet fprintd.service || continue
+
+        # A daemon that can see the reader is the end state. Leave it alone — a scan may
+        # be in flight on it — and stop looking.
+        if busctl --system call "$FPRINT" /net/reactivated/Fprint/Manager \
+            "$FPRINT.Manager" GetDevices 2>/dev/null |
+            grep -q /net/reactivated/Fprint/Device/; then
+            exit 0
+        fi
+
+        systemctl stop fprintd.service
+    done
+    ;;
+esac

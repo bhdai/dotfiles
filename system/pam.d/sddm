@@ -1,0 +1,50 @@
+#%PAM-1.0
+# The sddm 0.21.0-7 policy with a fingerprint path prepended to the auth stack.
+# Everything from `account` down is upstream's file verbatim.
+#
+# The two factors are serial here, not concurrent. pam_fprintd(8) LIMITATIONS: "The
+# PAM stack is by design a serialised authentication, so it is not possible for
+# pam_fprintd to allow authentication through passwords and fingerprints at the same
+# time. It is up to the application using the PAM services to implement separate PAM
+# processes and run separate authentication stacks separately." Quickshell does run
+# two — hence quickshell-lock and quickshell-fprint — and sddm runs one. So the
+# factor is chosen by what gets typed: a password, or an empty field and Enter.
+#
+# success=1 skips exactly the pam_fprintd line, which puts a password login back on
+# the ordinary stack via the include — pam_shells, pam_nologin, faillock preauth,
+# pam_unix reusing the token already collected, then faillock authsucc. That last
+# module is why only the password path clears a lockout tally; a finger returns from
+# `sufficient` before the include is ever reached, and so resets nothing (it
+# increments nothing either — faillock's authfail is equally unreachable).
+#
+# The same short-circuit means a finger also bypasses pam_nologin and pam_shells.
+# Accepted: neither is load-bearing at a display manager, and both are the hazards
+# quickshell-lock avoids by including system-auth rather than login.
+#
+# max-tries=1 bounds the greeter. pam_fprintd defaults to 3 tries at a 30s timeout
+# each, and sddm gives the user no way to abort a conversation in flight, so the
+# default strands the login screen for 90 seconds on a finger that will not read.
+# One try instead falls through to the include and returns the password field.
+#
+# ArchWiki SDDM warns that KWallet cannot be unlocked by a fingerprint. It does not
+# apply here: kwallet-pam is not installed and neither pam_kwallet5.so nor
+# pam_gnome_keyring.so exists on this machine, so the four keyring lines below are
+# inert — kwallet arrives only as a transitive dependency of kio and
+# plasma-workspace, and no wallet has ever been created. Installing a Secret Service
+# provider later would give this file a real cost and is the point to revisit it.
+
+auth        [success=1 new_authtok_reqd=1 default=ignore] pam_unix.so try_first_pass likeauth nullok
+auth        sufficient  pam_fprintd.so          max-tries=1
+auth        include     system-login
+-auth       optional    pam_gnome_keyring.so
+-auth       optional    pam_kwallet5.so
+
+account     include     system-login
+
+password    include     system-login
+-password   optional    pam_gnome_keyring.so    use_authtok
+
+session     optional    pam_keyinit.so          force revoke
+session     include     system-login
+-session    optional    pam_gnome_keyring.so    auto_start
+-session    optional    pam_kwallet5.so         auto_start

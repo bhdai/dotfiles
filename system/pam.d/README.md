@@ -1,10 +1,14 @@
-# PAM policies for the quickshell lock screen
+# PAM policies
+
+Fingerprint auth at two gates: the Quickshell lock screen (`quickshell-lock`,
+`quickshell-fprint`) and the sddm greeter (`sddm`).
+
+## Lock screen
 
 The Quickshell lock screen authenticates through two concurrent `PamContext`
 objects — password and fingerprint — and each one needs its own PAM service. Both
 are **new service names**, so they are scoped correctly by construction: sudo, su,
-sshd, polkit and login never resolve them. Nothing under `/etc/pam.d/` that already
-exists is edited.
+sshd, polkit and login never resolve them.
 
 `quickshell-lock` includes the **system auth** stack rather than `login`. Including
 `login` drags in `pam_nologin`, which refuses to unlock your own running session
@@ -21,23 +25,54 @@ line buys no rate limiting and only couples the two factors. That coupling costs
 escape hatch: mistype your password three times, get locked out for ten minutes, and
 your finger stops working too, leaving only a TTY.
 
-`pam_fprintd.so` must appear **only** in this one file. Fingerprint auth for
+## Where pam_fprintd may go
+
+`pam_fprintd.so` may appear only in a **leaf** service file — one that nothing else
+`include`s. Never in `system-auth` or `system-login`. Fingerprint auth for
 sudo/su/polkit "allows background processes to obtain permissions without prompting
 the user for a fingerprint" (ArchWiki `fprint`), and CVE-2024-37408 records that
 fprintd lacks a security attention mechanism. `/etc/pam.d/sudo` includes `system-auth`
 on this machine, so a fingerprint line there would leak into sudo immediately.
+`quickshell-fprint` and `sddm` are both leaves and both include *downward*, so
+neither leaks. The check is the direction of the `include`, not the count of files.
 
-Deploy both files with:
+## sddm
+
+Same module, opposite constraint: the greeter runs **one** PAM stack in one process,
+so the two factors cannot be offered at once (`pam_fprintd(8)`, LIMITATIONS). The
+factor is chosen by what gets typed — a password, or an empty field and Enter. The
+per-line reasoning is in the header of `sddm` itself.
+
+Unlike the two quickshell services, `/etc/pam.d/sddm` is **not** a new name — it is
+owned by the `sddm` package. It is in pacman's `backup` array (`pacman -Qii sddm`),
+so an upgrade will not clobber a local edit; it drops `/etc/pam.d/sddm.pacnew`
+beside it instead. That file is then the upstream policy this one forked from, and
+it has to be merged by hand. `pacman -Qkk sddm` reports the file as modified from
+here on, which is expected and not drift.
+
+The fingerprint prompt renders because `Current=` is empty in
+`/usr/lib/sddm/sddm.conf.d/default.conf`, which puts the greeter on sddm's built-in
+fallback theme — the only theme on this machine that binds `informationMessage`
+(`Main.qml:51`); `elarun`, `maldives` and `maya` all drop it silently. Setting a
+theme therefore costs the "Place your finger on the fingerprint reader" text and
+leaves a blind swipe into a stack with no abort. Check the theme before blaming the
+reader.
+
+## Deploy
 
 ```bash
 sudo install -Dm644 system/pam.d/quickshell-lock /etc/pam.d/quickshell-lock &&
-sudo install -Dm644 system/pam.d/quickshell-fprint /etc/pam.d/quickshell-fprint
+sudo install -Dm644 system/pam.d/quickshell-fprint /etc/pam.d/quickshell-fprint &&
+sudo install -Dm644 system/pam.d/sddm /etc/pam.d/sddm
 ```
 
 No reload — PAM reads the service file on every `pam_start`. The lock screen is
 broken until this line has been run on a machine; a missing service file fails
-closed and the shell reports it rather than hanging. Drift check:
-`diff -r system/pam.d/ /etc/pam.d/ | grep quickshell`.
+closed and the shell reports it rather than hanging. `sddm` is the opposite risk:
+it already exists and already works, so a bad edit is only discovered at the next
+login, from a greeter that cannot be argued with. Test it before logging out.
+
+Drift check: `diff -r system/pam.d/ /etc/pam.d/ | grep -E 'quickshell|sddm'`.
 
 ## Safe test procedure
 
@@ -46,13 +81,15 @@ errors to syslog and shows nothing in the UI, so watch the journal throughout.
 
 ```bash
 yay -S --needed pamtester                    # the CLI gate; AUR, not in the official repos
-sha256sum /etc/pam.d/{system-auth,system-login,system-local-login,sudo,su,other} > /tmp/pam-before
+sha256sum /etc/pam.d/{system-auth,system-login,system-local-login,sudo,su,other,sddm-greeter,sddm-autologin} > /tmp/pam-before
 pkill hypridle                               # nothing locks the screen mid-edit
 journalctl -f &                              # PAM config errors only ever land here
 ```
 
 There is no `polkit-1` service file here, so polkit resolves through `other` — that
-is why `other` is in the snapshot and `polkit-1` is not.
+is why `other` is in the snapshot and `polkit-1` is not. `sddm` is absent from it on
+purpose: it is the file being changed. Its two package-owned siblings are in, because
+they are what a careless edit hits by mistake.
 
 If you skipped the snapshot, `pacman -Qkk pambase sudo util-linux` checks the same
 thing after the fact and more strictly, against the package database rather than
@@ -78,15 +115,23 @@ pamtester quickshell-fprint $USER authenticate
 
 # a service name that does not exist must fail closed
 pamtester quickshell-nope $USER authenticate
+
+# sddm: correct password passes, and an empty one falls through to the finger
+# rather than failing outright — that fall-through is the whole edit
+pamtester sddm $USER authenticate
 ```
 
-Finally prove nothing shared moved, and that the fingerprint module is confined to
-the one new file:
+Finally prove nothing shared moved, and that the fingerprint module reached only the
+files it was meant to:
 
 ```bash
 sha256sum -c /tmp/pam-before                 # every line must say OK
-grep -rl pam_fprintd /etc/pam.d/             # must print quickshell-fprint and nothing else
+grep -rl pam_fprintd /etc/pam.d/             # must print exactly quickshell-fprint and sddm
 ```
+
+`pamtester` proves the stack, not the greeter. Whether the "Place your finger" text
+actually renders is a property of the theme and can only be seen by locking the
+session and logging back in — do that while the root VT is still open.
 
 Restart hypridle with `setsid hypridle >/dev/null 2>&1 &`, and close the root VT when
 the run is clean. `hyprctl dispatch exec hypridle` does **not** work here — the Lua
@@ -101,6 +146,14 @@ What a green run looks like, observed 2026-07-28:
 | 4× wrong password | `Authentication failure` each time; the 4th **also** prints `The account is locked due to 3 failed logins. (10 minutes left to unlock)` |
 | Enrolled finger | passes; any other finger fails |
 | `quickshell-nope` | `Authentication failure` with **no prompt at all** — unknown services fall through to `/etc/pam.d/other`, which is `pam_deny` + `pam_warn` |
+
+The `sddm` rows are **predicted, not yet observed** — fill them in on the first run:
+
+| Check | Expected |
+|---|---|
+| Correct password | `authentication successful` |
+| Empty password | prompts for a finger; enrolled finger passes |
+| Empty password, wrong finger | one attempt only, then back to a password prompt — `max-tries=1` |
 
 Two log lines that look like faults and are not: `pam_faillock: Error sending audit
 message: Operation not permitted` is pamtester running unprivileged and unable to
