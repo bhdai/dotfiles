@@ -1,0 +1,351 @@
+#!/usr/bin/env bash
+# Publishes, as tmux options, which panes are waiting on you.
+#
+# The daemon is the only writer of the window- and session-level rollups, and the
+# only writer of pane state it owns (see @att_owner below). Every consumer -- the
+# status line, choose-tree, the notifier -- is a dumb reader.
+#
+# A pane is blocked when both of these hold:
+#
+#   1. Something in the foreground process group is parked in a tty read. On this
+#      kernel that symbol is `wait_woken`, not `n_tty_read`: everything modern epolls
+#      stdin rather than blocking in read(), so matching only n_tty_read would never
+#      fire. This alone excludes far more than it looks: idle shells of every flavour
+#      sit in poll_schedule_timeout, busy commands in hrtimer_nanosleep or
+#      futex_do_wait, and fzf reads on a separate thread so its main thread is in
+#      futex_do_wait too.
+#   2. The pane is not on the alternate screen. Pagers and full-screen programs do
+#      block in a tty read -- `less` is indistinguishable from a prompt by wchan
+#      alone -- but they switch to the alternate screen first, and tmux tracks that.
+#
+# Canonical mode was the obvious second clause and is the wrong one: it is true of a
+# busy `sleep` that never touched termios, and false of a single-keypress `[y/N]`
+# confirmation, which is a prompt that very much wants answering.
+#
+# Finding the foreground process is its own problem: #{pane_current_command} reports
+# the pane's shell even while another process owns the terminal, so the foreground
+# pgid comes from /proc/<pane_pid>/stat instead. It is deliberately not compared
+# against pane_pid -- when a window is created to run one command, tmux makes that
+# command the pane process, and the two are equal in exactly the case worth catching.
+
+set -uo pipefail
+
+readonly TICK=1
+readonly RUNTIME="${XDG_RUNTIME_DIR:-/tmp}/attention"
+readonly NOTIFY="$(dirname "$(readlink -f "$0")")/attention-notify"
+
+# Slow to alarm, fast to calm: a prompt must be seen twice before it counts, but a
+# single unblocked sample clears it. Short-lived canonical reads (a script consuming
+# one line mid-pipeline) would otherwise flicker the status line.
+readonly BLOCKED_SAMPLES=2
+
+# The agent axis lapses on liveness, not on an event, so it costs two pgrep calls
+# per agent pane. Once a second buys nothing: a dead agent's marker lingering four
+# seconds is invisible, and this loop is meant to stay free.
+readonly LIVENESS_EVERY=5
+
+ticks=0
+
+declare -A streak=()
+declare -A wchar_prev=()
+declare -A win_pub=()
+declare -A sess_pub=()
+declare -A agent_win_pub=()
+declare -A agent_sess_pub=()
+
+# Foreground process group of the pane's tty.
+foreground_pid() {
+	local stat tpgid
+	read -r stat <"/proc/$1/stat" 2>/dev/null || return 1
+	# comm is parenthesised and may contain spaces; the fields after it are fixed:
+	# state ppid pgrp session tty_nr tpgid.
+	stat=${stat#*") "}
+	read -r _ _ _ _ _ tpgid _ <<<"$stat"
+	[[ -n ${tpgid:-} && $tpgid -gt 0 ]] || return 1
+	printf '%s' "$tpgid"
+}
+
+# Walks the whole foreground process group, not just its leader: a shell invoked
+# without job control (`fish -c 'pacman ...'`) leaves its child in its own process
+# group, so the leader is the shell sitting in futex_do_wait while the child two
+# pids along is the one doing the work.
+group_reader=''     # a process parked in a blocking tty read, if any
+group_has_command=0 # the group holds something other than a shell
+group_wchar=0       # bytes the group has written, for output-idle detection
+scan_group() {
+	local pid comm wchan key val stat pstate
+	group_reader='' group_has_command=0 group_wchar=0
+	for pid in $(pgrep -g "$1" 2>/dev/null); do
+		# Skip zombies. atuin leaves one in the group at every fish prompt, and
+		# counting a dead child as a running command makes an idle prompt satisfy
+		# Path 2: the cursor sits after the prompt and nothing is being written.
+		read -r stat <"/proc/$pid/stat" 2>/dev/null || continue
+		stat=${stat#*") "}
+		read -r pstate _ <<<"$stat"
+		[[ $pstate == Z ]] && continue
+
+		read -r comm <"/proc/$pid/comm" 2>/dev/null
+		case "${comm:-}" in
+		fish | bash | zsh | sh | dash | ksh) ;;
+		*) group_has_command=1 ;;
+		esac
+		read -r wchan <"/proc/$pid/wchan" 2>/dev/null
+		case "${wchan:-}" in
+		wait_woken | n_tty_read) group_reader=$pid ;;
+		esac
+		while IFS=': ' read -r key val; do
+			[[ $key == wchar ]] && {
+				group_wchar=$((group_wchar + val))
+				break
+			}
+		done <"/proc/$pid/io" 2>/dev/null
+	done
+}
+
+agent_alive() {
+	local tty=${1#/dev/}
+	pgrep -t "$tty" -x claude >/dev/null 2>&1 && return 0
+	pgrep -t "$tty" -x codex >/dev/null 2>&1 && return 0
+	return 1
+}
+
+cmds=()
+queue() {
+	((${#cmds[@]})) && cmds+=(';')
+	cmds+=("$@")
+}
+
+clear_pane() {
+	queue set -pu -t "$1" @att_state
+	queue set -pu -t "$1" @att_owner
+	queue set -pu -t "$1" @att_kind
+	queue set -pu -t "$1" @att_notified
+}
+
+clear_agent() {
+	queue set -pu -t "$1" @att_agent
+	queue set -pu -t "$1" @att_agent_kind
+}
+
+sweep() {
+	local id
+	cmds=()
+	# Per-pane agent state is deliberately left alone: it is the one thing here the
+	# daemon does not author, and wiping it on restart would blank the marker of a
+	# live agent until its next event -- which for an idle one is whenever you next
+	# type. Anything stale is a dead agent, and the liveness check takes it within
+	# five seconds. The rollups below are the daemon's own and must go, since the
+	# in-memory cache that would otherwise retract them starts empty.
+	while read -r id; do [[ -n $id ]] && clear_pane "$id"; done < <(tmux list-panes -a -F '#{pane_id}' 2>/dev/null)
+	while read -r id; do
+		[[ -n $id ]] || continue
+		queue set -wu -t "$id" @att_win
+		queue set -wu -t "$id" @att_win_n
+		queue set -wu -t "$id" @att_agent_win
+		queue set -wu -t "$id" @att_agent_win_n
+	done < <(tmux list-windows -a -F '#{window_id}' 2>/dev/null)
+	# Session options take no scope flag -- in tmux set-option, -s is the *server*
+	# (i.e. global) scope, which would give every session the same rollup.
+	while read -r id; do
+		[[ -n $id ]] || continue
+		queue set -u -t "$id" @att_sess
+		queue set -u -t "$id" @att_sess_n
+		queue set -u -t "$id" @att_agent_sess
+		queue set -u -t "$id" @att_agent_sess_n
+	done < <(tmux list-sessions -F '#{session_id}' 2>/dev/null)
+	((${#cmds[@]})) && tmux "${cmds[@]}" 2>/dev/null
+	cmds=()
+}
+
+tick() {
+	local -A win_best=() win_count=() sess_best=() sess_count=()
+	local -A agent_win_best=() agent_win_count=() agent_sess_best=() agent_sess_count=()
+	local line pane pane_pid tty alt cursor_x win sess pane_active win_active attached
+	local state owner kind notified agent
+	local -A seen=()
+
+	ticks=$((ticks + 1))
+	local check_liveness=$((ticks % LIVENESS_EVERY == 0))
+
+	cmds=()
+
+	while IFS='|' read -r pane pane_pid tty alt cursor_x win sess pane_active win_active attached \
+		state owner kind notified agent sname widx wname; do
+		[[ -n $pane ]] || continue
+		seen[$pane]=1
+
+		# Clear on visit: looking at the pane is the acknowledgement, whoever set the
+		# state. Detection is skipped too, so a pane you are watching never flickers.
+		if [[ $attached == 1 && $win_active == 1 && $pane_active == 1 ]]; then
+			if [[ -n $state ]]; then
+				clear_pane "$pane"
+				state='' owner='' kind=''
+			fi
+			unset "streak[$pane]"
+		elif [[ $owner == hook ]]; then
+			# A crashed agent never fires SessionEnd, so its claim lapses on liveness
+			# rather than on a timeout -- a long block you simply haven't returned to
+			# yet must not expire.
+			if ! agent_alive "$tty"; then
+				clear_pane "$pane"
+				state='' owner='' kind=''
+			fi
+		elif [[ $owner == poll || -z $owner ]]; then
+			local fg='' hit=0 reader=''
+			if [[ $alt == 0 ]] && fg=$(foreground_pid "$pane_pid"); then
+				scan_group "$fg"
+				if [[ -n $group_reader ]]; then
+					hit=1 reader=$group_reader
+				elif ((group_has_command)) && ((cursor_x > 0)) &&
+					[[ -n ${wchar_prev[$pane]:-} && ${wchar_prev[$pane]} == "$group_wchar" ]]; then
+					hit=1 reader=$fg
+				fi
+				wchar_prev[$pane]=$group_wchar
+			else
+				unset "wchar_prev[$pane]"
+			fi
+
+			if ((hit)); then
+				streak[$pane]=$((${streak[$pane]:-0} + 1))
+				if ((streak[$pane] >= BLOCKED_SAMPLES)) && [[ $state != blocked ]]; then
+					queue set -p -t "$pane" @att_state blocked
+					queue set -p -t "$pane" @att_owner poll
+					queue set -p -t "$pane" @att_kind shell
+					state=blocked owner=poll kind=shell
+					if [[ -z $notified ]]; then
+						queue set -p -t "$pane" @att_notified 1
+						local comm=''
+						read -r comm <"/proc/$reader/comm" 2>/dev/null
+						# setsid -f detaches rather than backgrounding: the notifier
+						# lives as long as the popup does, and this loop must not
+						# accumulate one zombie per alert.
+						setsid -f "$NOTIFY" "$pane" blocked "Waiting for input" \
+							"${sname}:${widx} ${wname} — ${comm:-command}" \
+							>/dev/null 2>&1
+					fi
+				fi
+			else
+				unset "streak[$pane]"
+				if [[ $state == blocked && $owner == poll ]]; then
+					clear_pane "$pane"
+					state='' owner='' kind=''
+				fi
+			fi
+		fi
+
+		# The agent axis survives a visit -- an agent is working whether or not you
+		# are watching it -- so clear-on-visit above cannot retire it and it gets its
+		# own lapse. Same reasoning as the hook branch: a crashed agent never fires
+		# SessionEnd, so this is liveness rather than a timeout.
+		if [[ -n $agent ]]; then
+			if ((check_liveness)) && ! agent_alive "$tty"; then
+				clear_agent "$pane"
+				agent=''
+			fi
+		fi
+
+		local asev=0
+		case "$agent" in
+		waiting) asev=3 ;;
+		working) asev=2 ;;
+		idle) asev=1 ;;
+		esac
+		if ((asev)); then
+			if ((asev > ${agent_win_best[$win]:-0})); then
+				agent_win_best[$win]=$asev agent_win_count[$win]=1
+			elif ((asev == ${agent_win_best[$win]:-0})); then
+				agent_win_count[$win]=$((${agent_win_count[$win]:-0} + 1))
+			fi
+			if ((asev > ${agent_sess_best[$sess]:-0})); then
+				agent_sess_best[$sess]=$asev agent_sess_count[$sess]=1
+			elif ((asev == ${agent_sess_best[$sess]:-0})); then
+				agent_sess_count[$sess]=$((${agent_sess_count[$sess]:-0} + 1))
+			fi
+		fi
+
+		local sev=0
+		case "$state" in
+		blocked) sev=3 ;;
+		error) sev=2 ;;
+		done) sev=1 ;;
+		*) continue ;;
+		esac
+		if ((sev > ${win_best[$win]:-0})); then
+			win_best[$win]=$sev win_count[$win]=1
+		elif ((sev == ${win_best[$win]:-0})); then
+			win_count[$win]=$((${win_count[$win]:-0} + 1))
+		fi
+		if ((sev > ${sess_best[$sess]:-0})); then
+			sess_best[$sess]=$sev sess_count[$sess]=1
+		elif ((sev == ${sess_best[$sess]:-0})); then
+			sess_count[$sess]=$((${sess_count[$sess]:-0} + 1))
+		fi
+	done < <(tmux list-panes -a -F \
+		'#{pane_id}|#{pane_pid}|#{pane_tty}|#{alternate_on}|#{cursor_x}|#{window_id}|#{session_id}|#{pane_active}|#{window_active}|#{session_attached}|#{@att_state}|#{@att_owner}|#{@att_kind}|#{@att_notified}|#{@att_agent}|#{session_name}|#{window_index}|#{window_name}' \
+		2>/dev/null)
+
+	local key
+	for key in "${!streak[@]}"; do [[ -n ${seen[$key]+x} ]] || unset "streak[$key]"; done
+	for key in "${!wchar_prev[@]}"; do [[ -n ${seen[$key]+x} ]] || unset "wchar_prev[$key]"; done
+
+	publish_rollup win '-w' '-wu' win_best win_count win_pub done error blocked
+	publish_rollup sess '' '-u' sess_best sess_count sess_pub done error blocked
+	publish_rollup agent_win '-w' '-wu' agent_win_best agent_win_count agent_win_pub idle working waiting
+	publish_rollup agent_sess '' '-u' agent_sess_best agent_sess_count agent_sess_pub idle working waiting
+
+	if ((${#cmds[@]})); then
+		# tmux does not treat a user-option write as a reason to redraw, so a marker
+		# would otherwise wait for the next status-interval to appear.
+		queue refresh-client -S
+		tmux "${cmds[@]}" 2>/dev/null
+	fi
+	return 0
+}
+
+# Rollups are written only when they change: tmux redraws the status line on every
+# option write, and this runs once a second.
+publish_rollup() {
+	local prefix=$1 set_flag=$2 unset_flag=$3
+	local -n best=$4 count=$5 pub=$6
+	# Severity names in ascending order, so the two axes can share this: the
+	# attention axis ranks done < error < blocked, the agent axis idle < working <
+	# waiting.
+	local -a names=("${@:7}")
+	local opt="@att_${prefix}" nopt="@att_${prefix}_n"
+	local -A want=()
+	local id name
+
+	for id in "${!best[@]}"; do
+		name=${names[${best[$id]} - 1]:-}
+		[[ -n $name ]] || continue
+		want[$id]="$name:${count[$id]}"
+	done
+
+	for id in "${!want[@]}"; do
+		[[ ${pub[$id]:-} == "${want[$id]}" ]] && continue
+		queue set ${set_flag:+"$set_flag"} -t "$id" "$opt" "${want[$id]%%:*}"
+		queue set ${set_flag:+"$set_flag"} -t "$id" "$nopt" "${want[$id]##*:}"
+	done
+	for id in "${!pub[@]}"; do
+		[[ -n ${want[$id]+x} ]] && continue
+		queue set "$unset_flag" -t "$id" "$opt"
+		queue set "$unset_flag" -t "$id" "$nopt"
+	done
+
+	# Replace wholesale rather than unset key by key: a session id is `$4`, and bash
+	# re-expands the subscript inside `unset arr[...]`, reading that as positional
+	# parameter 7 and aborting under `set -u`. Only sessions hit it -- @1 and %2 are
+	# not parameter expansions -- and only when one disappears.
+	pub=()
+	for id in "${!want[@]}"; do pub[$id]=${want[$id]}; done
+}
+
+mkdir -p "$RUNTIME/sessions"
+# Stale options survive a crash, and the in-memory rollup cache starts empty, so
+# reconcile from a known-clean slate rather than trusting what is already there.
+sweep
+
+while :; do
+	tmux has-session 2>/dev/null && tick
+	sleep "$TICK"
+done

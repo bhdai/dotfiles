@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Bring a tmux pane in front of the user: focus the terminal window showing it,
+# then move that client to the pane.
+#
+# Usage: attention-jump <pane-id>
+
+set -uo pipefail
+
+pane=${1:-}
+[[ -n $pane ]] || exit 1
+
+read -r session window < <(tmux display-message -p -t "$pane" '#{session_id} #{window_id}' 2>/dev/null) || exit 1
+[[ -n ${session:-} ]] || exit 1
+
+# Prefer a client already attached to the target session -- switching that one is
+# invisible to whatever the other clients are doing. Any client will do otherwise.
+client='' client_pid=''
+while IFS='|' read -r name csession cpid; do
+	[[ -n $name ]] || continue
+	if [[ $csession == "$session" ]]; then
+		client=$name client_pid=$cpid
+		break
+	fi
+	[[ -z $client ]] && client=$name && client_pid=$cpid
+done < <(tmux list-clients -F '#{client_name}|#{client_session}|#{client_pid}' 2>/dev/null)
+
+[[ -n $client ]] || exit 1
+
+# Hyprland 0.56 dispatches through Lua: the shell forms (`focuswindow address:...`,
+# `focuswindow,address:...`) are parse errors, not no-ops, so they fail silently in a
+# background notifier. This is also what crosses workspaces -- focusing a window on
+# another workspace switches to it, so no separate workspace dispatch is needed.
+focus_by() {
+	hyprctl dispatch "hl.dsp.focus({ window = \"$1\" })" >/dev/null 2>&1
+}
+
+# Hyprland knows windows by the pid of the process that created them, which is the
+# terminal -- an ancestor of the tmux client, not the client itself. Walking up the
+# ppid chain finds the right window even with several terminals open, where matching
+# on window class alone would pick an arbitrary one.
+focus_terminal() {
+	local pid=$1 addr='' hops=0
+	local clients
+	clients=$(hyprctl clients -j 2>/dev/null) || return 1
+
+	while [[ -n $pid && $pid -gt 1 && $hops -lt 12 ]]; do
+		addr=$(printf '%s' "$clients" | jq -r --argjson p "$pid" 'first(.[] | select(.pid == $p) | .address) // empty')
+		if [[ -n $addr ]]; then
+			focus_by "address:$addr"
+			return 0
+		fi
+		local stat
+		read -r stat <"/proc/$pid/stat" 2>/dev/null || return 1
+		stat=${stat#*") "}
+		read -r _ pid _ <<<"$stat"
+		((hops++))
+	done
+	return 1
+}
+
+focus_terminal "$client_pid" || focus_by class:com.mitchellh.ghostty
+
+tmux switch-client -c "$client" -t "$session" 2>/dev/null
+tmux select-window -t "$window" 2>/dev/null
+tmux select-pane -t "$pane" 2>/dev/null

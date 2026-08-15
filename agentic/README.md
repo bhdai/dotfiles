@@ -12,7 +12,12 @@ for f in settings.json statusline.sh statusline-git.sh
     ln -sfn ~/ghq/github.com/bhdai/dotfiles/agentic/claude/$f ~/.claude/$f
 end
 ln -sfn ~/ghq/github.com/bhdai/dotfiles/agentic/claude/skills/deep-research ~/.claude/skills/deep-research
+ln -sfn ~/ghq/github.com/bhdai/dotfiles/agentic/codex/hooks.json ~/.codex/hooks.json
 ```
+
+The hooks in `claude/settings.json` and `codex/hooks.json` both point at
+[`attention/`](../attention/README.md), which also needs one key set in
+`~/.codex/config.toml` by hand — Codex rewrites that file, so it is not symlinked.
 
 Use `ln -sfn`, not `ln -s`: the target directories already exist, and plain `ln -s`
 silently creates the link *inside* them instead of failing.

@@ -1,0 +1,56 @@
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/ghq/github.com/bhdai/dotfiles/attention/bin/attention-hook codex",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/ghq/github.com/bhdai/dotfiles/attention/bin/attention-hook codex"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/ghq/github.com/bhdai/dotfiles/attention/bin/attention-hook codex"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/ghq/github.com/bhdai/dotfiles/attention/bin/attention-hook codex",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/ghq/github.com/bhdai/dotfiles/attention/bin/attention-hook codex"
+          }
+        ]
+      }
+    ]
+  }
+}

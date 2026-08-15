@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Desktop notification for a pane that wants attention, suppressed when you are
+# already looking at that pane, and clickable to jump there.
+#
+# Usage: attention-notify <pane-id> <state> <title> <body>
+#
+# Only `blocked` is ever notified: `done` and `error` live in the status line and
+# choose-tree, because an interrupt you have already chosen to ignore is how a
+# notification system earns itself a permanent mute.
+
+set -uo pipefail
+
+pane=${1:-}
+state=${2:-}
+title=${3:-}
+body=${4:-}
+[[ -n $pane && -n $title ]] || exit 1
+
+here=$(dirname "$(readlink -f "$0")")
+
+# Same test done.fish applies before its own notifications: the pane is on screen
+# only if its window is current in an attached session AND the terminal showing that
+# client holds the compositor's focus.
+read -r visible session < <(tmux display-message -p -t "$pane" \
+	'#{&&:#{session_attached},#{&&:#{window_active},#{pane_active}}} #{session_id}' 2>/dev/null)
+
+if [[ ${visible:-0} == 1 ]]; then
+	focused_pid=$(hyprctl activewindow -j 2>/dev/null | jq -r '.pid // empty')
+	while [[ -n ${focused_pid:-} ]] && IFS='|' read -r csession cpid; do
+		[[ $csession == "$session" ]] || continue
+		pid=$cpid hops=0
+		while [[ -n $pid && $pid -gt 1 && $hops -lt 12 ]]; do
+			[[ $pid == "$focused_pid" ]] && exit 0
+			read -r stat <"/proc/$pid/stat" 2>/dev/null || break
+			stat=${stat#*") "}
+			read -r _ pid _ <<<"$stat"
+			((hops++))
+		done
+	done < <(tmux list-clients -F '#{client_session}|#{client_pid}' 2>/dev/null)
+fi
+
+# notify-send blocks until the notification is dismissed or an action fires, and
+# prints the action key on activation. Quickshell advertises actionsSupported, so
+# the body itself is clickable.
+action=$(notify-send \
+	--app-name=attention \
+	--icon=utilities-terminal \
+	--urgency=normal \
+	--action=default="Go to pane" \
+	"$title" "$body" 2>/dev/null)
+
+[[ $action == default ]] && exec "$here/attention-jump" "$pane"
+exit 0

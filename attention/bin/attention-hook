@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+# Turns Claude Code and Codex lifecycle events into pane attention and agent state.
+#
+# Usage: attention-hook <claude|codex>          reads the hook payload on stdin
+#        attention-hook codex-notify <json>     Codex `notify` program, payload in argv
+#
+# Codex and Claude share a hook vocabulary, but not all of it: Codex has no `Stop`
+# and no `Notification` event (its enum is pre-tool-use, permission-request,
+# post-tool-use, pre/post-compact, session-start, session-end, user-prompt-submit,
+# subagent-start, subagent-stop). So Codex reaches `blocked` through
+# permission-request -- declared async in hooks.json so this script can never delay
+# or deny a tool call -- and reaches `done` through the older `notify` program.
+#
+# Most events write both axes. The attention axis says whether the pane wants you
+# and is cleared when you look at it; the agent axis says what the agent is doing
+# and is not, so it survives the visit. See attention/README.md.
+#
+# This script must always exit 0 and print nothing. permission-request is a decision
+# hook: stray stdout there is read as a verdict on the tool call.
+
+set -uo pipefail
+
+readonly RUNTIME="${XDG_RUNTIME_DIR:-/tmp}/attention/sessions"
+here=$(dirname "$(readlink -f "$0")")
+
+finish() { exit 0; }
+trap finish EXIT
+
+kind=${1:-}
+[[ -n $kind ]] || exit 0
+
+if [[ $kind == codex-notify ]]; then
+	payload=${2:-}
+	kind=codex
+	event=turncomplete
+else
+	payload=$(cat)
+	raw=$(printf '%s' "$payload" | jq -r '.hook_event_name // empty' 2>/dev/null)
+	# Config keys are kebab-case and payloads are PascalCase; normalise both.
+	raw=${raw//[-_]/}
+	event=${raw,,}
+fi
+
+session=$(printf '%s' "$payload" | jq -r '.session_id // .thread_id // ."thread-id" // empty' 2>/dev/null)
+
+# TMUX_PANE is inherited by anything the agent spawns, but hooks are not guaranteed
+# to be direct children of the pane. The mapping is recorded at session start, where
+# the environment is known-fresh, and is the source of truth afterwards.
+pane=''
+if [[ -n $session && -f "$RUNTIME/$session" ]]; then
+	read -r pane <"$RUNTIME/$session" 2>/dev/null
+fi
+[[ -n $pane ]] || pane=${TMUX_PANE:-}
+
+case "$event" in
+sessionstart)
+	if [[ -n $session && -n ${TMUX_PANE:-} ]]; then
+		mkdir -p "$RUNTIME"
+		printf '%s' "$TMUX_PANE" >"$RUNTIME/$session"
+	fi
+	[[ -n $pane ]] && "$here/attention-set" "$pane" clear &&
+		"$here/attention-set" "$pane" agent idle "$kind"
+	;;
+notification | permissionrequest)
+	[[ -n $pane ]] || exit 0
+	"$here/attention-set" "$pane" blocked hook "$kind"
+	"$here/attention-set" "$pane" agent waiting "$kind"
+	# Once per blocked episode: the marker is the persistent reminder, the popup is
+	# the interrupt. Claude re-fires Notification about every minute while idle.
+	notified=$(tmux show-options -pqv -t "$pane" @att_notified 2>/dev/null)
+	if [[ -z ${notified:-} ]]; then
+		tmux set -p -t "$pane" @att_notified 1 2>/dev/null
+		label=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index} #{window_name}' 2>/dev/null)
+		body=$(printf '%s' "$payload" | jq -r '.message // empty' 2>/dev/null)
+		setsid -f "$here/attention-notify" "$pane" blocked \
+			"$kind is waiting" "${label:-$pane}${body:+ — $body}" >/dev/null 2>&1
+	fi
+	;;
+posttooluse)
+	# Neither agent announces "resumed after you approved". A tool that has just
+	# finished running is the proof, and without it a pane answered at a permission
+	# prompt would read `waiting` for the rest of the turn.
+	[[ -n $pane ]] && "$here/attention-set" "$pane" agent working "$kind"
+	;;
+stop | turncomplete)
+	[[ -n $pane ]] && "$here/attention-set" "$pane" done hook "$kind" &&
+		"$here/attention-set" "$pane" agent idle "$kind"
+	;;
+userpromptsubmit)
+	[[ -n $pane ]] && "$here/attention-set" "$pane" clear &&
+		"$here/attention-set" "$pane" agent working "$kind"
+	;;
+sessionend)
+	[[ -n $pane ]] && "$here/attention-set" "$pane" clear &&
+		"$here/attention-set" "$pane" agent clear
+	[[ -n $session ]] && rm -f "$RUNTIME/$session"
+	;;
+esac
+
+exit 0

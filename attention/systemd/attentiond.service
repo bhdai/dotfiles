@@ -1,0 +1,14 @@
+[Unit]
+Description=Publish tmux pane attention state
+# Only the notifier needs the graphical session, and it degrades to silence without
+# one, so the daemon itself is not ordered against it.
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=%h/ghq/github.com/bhdai/dotfiles/attention/bin/attentiond
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

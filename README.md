@@ -19,6 +19,7 @@ deploys. Every deploy command in those files is written to run from this repo ro
 | Where | What |
 |---|---|
 | [`agentic/`](agentic/README.md) | Claude Code and Codex config, linked file by file into `~/.claude` and `~/.codex` |
+| [`attention/`](attention/README.md) | Which tmux pane is waiting on you and what every agent is doing: the daemon, the agent hooks, and the user unit |
 | [`config/hypr/`](config/hypr/README.md) | Session locking: one entry point, the fallback chain, and how to apply a change |
 | [`system/keyd/`](system/keyd/README.md) | Keyboard remapping, `/etc/keyd` |
 | [`system/pam.d/`](system/pam.d/README.md) | PAM services for the Quickshell lock screen, and the safe procedure for testing them |

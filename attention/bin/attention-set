@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Write or clear one pane's attention or agent state.
+#
+# Usage: attention-set <pane-id> clear
+#        attention-set <pane-id> <blocked|done|error> <owner> [kind]
+#        attention-set <pane-id> agent <working|waiting|idle|clear> [kind]
+#
+# Two independent axes live on a pane. The first three forms write the *attention*
+# axis: whether the pane wants you right now, which is cleared the moment you look
+# at it. The `agent` form writes what the agent in the pane is doing, which only
+# that agent's own lifecycle events change -- watching a working agent does not
+# stop it working. `clear` therefore touches the attention axis only.
+#
+# `owner` records who made the claim. attentiond overwrites only what it owns
+# itself, so a state set here survives its next poll; see attention/README.md.
+# Callers outside tmux are a no-op, not an error -- an agent run in a bare terminal
+# should degrade quietly.
+
+set -uo pipefail
+
+pane=${1:-}
+state=${2:-}
+owner=${3:-}
+kind=${4:-shell}
+
+[[ -n $pane && -n $state ]] || exit 0
+command -v tmux >/dev/null 2>&1 || exit 0
+tmux has-session 2>/dev/null || exit 0
+
+if [[ $state == agent ]]; then
+	agent=${3:-}
+	[[ -n $agent ]] || exit 0
+
+	if [[ $agent == clear ]]; then
+		tmux set -pu -t "$pane" @att_agent \; \
+			set -pu -t "$pane" @att_agent_kind \; \
+			refresh-client -S 2>/dev/null
+		exit 0
+	fi
+
+	# `working` is re-asserted on every tool call of a long turn, and each write
+	# costs tmux a status-line redraw. Reading first is the cheaper half of that
+	# trade on the one hook here that fires on a hot path.
+	cur=$(tmux show-options -pqv -t "$pane" @att_agent 2>/dev/null)
+	[[ ${cur:-} == "$agent" ]] && exit 0
+
+	tmux set -p -t "$pane" @att_agent "$agent" \; \
+		set -p -t "$pane" @att_agent_kind "${4:-}" \; \
+		refresh-client -S >/dev/null 2>&1
+	exit 0
+fi
+
+if [[ $state == clear ]]; then
+	tmux set -pu -t "$pane" @att_state \; \
+		set -pu -t "$pane" @att_owner \; \
+		set -pu -t "$pane" @att_kind \; \
+		set -pu -t "$pane" @att_notified \; \
+		refresh-client -S 2>/dev/null
+	exit 0
+fi
+
+[[ -n $owner ]] || exit 0
+
+cmd=(set -p -t "$pane" @att_state "$state" ';'
+	set -p -t "$pane" @att_owner "$owner" ';'
+	set -p -t "$pane" @att_kind "$kind")
+
+# Leaving a blocked state ends that episode, so the once-per-episode notification
+# guard lifts with it -- otherwise an agent that blocks, is answered, and blocks
+# again would only ever notify the first time.
+[[ $state != blocked ]] && cmd+=(';' set -pu -t "$pane" @att_notified)
+
+cmd+=(';' refresh-client -S)
+tmux "${cmd[@]}" >/dev/null 2>&1
