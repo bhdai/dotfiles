@@ -31,6 +31,18 @@ hl.on("hyprland.start", function()
 	-- hyprctl hyprpaper wallpaper "eDP-1,$HOME/Pictures/wall/leaves.jpg"
 	hl.exec_cmd("hyprsunset")
 
+	-- The one daemon here started through systemd rather than exec'd directly, because
+	-- dictation fails silently -- a dead daemon looks exactly like a key that did
+	-- nothing. voxtype-bin's unit carries Restart=on-failure, and puts the daemon's
+	-- output in the journal instead of Hyprland's stdout, where the rest of these go
+	-- to die.
+	--
+	-- Started rather than enabled: the shipped unit is WantedBy=graphical-session.target
+	-- and nothing on this machine activates that target, so enabling it would install a
+	-- want that never fires. Starting it here also places it after the environment
+	-- import above, which wtype needs to have a display to type into.
+	hl.exec_cmd("systemctl --user start voxtype.service")
+
 	-- TODO: verify exec_cmd rules syntax for workspace placement
 	hl.exec_cmd("zen-browser", { workspace = "1 silent" })
 	hl.exec_cmd("ghostty", { workspace = "2 silent" })

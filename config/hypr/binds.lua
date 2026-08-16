@@ -25,6 +25,32 @@ hl.bind("SUPER + Print", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screen
 
 hl.bind(meh .. " + S", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-text"))
 
+-- Push-to-talk is the primary gesture: holding a key bounds the recording by
+-- the same action that starts it, so there is no state left running if the
+-- transcription is abandoned. The toggle is for dictation too long to hold a
+-- key through, and it is the same daemon and the same state file underneath --
+-- whichever one starts a recording, either one can end it.
+hl.bind("F9", hl.dsp.exec_cmd("voxtype record start"))
+hl.bind("F9", hl.dsp.exec_cmd("voxtype record stop"), { release = true })
+hl.bind(meh .. " + X", hl.dsp.exec_cmd("voxtype record toggle"))
+hl.bind(meh .. " + Z", hl.dsp.exec_cmd("voxtype record cancel"))
+
+-- Entered by voxtype for the length of the typing and left immediately after (the
+-- output hooks in config/voxtype/config.toml). wtype replays the transcription as key
+-- events, so a modifier still held from the chord that ended the dictation would turn
+-- those into chords; a submap that binds the modifiers to nothing swallows them.
+--
+-- Escape is deliberately not bound here: binding it drops wtype's first character
+-- (hyprwm/Hyprland#3165). F12 is the way out if voxtype dies mid-output and never
+-- sends the reset, which is the only way to be left in here.
+hl.define_submap("voxtype_suppress", function()
+	for _, modifier in ipairs({ "SUPER_L", "SUPER_R", "Control_L", "Control_R", "Alt_L", "Alt_R", "Shift_L", "Shift_R" }) do
+		hl.bind(modifier, hl.dsp.exec_cmd("true"))
+	end
+
+	hl.bind("F12", hl.dsp.submap("reset"))
+end)
+
 -- Each of these is a toggle: whichever one starts a recording, any of them stops
 -- it. The soundtrack has to be chosen up front because it cannot be added later,
 -- and these are chords rather than a menu because there is no menu to hang them

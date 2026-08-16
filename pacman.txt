@@ -172,6 +172,7 @@ visual-studio-code-insiders-bin
 vlc
 vlc-plugin-ffmpeg
 vlc-plugins-extra
+voxtype-bin
 vulkan-intel
 vulkan-nouveau
 vulkan-radeon
@@ -185,6 +186,7 @@ wl-clip-persist
 wl-clipboard
 wlrctl
 wofi
+wtype
 xdg-desktop-portal-hyprland
 xdg-utils
 xdotool

@@ -1,0 +1,54 @@
+# Dictation daemon. Overrides /etc/voxtype/config.toml; anything absent here
+# keeps voxtype's own default.
+
+# The daemon rewrites this file with `idle`, `recording`, `streaming` or
+# `transcribing` on every state transition, and `voxtype record toggle` reads it
+# to know what to toggle -- setting this to "disabled" breaks the toggle bind.
+state_file = "auto"
+
+[hotkey]
+# Hyprland owns F9 and the meh chord (config/hypr/binds.lua). Voxtype's own
+# grabber would be a second thing holding the same keys, and it reads evdev
+# directly, which would mean joining the `input` group for no gain.
+enabled = false
+
+[audio]
+device = "default"
+sample_rate = 16000
+max_duration_secs = 60
+pause_media = true
+
+[whisper]
+# small.en rather than the base.en most guides start from: markedly better on
+# proper nouns and technical vocabulary, and ~500MB and a fraction of a second
+# is not a real cost on this machine. English-only -- dictating another language
+# needs a multilingual model (`voxtype setup model`), not just `language` below.
+model = "small.en"
+language = "en"
+
+[output]
+# Types at the cursor, so dictation lands in whatever holds focus. Needs wtype.
+mode = "type"
+
+# wtype replays each character as a key event, so any modifier still physically held
+# when output begins turns the transcription into a chord -- meh + X ends a dictation
+# and the first typed letters arrive as CTRL+SHIFT+ALT chords if the hand is slow off
+# the keys. The suppress submap parks every bind for the length of the typing, and
+# resets after. Defined in config/hypr/binds.lua.
+#
+# `voxtype setup compositor hyprland` also writes a pre_recording_command entering a
+# second submap, dropped here: it disables every keybind on the machine for as long as
+# a recording runs, which for toggle-mode dictation is unbounded, and it takes the F9
+# release bind with it so push-to-talk could never stop itself.
+pre_output_command = "hyprctl dispatch submap voxtype_suppress"
+post_output_command = "hyprctl dispatch submap reset"
+fallback_to_clipboard = true
+type_delay_ms = 1
+
+[output.notification]
+# The bar indicator is the feedback channel. Notifications would report the same
+# transitions a second time, and on_transcription would put the dictated text on
+# screen right after it has already been typed there.
+on_recording_start = false
+on_recording_stop = false
+on_transcription = false
