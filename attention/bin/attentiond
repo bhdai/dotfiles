@@ -44,7 +44,37 @@ readonly BLOCKED_SAMPLES=2
 # seconds is invisible, and this loop is meant to stay free.
 readonly LIVENESS_EVERY=5
 
+# The `working` marker breathes, through the glyph family the agents themselves use
+# for thinking, so a live turn is distinguishable from a stalled one at a glance.
+# Size and brightness climb together and fall back: one channel alone is a flicker
+# at this size, and two make it read as one mark pulsing rather than as a glyph
+# being swapped. Each frame carries its own colour, which overrides the marker's
+# own #[fg=...] -- so the resting glyph, which carries none, keeps the marker's.
+#
+# tmux re-evaluates an open mode's format on every option write, which is what makes
+# an option a usable frame channel; refresh-client is not involved and would not
+# help, since -S redraws the status line, which reads none of this.
+#
+# Frames are written only while a tree is actually open. Nothing else draws the
+# agent axis, so an agent working with nobody looking must cost nothing -- and a
+# frame is not free: an option write marks the client for redraw whatever its scope,
+# which on 3.7 measures around four status-line repaints per write. Bounded to the
+# seconds a tree is open that is nothing; unbounded it would be a repaint storm for
+# a marker on no screen.
+readonly -a SPIN_FRAMES=(
+	'#[fg=#414868]·' '#[fg=#565f89]✢' '#[fg=#7aa2f7]✳' '#[fg=#7dcfff]∗'
+	'#[fg=#b4f9f8]✻' '#[fg=#b4f9f8]✽' '#[fg=#7dcfff]✻' '#[fg=#7aa2f7]∗'
+	'#[fg=#565f89]✳' '#[fg=#414868]✢'
+)
+readonly SPIN_REST='✻'
+readonly SPIN_TICK=0.15
+readonly SPIN_STEPS=7
+
 ticks=0
+spin_frame=0
+spin_running=0
+tree_open=0
+working_any=0
 
 declare -A streak=()
 declare -A wchar_prev=()
@@ -153,24 +183,62 @@ sweep() {
 		queue set -u -t "$id" @att_agent_sess
 		queue set -u -t "$id" @att_agent_sess_n
 	done < <(tmux list-sessions -F '#{session_id}' 2>/dev/null)
+	# A crash mid-animation leaves the frame parked on whichever glyph it stopped on,
+	# and the smallest of them is a bare dot.
+	queue set -g @att_spin "$SPIN_REST"
 	((${#cmds[@]})) && tmux "${cmds[@]}" 2>/dev/null
 	cmds=()
+}
+
+# Is any pane showing choose-tree right now? Cheap enough to ask between frames: a
+# read costs a fork, while a write costs every attached client a redraw.
+tree_check() {
+	local mode
+	tree_open=0
+	while read -r mode; do
+		[[ $mode == tree-mode ]] && {
+			tree_open=1
+			return
+		}
+	done < <(tmux list-panes -a -F '#{pane_mode}' 2>/dev/null)
+}
+
+# One tick's worth of frames. Split from the plain sleep rather than layered on top
+# of it so the poll cadence is unchanged: the pane scan still runs once a second.
+#
+# The tree check repeats between frames instead of riding on that scan. A second of
+# static glyph is most of the time anyone spends looking at a tree, so sampling it
+# once a second made the animation something you mostly missed.
+spin() {
+	local i
+	for ((i = 0; i < SPIN_STEPS; i++)); do
+		((tree_open)) || tree_check
+		if ((tree_open)); then
+			tmux set -g @att_spin "${SPIN_FRAMES[spin_frame]}" 2>/dev/null
+			spin_frame=$(((spin_frame + 1) % ${#SPIN_FRAMES[@]}))
+			spin_running=1
+		fi
+		sleep "$SPIN_TICK"
+	done
 }
 
 tick() {
 	local -A win_best=() win_count=() sess_best=() sess_count=()
 	local -A agent_win_best=() agent_win_count=() agent_sess_best=() agent_sess_count=()
 	local line pane pane_pid tty alt cursor_x win sess pane_active win_active attached
-	local state owner kind notified agent
+	local state owner kind notified agent pmode
 	local -A seen=()
 
+	tree_open=0 working_any=0
 	ticks=$((ticks + 1))
 	local check_liveness=$((ticks % LIVENESS_EVERY == 0))
 
 	cmds=()
 
+	# pane_mode sits ahead of the free-text fields: window_name is read last so that a
+	# `|` in a window name lands in it rather than shifting every field after it.
 	while IFS='|' read -r pane pane_pid tty alt cursor_x win sess pane_active win_active attached \
-		state owner kind notified agent sname widx wname; do
+		state owner kind notified agent pmode sname widx wname; do
 		[[ -n $pane ]] || continue
 		seen[$pane]=1
 
@@ -244,6 +312,9 @@ tick() {
 			fi
 		fi
 
+		[[ $agent == working ]] && working_any=1
+		[[ $pmode == tree-mode ]] && tree_open=1
+
 		local asev=0
 		case "$agent" in
 		waiting) asev=3 ;;
@@ -281,7 +352,7 @@ tick() {
 			sess_count[$sess]=$((${sess_count[$sess]:-0} + 1))
 		fi
 	done < <(tmux list-panes -a -F \
-		'#{pane_id}|#{pane_pid}|#{pane_tty}|#{alternate_on}|#{cursor_x}|#{window_id}|#{session_id}|#{pane_active}|#{window_active}|#{session_attached}|#{@att_state}|#{@att_owner}|#{@att_kind}|#{@att_notified}|#{@att_agent}|#{session_name}|#{window_index}|#{window_name}' \
+		'#{pane_id}|#{pane_pid}|#{pane_tty}|#{alternate_on}|#{cursor_x}|#{window_id}|#{session_id}|#{pane_active}|#{window_active}|#{session_attached}|#{@att_state}|#{@att_owner}|#{@att_kind}|#{@att_notified}|#{@att_agent}|#{pane_mode}|#{session_name}|#{window_index}|#{window_name}' \
 		2>/dev/null)
 
 	local key
@@ -346,6 +417,23 @@ mkdir -p "$RUNTIME/sessions"
 sweep
 
 while :; do
-	tmux has-session 2>/dev/null && tick
-	sleep "$TICK"
+	if tmux has-session 2>/dev/null; then
+		tick
+	else
+		working_any=0 tree_open=0
+	fi
+
+	if ((working_any)); then
+		spin
+	else
+		sleep "$TICK"
+	fi
+
+	# Park the marker on the whole glyph as soon as nothing is animating. Whatever
+	# frame it stopped on is what the next tree would open showing, and the smallest
+	# of them is a bare dot in the dimmest colour of the ramp.
+	if ((spin_running)) && ! ((working_any && tree_open)); then
+		tmux set -g @att_spin "$SPIN_REST" 2>/dev/null
+		spin_running=0
+	fi
 done

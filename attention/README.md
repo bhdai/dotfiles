@@ -54,22 +54,86 @@ The agent axis is deliberately kept off the bar. It never clears, so putting it 
 would mean a permanent marker on every window that has ever run an agent — the bar
 would stop being a thing you notice changing, which is the only reason it works.
 
-**`prefix+s` carries both**, with counts. The glyph shapes are disjoint between the
-axes, because a waiting agent is `blocked` and `waiting` in the same moment and one
-glyph serving both would read as a single marker drawn twice:
+**`prefix+s` carries both**, with counts. The two axes are kept apart by shape,
+because a waiting agent is `blocked` and `waiting` in the same moment and one glyph
+serving both would read as a single marker drawn twice:
 
 | | Attention | Agent |
 |---|---|---|
-| wants you | `◉` blocked | `◆` waiting |
-| in progress | | `●` working |
-| finished | `●` done | `○` idle |
-| failed | `▲` error | |
+| wants you | `◉` blocked, red | `✻` waiting, yellow |
+| in progress | | `✻` working, blue, breathing |
+| finished | status line only | `✻` idle, green |
+| failed | `▲` error, yellow | |
 
-Fill carries how much is pending and hue carries which state, so the pair on a row
-stays legible after a visit clears the attention half. Only `error` breaks the dot
-vocabulary, because a failed command is not a degree of the same thing.
+`done` is the one state that draws no glyph here. It has exactly one writer — an
+agent finishing its turn — which is the same event that sets the agent axis to
+`idle`, so drawing both put two markers on the row for one thing. The agent axis
+wins that tie because it is the durable half: it survives the visit that clears
+`done`, and it is still there when you come back. The status line keeps `done`,
+where it is not a duplicate of anything, and remains the thing that tells you a turn
+finished in a window you are not looking at.
+
+What that costs is the distinction between "finished and unreviewed" and "finished
+an hour ago", which only `done` tracks. That distinction is on the bar, and one
+glyph per pane is worth more in a tree you scan than a second one that means almost
+the same thing.
+
+`blocked` and `waiting` do still land together, red beside yellow, because there
+they mean different things: `waiting` is what the agent is doing, `blocked` is that
+you have not answered it yet. Only `error` breaks the dot vocabulary, because a
+failed command is not a degree of the same thing.
+
+The agent axis is one glyph in three colours instead. A pane running an agent is a
+single thing whose condition changes, not three different things, and `✻` is the
+mark the agents themselves show while thinking — so the column reads without a
+legend, and the state is the colour: green finished, yellow wants an answer, a blue
+pulse mid-turn. Yellow is `error` on the other axis, which is a collision only in
+the abstract: the shapes differ and both halves sit on the same row, where the
+question is which glyph is lit, not which hue appeared somewhere.
+
 Sessions stay collapsed, so the session rollup is what makes an agent visible without
 expanding the tree.
+
+### The working pulse
+
+`working` breathes through `· ✢ ✳ ∗ ✻ ✽` and back down, at 150ms a frame, so a
+running turn is distinguishable from one that died mid-tool-call without waiting for
+the liveness check to notice. A stalled agent and a busy one are the same static
+glyph otherwise, and telling them apart is most of why you open the tree at all.
+
+Size and brightness move together — the frames carry their own colour, dim at `·`
+and near-white at `✽`, overriding the marker's blue. One channel alone reads as a
+flicker at this size; two make it read as one mark pulsing rather than as a glyph
+being swapped for a different glyph. The sequence runs back down instead of
+restarting at `·`, because the jump from the largest frame to the smallest is a pop
+that draws the eye more than the motion does.
+
+The frame is a global option, `@att_spin`, that `attentiond` advances. tmux
+re-evaluates an open mode's format on every option write — a counter written 40 times
+at 200ms rendered 39 distinct frames in `choose-tree` with no `refresh-client` at
+all — so the option is the whole channel. `refresh-client -S` is not involved and
+would not help: it redraws the status line, which deliberately reads none of this.
+
+Frames are written only while a pane is in `tree-mode`. Nothing else draws the agent
+axis, so an agent working with nobody watching would be writing frames forever for a
+marker on no screen — and a frame is not free. An option write marks the client for
+redraw whatever its scope: pane, session and global writes each measured around four
+status-line repaints on 3.7, so seven frames a second is around thirty repaints a
+second of a bar that did not change. For the seconds a tree is open that is
+invisible. Left running it would be a repaint storm nobody asked for.
+
+That gate is checked between frames rather than on the once-a-second pane scan,
+which is the difference between an animation and one you keep missing: a second of
+static glyph is most of the time anyone spends in a tree, so sampling it at the tick
+meant the pulse usually started around when you closed the thing. Polling it at
+frame rate is affordable for the same reason writing at frame rate is not — a
+`list-panes` read costs a fork, while a write costs every attached client a redraw —
+and it only runs at all while some agent is mid-turn.
+
+`@att_spin` is defined in `tmux.conf` as a plain `✻`, and the daemon parks it back
+there when it stops animating and on startup. A stopped daemon, or a crash on the
+smallest frame, then degrades to a static mark rather than to a bare dot or an
+empty column.
 
 ## Sources, and who owns a pane
 
