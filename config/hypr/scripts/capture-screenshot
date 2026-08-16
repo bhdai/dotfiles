@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+#
+# Screenshot: pick a region, save it and put it on the clipboard at the same
+# time, then offer the annotation editor as a notification action.
+#
+# Adapted from Omarchy's omarchy-capture-screenshot (MIT, Basecamp/DHH). The
+# notification differs: Omarchy carries the click command in a private hint that
+# only its own shell understands, while Quickshell — the notification daemon
+# here — renders real libnotify actions as buttons, so the editor is offered
+# that way instead.
+#
+# Usage: capture-screenshot [smart|region|windows|fullscreen] [slurp|copy|save]
+#
+#   slurp (default) save to disk, copy to clipboard, and notify
+#   copy            clipboard only
+#   save            disk only, path on stdout
+#
+# Env: SCREENSHOT_DIR overrides where files land, SCREENSHOT_EDITOR overrides
+# the editor offered by the notification.
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+OUTPUT_DIR="${SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}}"
+EDITOR_CMD="${SCREENSHOT_EDITOR:-tensaku-edit}"
+
+mkdir -p "$OUTPUT_DIR" || exit 1
+
+# Pressing the screenshot key again while the picker is up dismisses it.
+pkill slurp && exit 0
+
+MODE="${1:-smart}"
+PROCESSING="${2:-slurp}"
+
+# Software-composited cursors (Hyprland's fallback where hardware cursors do
+# not work) are baked into the frames grim captures, so force hardware cursors
+# until after grim runs and restore the setting on exit.
+NO_HW_CURSORS=$(hyprctl getoption cursor:no_hardware_cursors -j | jq '.int')
+
+set_no_hw_cursors() {
+	hyprctl eval "hl.config({ cursor = { no_hardware_cursors = $1 } })" &>/dev/null
+}
+
+cleanup() {
+	[[ -n $FREEZE_PID ]] && kill $FREEZE_PID 2>/dev/null
+	set_no_hw_cursors "$NO_HW_CURSORS"
+}
+trap cleanup EXIT
+
+set_no_hw_cursors 0
+
+# The picker leaves the screen freeze running (PID on its first output line) so
+# grim captures the frozen overlay rather than live content shifting during
+# teardown.
+{ read -r FREEZE_PID; read -r SELECTION; } < <("$here/capture-region" "$MODE" --keep-freeze)
+
+[[ -z $SELECTION ]] && exit 0
+
+FILEPATH="$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png"
+
+# Detached, because `notify-send -A` blocks until the action is clicked or the
+# notification is closed. Quickshell only hides the popup on timeout and keeps
+# the notification in its centre, so nothing would ever close this one for us —
+# `timeout` is what stops a waiter accumulating per screenshot, and it doubles
+# as the window in which the button still works from the notification centre.
+offer_editor() {
+	(
+		[[ $(timeout 60 notify-send -a screenshot -t 8000 \
+			--hint="string:image-path:$FILEPATH" \
+			-A "edit=Edit" \
+			"Screenshot saved" "$FILEPATH") == edit ]] &&
+			exec "$EDITOR_CMD" "$FILEPATH"
+	) &
+}
+
+case "$PROCESSING" in
+slurp)
+	grim -g "$SELECTION" "$FILEPATH" || exit 1
+	echo "$FILEPATH"
+	wl-copy --type image/png <"$FILEPATH"
+	offer_editor
+	;;
+copy)
+	grim -g "$SELECTION" - | wl-copy --type image/png
+	;;
+save)
+	grim -g "$SELECTION" "$FILEPATH" || exit 1
+	echo "$FILEPATH"
+	;;
+esac

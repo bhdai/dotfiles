@@ -1,0 +1,236 @@
+#!/usr/bin/env bash
+#
+# Screen recording toggle: one invocation starts a recording, the next stops it.
+#
+# Adapted from Omarchy's omarchy-capture-screenrecording (MIT, Basecamp/DHH).
+# The picker is shared with screenshots, so aiming a recording is the same
+# gesture as aiming a shot.
+#
+# Usage: capture-screenrecording [--fullscreen] [--with-desktop-audio]
+#                               [--with-microphone-audio] [--resolution=WxH]
+#                               [--stop-recording]
+#
+#   --stop-recording  stop only; fail rather than start if nothing is recording,
+#                     so a bind can be "stop, or fall through to a menu"
+#
+# Env: SCREENRECORD_DIR overrides where files land. Unlike screenshots the
+# directory is not created, because a typo here would silently scatter large
+# files somewhere unnoticed.
+# Env: SCREENRECORD_DEBUG=true appends gpu-screen-recorder's stderr and the
+# capture target it was launched with to /tmp/screenrecording.log, for reporting
+# capture failures.
+#
+# While a recording runs, RECORDING_FILE holds the path being written. It exists
+# for exactly the lifetime of the recording, so a bar indicator can watch that
+# one file rather than polling for the process.
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+OUTPUT_DIR="${SCREENRECORD_DIR:-${XDG_VIDEOS_DIR:-$HOME/Videos}}"
+
+RECORDING_FILE="${XDG_RUNTIME_DIR:-/tmp}/screenrecording-filename"
+LOG_FILE=$([[ ${SCREENRECORD_DEBUG:-false} == "true" ]] && echo "/tmp/screenrecording.log" || echo "/dev/null")
+
+DESKTOP_AUDIO="false"
+MICROPHONE_AUDIO="false"
+RESOLUTION=""
+FULLSCREEN="false"
+STOP_RECORDING="false"
+
+for arg in "$@"; do
+	case "$arg" in
+	--with-desktop-audio) DESKTOP_AUDIO="true" ;;
+	--with-microphone-audio) MICROPHONE_AUDIO="true" ;;
+	--resolution=*) RESOLUTION="${arg#*=}" ;;
+	--fullscreen) FULLSCREEN="true" ;;
+	--stop-recording) STOP_RECORDING="true" ;;
+	esac
+done
+
+screenrecording_active() {
+	pgrep -f "^gpu-screen-recorder" >/dev/null
+}
+
+focused_monitor() {
+	hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name'
+}
+
+# Capturing a display larger than 4K at native resolution produces files big
+# enough to be useless for sharing, which is what these recordings are for.
+default_resolution() {
+	local width height
+	read -r width height < <(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | "\(.width) \(.height)"')
+	if ((width > 3840 || height > 2160)); then
+		echo "3840x2160"
+	else
+		echo "0x0"
+	fi
+}
+
+# Echoes "monitor:NAME" when the selection is exactly one monitor — recording it
+# by name skips the scaling arithmetic and keeps native resolution — otherwise
+# "region:WxH+X+Y". Returns non-zero when the picker was cancelled.
+select_capture_target() {
+	local target
+	target=$("$here/capture-region" smart --match-monitor) || return 1
+
+	if [[ $target == monitor:* ]]; then
+		echo "$target"
+		return
+	fi
+
+	[[ $target =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
+
+	# gpu-screen-recorder wants region geometry in the compositor's logical
+	# coordinate space — the same space slurp reports — so the values pass
+	# through untouched; gsr scales to physical pixels itself.
+	echo "region:${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}"
+}
+
+start_screenrecording() {
+	local capture_args=()
+	local target
+
+	# A recorder that died without being stopped leaves its path behind, and
+	# anything watching the file would go on believing a recording is running.
+	rm -f "$RECORDING_FILE"
+
+	if [[ $FULLSCREEN == "true" ]]; then
+		target="monitor:$(focused_monitor)"
+		capture_args=(-w "${target#monitor:}" -s "${RESOLUTION:-$(default_resolution)}")
+	else
+		target=$(select_capture_target) || return 1
+
+		case $target in
+		monitor:*)
+			capture_args=(-w "${target#monitor:}" -s "${RESOLUTION:-$(default_resolution)}")
+			;;
+		region:*)
+			capture_args=(-w region -region "${target#region:}")
+			[[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
+			;;
+		esac
+	fi
+
+	local filename="$OUTPUT_DIR/screenrecording-$(date +'%Y-%m-%d_%H-%M-%S').mp4"
+	local audio_devices=""
+	local audio_args=()
+
+	[[ $DESKTOP_AUDIO == "true" ]] && audio_devices+="default_output"
+
+	# Merged into one track rather than recorded as two, because most players
+	# only ever play the first.
+	if [[ $MICROPHONE_AUDIO == "true" ]]; then
+		[[ -n $audio_devices ]] && audio_devices+="|"
+		audio_devices+="default_input"
+	fi
+
+	[[ -n $audio_devices ]] && audio_args+=(-a "$audio_devices" -ac aac)
+
+	echo "===== $(date '+%F %T') args: $* target: $target =====" >>"$LOG_FILE"
+	gpu-screen-recorder "${capture_args[@]}" -k auto -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" 2>>"$LOG_FILE" &
+	local pid=$!
+
+	while kill -0 $pid 2>/dev/null && [[ ! -f $filename ]]; do
+		sleep 0.2
+	done
+
+	if kill -0 $pid 2>/dev/null; then
+		echo "$filename" >"$RECORDING_FILE"
+	else
+		notify-send -a screenrecording -u critical "Screen recording failed to start" \
+			"${LOG_FILE#/dev/null}"
+	fi
+}
+
+stop_screenrecording() {
+	pkill -SIGINT -f "^gpu-screen-recorder" # SIGINT is what makes it write a playable file
+
+	local count=0
+	while pgrep -f "^gpu-screen-recorder" >/dev/null && ((count < 50)); do
+		sleep 0.1
+		count=$((count + 1))
+	done
+
+	local filename=$(cat "$RECORDING_FILE" 2>/dev/null)
+	rm -f "$RECORDING_FILE"
+
+	if pgrep -f "^gpu-screen-recorder" >/dev/null; then
+		pkill -9 -f "^gpu-screen-recorder"
+		notify-send -a screenrecording -u critical -t 5000 "Screen recording error" \
+			"Recording process had to be force-killed. Video may be corrupted."
+		return
+	fi
+
+	finalize_recording "$filename"
+	echo "$filename"
+	offer_playback "$filename"
+}
+
+# gpu-screen-recorder opens the encoder before there is anything worth showing,
+# and PipeWire pops as the capture stream opens, so the raw file starts with a
+# discardable frame and a near-clipping transient.
+finalize_recording() {
+	local input=$1
+	[[ -f $input ]] || return
+
+	# Stream copy cannot drop the warmup packets — it rewinds to the keyframe —
+	# so re-encode only when the first GOP actually contains them.
+	local video_codec=(-c:v copy)
+	if ffprobe -v error -select_streams v:0 -read_intervals %+0.2 -show_entries packet=flags -of csv=p=0 "$input" 2>/dev/null | grep -q D; then
+		video_codec=(-c:v libx264 -preset veryfast -crf 20)
+	fi
+
+	local args=(-y -ss 0.1 -i "$input" "${video_codec[@]}")
+	if ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 "$input" 2>/dev/null | grep -q audio; then
+		# The pop sits around 130-200ms and is too close to clipping for a fade
+		# to attenuate, so the first 400ms is hard-muted; the 50ms fade then
+		# avoids a click at the boundary before loudnorm normalizes the rest.
+		args+=(-af "volume=enable='lt(t,0.4)':volume=0,afade=t=in:st=0.4:d=0.05,loudnorm=I=-14:TP=-1.5:LRA=11")
+	fi
+
+	local processed="${input%.mp4}-processed.mp4"
+	if ffmpeg "${args[@]}" "$processed" -loglevel quiet 2>/dev/null; then
+		mv "$processed" "$input"
+	else
+		rm -f "$processed"
+	fi
+}
+
+# Detached and time-capped for the same reason as the screenshot notification:
+# `notify-send -A` waits for the click, and nothing else would ever close it.
+offer_playback() {
+	local filename=$1
+	local preview="${filename%.mp4}-preview.png"
+
+	ffmpeg -y -i "$filename" -ss 00:00:00.1 -vframes 1 -q:v 2 "$preview" -loglevel quiet 2>/dev/null
+
+	(
+		[[ $(timeout 60 notify-send -a screenrecording -t 10000 \
+			--hint="string:image-path:${preview:-$filename}" \
+			-A "play=Play" \
+			"Screen recording saved" "$filename") == play ]] &&
+			exec mpv "$filename"
+	) &
+
+	# The bar loads the thumbnail into memory when the toast appears and never
+	# re-reads it, so the preview only has to outlive that load — not the toast,
+	# and certainly not the 60s action window.
+	(
+		sleep 2
+		rm -f "$preview"
+	) &
+}
+
+if screenrecording_active; then
+	stop_screenrecording
+elif [[ $STOP_RECORDING == "true" ]]; then
+	exit 1
+elif [[ ! -d $OUTPUT_DIR ]]; then
+	notify-send -a screenrecording -u critical -t 3000 \
+		"Screen recording directory does not exist" "$OUTPUT_DIR"
+	exit 1
+else
+	start_screenrecording
+fi

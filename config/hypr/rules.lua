@@ -29,6 +29,17 @@ hl.window_rule({
 	size = { "monitor_w*0.25", "monitor_h*0.30" },
 })
 
+-- The screenshot annotation editor sizes itself to the image it was handed, so a
+-- full-screen shot opens a window the size of the screen. Capped rather than
+-- sized, so a small region still opens at its own size instead of being inflated
+-- to fill the cap.
+hl.window_rule({ match = { class = "dev.tensaku.Tensaku" }, float = true })
+hl.window_rule({ match = { class = "dev.tensaku.Tensaku" }, center = true })
+hl.window_rule({
+	match = { class = "dev.tensaku.Tensaku" },
+	max_size = { "monitor_w*0.65", "monitor_h*0.65" },
+})
+
 -- Smart borders: w[tv1] and f[1] match workspaces holding a single tiled window,
 -- where a border only draws a box around the whole screen.
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
@@ -70,11 +81,11 @@ hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
 hl.layer_rule({ match = { namespace = "bar-1" }, blur = true })
 
 -- hyprpicker's fullscreen freeze layer (used both by the color picker and by
--- grimblast --freeze for screenshots) otherwise inherits the popin layersIn/Out
--- animation, which scales the whole screen in and out.
+-- the screen freeze every capture selects over) otherwise inherits the popin
+-- layersIn/Out animation, which scales the whole screen in and out.
 hl.layer_rule({ match = { namespace = "hyprpicker" }, no_anim = true })
 
--- slurp's area-selection box. grimblast tries to disable its animation at
--- runtime, but `hyprctl keyword layerrule` is rejected under the Lua parser
--- ("keyword can't work with non-legacy parsers"), so it must be set here.
-hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })
+-- slurp's area-selection box. It has to be set here rather than at runtime,
+-- because `hyprctl keyword layerrule` is rejected under the Lua parser
+-- ("keyword can't work with non-legacy parsers").
+hl.layer_rule({ match = { namespace = "selection" }, no_anim = true, animation = "none" })

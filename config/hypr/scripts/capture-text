@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# OCR a screen region to the clipboard.
+#
+# The scratch file is anchored under a private directory so the trailing cleanup
+# cannot hit an unrelated file, and so the captured pixels are not left readable
+# by other users while tesseract runs.
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+pkill slurp && exit 0
+
+scratch=$(mktemp -d) || exit 1
+trap 'rm -rf "$scratch"; [[ -n $FREEZE_PID ]] && kill $FREEZE_PID 2>/dev/null' EXIT
+
+{ read -r FREEZE_PID; read -r SELECTION; } < <("$here/capture-region" --keep-freeze)
+
+[[ -z $SELECTION ]] && exit 0
+
+grim -g "$SELECTION" "$scratch/ocr.png" || exit 1
+tesseract -l eng "$scratch/ocr.png" - | wl-copy

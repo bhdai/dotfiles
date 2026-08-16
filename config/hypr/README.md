@@ -66,3 +66,78 @@ cd ~/.config/quickshell && cp shell.qml /tmp/s && cat /tmp/s > shell.qml
 qs log | tail -5          # want a trailing "Configuration Loaded", not an error
 qs ipc call lock isLocked # want "false", not "Target not found."
 ```
+
+# Capture
+
+`scripts/capture-region` is the only thing that asks *what* to capture; screenshots and OCR
+are thin wrappers that decide what to do with the answer. Ported from
+[Omarchy](https://github.com/basecamp/omarchy) (MIT), which replaces what grimblast was
+doing here.
+
+Two things happen before the picker appears, and both are the reason this is a script
+rather than a bind:
+
+- **The screen is frozen** with `hyprpicker -r -z`, and the freeze is deliberately *left
+  running* across the handoff (`--keep-freeze` prints its PID for the caller to kill).
+  grim must read the frozen overlay; killing the freeze first lets live content shift back
+  in during teardown and land in the file.
+- **Hardware cursors are forced on** for the duration of the grab. Where Hyprland falls
+  back to software-composited cursors, the pointer is already in the framebuffer grim
+  reads, so it appears in the shot no matter what grim is asked for.
+
+Selection is one gesture: drag for a region, or click once and slurp snaps to the window
+or monitor rectangle under the cursor, which is why `Print` alone replaced the old
+copy/save × area/screen matrix. The shot goes to `~/Pictures` and the clipboard together.
+While the picker is up it can be driven entirely from the keyboard — `Return` takes the
+highlighted window, `Ctrl+Return` the whole screen, `Tab` and the arrows move the
+highlight. Those binds are registered on `layer.opened` for slurp's `selection` namespace
+and removed on `layer.closed`, so they exist only while a selection is on screen and
+cannot collide with anything else here. Each handle is unbound individually; unbinding by
+key would take this config's own `Return` and `Tab` bindings with it.
+
+The editor is offered as a **notification action**, not run automatically — the shot is
+already saved and copied, so the toast is an offer rather than a step. Omarchy carries the
+click command in a private hint that only its own shell understands; Quickshell renders
+real libnotify actions as buttons, so this uses one of those. The cost is that
+`notify-send -A` blocks until the button is clicked, and Quickshell only *hides* a popup on
+timeout while keeping the notification in its centre — nothing would ever close it for us.
+Hence the `timeout 60` wrapper: it stops a waiter accumulating per screenshot, and doubles
+as the window in which the button still works from the notification centre.
+
+## Recording
+
+`scripts/capture-screenrecording` is a toggle on `Alt+Print`, over the same picker —
+`Shift` adds desktop audio, `Ctrl` adds the microphone too. Whichever chord started a
+recording, any of them stops it. The soundtrack is chosen up front because it cannot be
+added afterwards. Clicking a monitor in the picker records that whole monitor, so
+full-screen recording needs no bind of its own.
+
+Two flags differ from Omarchy's version and matter:
+
+- **`-w region -region WxH+X+Y`**, not `-w WxH+X+Y`. gpu-screen-recorder 6 moved region
+  geometry to its own flag; the old spelling is a v5 leftover and fails here.
+- **A monitor is recorded by name** (`-w eDP-1`) when the selection turns out to be exactly
+  one, which is what `--match-monitor` on the picker is for. Same capture backend, but no
+  scaling arithmetic and native resolution.
+
+Stopping is `SIGINT` — anything harsher leaves an unplayable file — and the recording is
+then finalized before you are handed it. gpu-screen-recorder opens the encoder before
+there is anything worth showing and PipeWire pops as the capture stream opens, so the
+first 0.1s is trimmed, the first 400ms of audio is hard-muted (the pop is too close to
+clipping for a fade to help), and the rest is normalized to -14 LUFS. The video is
+stream-copied unless the first GOP actually contains warmup packets, since a stream copy
+cannot drop those.
+
+### Hooking up a bar indicator
+
+`$XDG_RUNTIME_DIR/screenrecording-filename` holds the path being written, and exists for
+exactly the lifetime of the recording. That is the seam: a Quickshell indicator watches
+that one file rather than polling for the process, and the scripts need to know nothing
+about the bar. Stop from a click with `capture-screenrecording --stop-recording`, which
+fails instead of starting one when nothing is recording.
+
+## Requirements
+
+`tensaku` (AUR) is the annotation editor the notification opens; `SCREENSHOT_EDITOR`
+overrides it. `gpu-screen-recorder` (extra) does the recording. Nothing here uses grimblast
+any more, so `grimblast-git` can go on the next package sweep.

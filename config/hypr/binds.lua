@@ -15,21 +15,83 @@ hl.bind("SUPER + D", hl.dsp.exec_cmd("discord"))
 hl.bind(meh .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
 hl.bind(meh .. " + N", hl.dsp.exec_cmd("makoctl dismiss -a"))
 
-hl.bind("Print", hl.dsp.exec_cmd("grimblast -w 0.3 --notify --freeze copy area"))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("grimblast -w 0.3 --notify save area"))
-hl.bind("SUPER + Print", hl.dsp.exec_cmd("grimblast -w 0.3 --notify copy screen"))
-hl.bind("SUPER + SHIFT + Print", hl.dsp.exec_cmd("grimblast -w 0.3 --notify save screen"))
+-- One Print for the common case, because the picker's smart mode already covers
+-- what the old copy/save × area/screen matrix needed four chords for: drag for a
+-- region, or click once to snap to the window or monitor under the cursor. The
+-- shot lands on disk and the clipboard together, so neither is a separate bind.
+hl.bind("Print", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screenshot"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screenshot smart copy"))
+hl.bind("SUPER + Print", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screenshot fullscreen"))
 
--- OCR an area to the clipboard. The scratch file is anchored under /tmp with a
--- distinct name so the trailing rm cannot hit an unrelated file.
+hl.bind(meh .. " + S", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-text"))
+
+-- Each of these is a toggle: whichever one starts a recording, any of them stops
+-- it. The soundtrack has to be chosen up front because it cannot be added later,
+-- and these are chords rather than a menu because there is no menu to hang them
+-- off. Recording a whole monitor needs no bind of its own — click it in the
+-- picker and the selection snaps to it.
+hl.bind("ALT + Print", hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screenrecording"))
 hl.bind(
-	meh .. " + S",
+	"SHIFT + ALT + Print",
+	hl.dsp.exec_cmd(shared.scripts_path .. "/capture-screenrecording --with-desktop-audio")
+)
+hl.bind(
+	"CTRL + ALT + Print",
 	hl.dsp.exec_cmd(
-		"grimblast save area /tmp/hypr-ocr.png"
-			.. " && tesseract -l eng /tmp/hypr-ocr.png - | wl-copy"
-			.. " && rm /tmp/hypr-ocr.png"
+		shared.scripts_path .. "/capture-screenrecording --with-desktop-audio --with-microphone-audio"
 	)
 )
+
+-- Keyboard control for the slurp region picker (see scripts/capture-region).
+-- The binds live exactly as long as a selection layer is on screen (slurp opens
+-- one per monitor), so they cannot leak or get stuck. Unbinding by key would
+-- take a same-key binding out of the rest of this config with it, so each handle
+-- is kept and removed individually.
+local selection_layers = 0
+local selection_binds = {}
+
+hl.on("layer.opened", function(layer)
+	if layer.namespace ~= "selection" then
+		return
+	end
+
+	selection_layers = selection_layers + 1
+	if selection_layers > 1 then
+		return
+	end
+
+	local function pick(key, argument, description)
+		table.insert(
+			selection_binds,
+			hl.bind(key, hl.dsp.exec_cmd(shared.scripts_path .. "/capture-region " .. argument), { description = description })
+		)
+	end
+
+	pick("RETURN", "--take-window", "Capture highlighted window")
+	pick("CTRL + RETURN", "--take-fullscreen", "Capture entire screen")
+	pick("TAB", "--select-window next", "Select next window to capture")
+	pick("CTRL + TAB", "--select-window prev", "Select previous window to capture")
+
+	for _, direction in ipairs({ "left", "right", "up", "down" }) do
+		pick(direction:upper(), "--select-window " .. direction, "Select window to capture")
+	end
+end)
+
+hl.on("layer.closed", function(layer)
+	if layer.namespace ~= "selection" or selection_layers == 0 then
+		return
+	end
+
+	selection_layers = selection_layers - 1
+	if selection_layers > 0 then
+		return
+	end
+
+	for _, keybind in ipairs(selection_binds) do
+		keybind:unbind()
+	end
+	selection_binds = {}
+end)
 
 hl.bind("XF86PowerOff", qs.call("session", "open"))
 hl.bind("SUPER + SHIFT + S", qs.call("session", "open"))
