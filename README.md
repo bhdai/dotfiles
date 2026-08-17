@@ -26,6 +26,7 @@ deploys. Every deploy command in those files is written to run from this repo ro
 | [`system/systemd/`](system/systemd/README.md) | Clearing fprintd state across suspend |
 | [`system/tlp/`](system/tlp/README.md) | Battery charge thresholds |
 | [`system/zapret/`](system/zapret/README.md) | SNI-filtering bypass |
+| [`system/zmk/`](system/zmk/README.md) | Sofle keyboard firmware (submodule, built in its own CI), and how to flash it |
 
 ## KDE default terminal
 

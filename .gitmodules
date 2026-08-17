@@ -6,3 +6,7 @@
 	path = config/quickshell
 	url = git@github.com:bhdai/quickshell_config.git
 	branch = main
+[submodule "zmk"]
+	path = system/zmk
+	url = git@github.com:bhdai/zmk-config.git
+	branch = main
