@@ -1,7 +1,6 @@
 -- Rules are evaluated top to bottom, and a named rule must be registered before
 -- any rule that matches on its tag.
 
-local quake = require("quake")
 local popups = require("popups")
 
 -- Tag-first: match once on class or title, then let the property rules below act
@@ -45,8 +44,6 @@ hl.window_rule({
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
 
-quake.register_rules()
-
 hl.window_rule({ match = { class = "(firefox|zen)" }, idle_inhibit = "fullscreen" })
 
 -- A column stores its width once, at open time. scrolling:column_width defaults to
@@ -55,8 +52,9 @@ hl.window_rule({ match = { class = "(firefox|zen)" }, idle_inhibit = "fullscreen
 -- stored width match what they already look like alone, so nothing snaps.
 hl.window_rule({ match = { class = "(firefox|zen)" }, scrolling_width = 1.0 })
 hl.window_rule({ match = { class = "org.mozilla.Thunderbird" }, scrolling_width = 1.0 })
--- Only the regular terminal; the quake dropdown runs under class dai.quake and
--- floats, so it never enters a column.
+-- Only the regular terminal; the quake console runs under class dai.quake, so a
+-- second window opened inside the console still splits instead of taking the
+-- console's full width.
 hl.window_rule({ match = { class = "com.mitchellh.ghostty" }, scrolling_width = 1.0 })
 
 hl.window_rule({ match = { title = "Rofi" }, animation = "popin" })

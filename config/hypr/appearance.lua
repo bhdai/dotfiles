@@ -60,19 +60,23 @@ hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 0.5, bezier = "men
 hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 2.7, bezier = "stall" })
 
 hl.animation({ leaf = "workspaces", enabled = true, speed = 7, bezier = "menu_decel", style = "slide" })
+-- The direction names the edge the offset is measured from, not where the
+-- workspace goes: "slide top" drops the quake console down into view and "slide
+-- bottom" retracts it back up. Bare "slidevert" leaves the edge unstated and
+-- Hyprland picks the bottom, which slides the console up from below instead.
 hl.animation({
 	leaf = "specialWorkspaceIn",
 	enabled = true,
 	speed = 2.8,
 	bezier = "emphasizedDecel",
-	style = "slidevert",
+	style = "slide top",
 })
 hl.animation({
 	leaf = "specialWorkspaceOut",
 	enabled = true,
 	speed = 1.2,
 	bezier = "emphasizedAccel",
-	style = "slidevert",
+	style = "slide bottom",
 })
 
 hl.animation({ leaf = "zoomFactor", enabled = true, speed = 3, bezier = "standardDecel" })

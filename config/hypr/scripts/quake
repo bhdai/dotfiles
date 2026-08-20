@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
-# Executable adapter for callers outside Hyprland's Lua config.
-exec hyprctl eval 'require("quake").toggle()'
+# Executable adapter for callers outside Hyprland's Lua config (nvim).
+# Spelled as Lua rather than `togglespecialworkspace quake`, because the Lua
+# parser evaluates whatever `hyprctl dispatch` is handed and rejects the legacy
+# dispatcher syntax outright.
+exec hyprctl dispatch 'hl.dsp.workspace.toggle_special("quake")'

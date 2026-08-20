@@ -1,6 +1,5 @@
 local shared = require("shared")
 local qs = require("qs")
-local quake = require("quake")
 local meh = shared.meh
 
 hl.bind("SUPER + Return", hl.dsp.exec_cmd("ghostty"))
@@ -158,10 +157,7 @@ hl.bind("SUPER + P", hl.dsp.window.pseudo())
 hl.bind("SUPER + Q", hl.dsp.window.close())
 hl.bind("SUPER + T", hl.dsp.window.float())
 hl.bind("SUPER + Tab", hl.dsp.focus({ workspace = "previous" }))
--- Direct call rather than scripts/quake; that script exists for callers outside this
--- Lua state (nvim), and going through it here would spawn a shell and an hyprctl eval
--- round trip back into the state the keybind already fired from.
-hl.bind("SUPER + backslash", quake.toggle)
+hl.bind("SUPER + backslash", hl.dsp.workspace.toggle_special("quake"))
 hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("hyprpicker -a"))
 
 hl.bind("SUPER + period", hl.dsp.layout("move +col"))
@@ -198,8 +194,10 @@ end
 hl.bind("SUPER + 0", hl.dsp.focus({ workspace = 10 }))
 hl.bind("SUPER + ALT + 0", hl.dsp.window.move({ workspace = 10 }))
 
-hl.bind("SUPER + s", hl.dsp.workspace.toggle_special())
-hl.bind("SUPER + ALT + s", hl.dsp.window.move({ workspace = "special" }))
+-- Same console as SUPER + backslash. The move is the escape hatch: anything
+-- stashed here takes the console over, and suppresses its terminal seed.
+hl.bind("SUPER + s", hl.dsp.workspace.toggle_special("quake"))
+hl.bind("SUPER + ALT + s", hl.dsp.window.move({ workspace = "special:quake", follow = false }))
 
 hl.bind("SUPER + bracketleft", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind("SUPER + bracketright", hl.dsp.focus({ workspace = "e+1" }))

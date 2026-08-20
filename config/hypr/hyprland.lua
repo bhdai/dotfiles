@@ -6,5 +6,6 @@ require("monitors")
 require("compositor")
 require("appearance")
 require("rules") -- evaluated top to bottom, so load order is part of the semantics
+require("quake")
 require("binds")
 require("autostart")
