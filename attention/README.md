@@ -54,13 +54,13 @@ The agent axis is deliberately kept off the bar. It never clears, so putting it 
 would mean a permanent marker on every window that has ever run an agent — the bar
 would stop being a thing you notice changing, which is the only reason it works.
 
-**`prefix+s` carries both**, with counts. The two axes are kept apart by shape,
-because a waiting agent is `blocked` and `waiting` in the same moment and one glyph
-serving both would read as a single marker drawn twice:
+**`prefix+s` carries both**, with counts. The two axes are kept apart by shape, so
+that a pane blocked on a `[Y/n]` and a pane running an agent do not read as the same
+kind of thing:
 
 | | Attention | Agent |
 |---|---|---|
-| wants you | `◉` blocked, red | `✻` waiting, yellow |
+| wants you | `◉` blocked, red — only where no agent is waiting | `✻` waiting, yellow |
 | in progress | | `✻` working, blue, breathing |
 | finished | status line only | `✻` idle, green |
 | failed | `▲` error, yellow | |
@@ -78,10 +78,18 @@ an hour ago", which only `done` tracks. That distinction is on the bar, and one
 glyph per pane is worth more in a tree you scan than a second one that means almost
 the same thing.
 
-`blocked` and `waiting` do still land together, red beside yellow, because there
-they mean different things: `waiting` is what the agent is doing, `blocked` is that
-you have not answered it yet. Only `error` breaks the dot vocabulary, because a
-failed command is not a degree of the same thing.
+`blocked` loses the same tie to `waiting`, for a plainer reason: on an agent pane the
+two are one event. Every `blocked` there comes from the hook that also sets `waiting`
+— the poller cannot see an agent at all, since agents hold the alternate screen — so
+`◉ ✻` was never two facts, only one fact drawn twice, and the durable half is again
+the one that survives the visit. The dot is drawn only where the agent axis on that
+row is not `waiting`, which leaves it intact for the `[Y/n]` it was built for. On a
+window or session rollup that means a `pacman` prompt sharing a window with a waiting
+agent shows no dot — one glyph short of the truth, in a case rare enough to prefer
+over a dot on every agent row.
+
+Only `error` breaks the dot vocabulary, because a failed command is not a degree of
+the same thing.
 
 The agent axis is one glyph in three colours instead. A pane running an agent is a
 single thing whose condition changes, not three different things, and `✻` is the
