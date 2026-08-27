@@ -1,5 +1,5 @@
 # fonts
-font-size = 10
+font-size = 11
 font-family = "FiraCode Nerd Font"
 font-family-bold = "FiraCode Nerd Font"
 font-family-italic = "Maple Mono"
@@ -14,7 +14,7 @@ mouse-hide-while-typing = true
 # adjust-cursor-thickness = 2
 
 # theme
-theme = /home/dai/ghq/github.com/folke/tokyonight.nvim/extras/ghostty/tokyonight_night
+theme = gruvbox-material-dark
 cursor-invert-fg-bg = false
 background-opacity = 1
 window-theme = ghostty

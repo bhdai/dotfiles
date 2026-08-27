@@ -1,0 +1,35 @@
+# Gruvbox Material dark, hard contrast, material foreground
+# https://github.com/sainnhe/gruvbox-material
+#
+# Ghostty's bundled "Gruvbox Material Dark" with two changes:
+#   - ANSI 0 is bg5 rather than #282828. The bundled theme gives black the same
+#     value as the background, so anything printing in black disappears; bg5 is
+#     what the colorscheme itself uses for terminal black.
+#   - the selection is the colorscheme's own Visual background instead of an
+#     inverted foreground block, so selecting in the terminal looks like
+#     selecting in Neovim.
+background = #1d2021
+foreground = #d4be98
+cursor-color = #d4be98
+cursor-text = #1d2021
+selection-background = #2e3b3b
+selection-foreground = #d4be98
+
+# 9-14 repeat 1-6: the colorscheme sets its own terminal palette that way, having
+# no separate bright accents.
+palette = 0=#504945
+palette = 1=#ea6962
+palette = 2=#a9b665
+palette = 3=#d8a657
+palette = 4=#7daea3
+palette = 5=#d3869b
+palette = 6=#89b482
+palette = 7=#d4be98
+palette = 8=#7c6f64
+palette = 9=#ea6962
+palette = 10=#a9b665
+palette = 11=#d8a657
+palette = 12=#7daea3
+palette = 13=#d3869b
+palette = 14=#89b482
+palette = 15=#ddc7a1
