@@ -7,7 +7,7 @@
 local workspace = "quake"
 
 -- How much of the usable screen the console covers, measured from the top.
-local share = 0.5
+local share = 0.7
 
 -- Seeded lazily rather than at boot, so nothing is running until the console is
 -- first wanted. on_created_empty only fires when the workspace opens with
