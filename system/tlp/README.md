@@ -11,6 +11,19 @@ sudo install -Dm644 system/tlp/10-battery-care.conf /etc/tlp.d/10-battery-care.c
 sudo tlp start
 ```
 
-Verify with `sudo tlp-stat -b` (`stopThreshold = 70`). Raise the stop threshold for a
-day away from power with `sudo tlp setcharge 0 100 BAT0`; it reverts on the next
-`tlp start` or reboot. Drift check: `diff system/tlp/10-battery-care.conf /etc/tlp.d/10-battery-care.conf`.
+Verify with `sudo tlp-stat -b` (`stopThreshold = 70`). Charge to full before a day
+away from power with `sudo tlp fullcharge BAT0`; unplugging, rebooting, or `tlp start`
+restores the configured thresholds. Drift check: `diff system/tlp/10-battery-care.conf /etc/tlp.d/10-battery-care.conf`.
+
+## Power profiles
+
+`TLP_PROFILE_BAT=SAV` via a second drop-in, so unplugging drops to power-saver instead of
+TLP's stock `BAL`. AC stays on `PRF`. The profile switcher in quickshell talks to `tlp-pd`
+over `org.freedesktop.UPower.PowerProfiles`, so it reflects this too. Deploy with:
+
+```bash
+sudo install -Dm644 system/tlp/20-power-profiles.conf /etc/tlp.d/20-power-profiles.conf &&
+sudo tlp start
+```
+
+Verify with `tlpctl list` on battery (`*` on `power-saver`).
