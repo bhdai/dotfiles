@@ -75,20 +75,37 @@ hl.window_rule({
 })
 hl.window_rule({ match = { tag = "picture-in-picture" }, pin = true })
 
--- Quickshell's panels. `ignore_alpha` matters more than it looks: these surfaces are far
--- larger than the card drawn inside them (the dashboard's is fixed at its widest destination
--- and masked down), so without a threshold Hyprland blurs the whole invisible rectangle. 0.5
--- clears the launcher's drop shadow while sitting well under the panels' own alpha.
+-- Every Quickshell surface that draws itself translucent. Transparency without blur is not a
+-- partial version of this effect, it is a different and worse one, so the two belong together:
+-- a surface that gets one and not the other reads as a bug.
 --
--- `xray` samples only the wallpaper layer instead of whatever windows happen to be underneath,
--- so a panel looks the same over a browser as over an empty desktop.
+-- `ignore_alpha` matters more than it looks: these surfaces are far larger than the card drawn
+-- inside them (the dashboard's is fixed at its widest destination and masked down, and the
+-- notification strip is mostly click-through), so without a threshold Hyprland blurs the whole
+-- invisible rectangle. 0.5 clears the launcher's drop shadow while sitting well under the
+-- surfaces' own alpha.
+--
+-- Deliberately no `xray`: it samples only the wallpaper layer, so a panel over a terminal blurs
+-- the wallpaper it is hiding rather than the terminal. Cheaper, and wrong — a frosted surface
+-- that ignores what it is actually covering stops reading as glass.
 --
 -- The bar is deliberately absent. It reserves its own 40px exclusive zone, so what sits behind
 -- it is almost always the static wallpaper — blurring a still image earns nothing for a
 -- per-frame cost on a surface that is never not on screen. Its transparency alone carries it.
-local quickshell_panels = { "quickshell:controlCenter", "quickshell:dashboard", "quickshell:launcher" }
-for _, namespace in ipairs(quickshell_panels) do
-	hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.5, xray = true })
+--
+-- The notification namespace does not follow the `quickshell:<name>` convention the others use.
+-- It is spelled the way the surface actually declares itself; a layer rule matches nothing if
+-- it disagrees with the client by a single character.
+local quickshell_surfaces = {
+	"quickshell:controlCenter",
+	"quickshell:dashboard",
+	"quickshell:launcher",
+	"quickshell:osd:volume",
+	"quickshell:osd:brightness",
+	"quickshell-notification-popups",
+}
+for _, namespace in ipairs(quickshell_surfaces) do
+	hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.5 })
 end
 
 -- hyprpicker's fullscreen freeze layer (used both by the color picker and by
