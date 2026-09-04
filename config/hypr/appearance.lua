@@ -7,15 +7,18 @@ hl.config({
 
 		blur = {
 			enabled = true,
-			brightness = 2.0,
-			contrast = 1.8,
-			ignore_opacity = false,
+			brightness = 1.0,
+			contrast = 1.0,
+			-- Blur the backdrop at full strength no matter how transparent the surface above it
+			-- is. With this off the blur fades in step with surface alpha, so a translucent panel
+			-- shows a mix of blurred and raw backdrop and shapes stay legible through it.
+			ignore_opacity = true,
 			new_optimizations = true,
 			noise = 0,
 			passes = 3,
 			popups = true,
 			popups_ignorealpha = 0.5,
-			size = 10,
+			size = 8,
 			special = false,
 			vibrancy = 0.0,
 			vibrancy_darkness = 0,

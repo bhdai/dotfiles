@@ -75,8 +75,21 @@ hl.window_rule({
 })
 hl.window_rule({ match = { tag = "picture-in-picture" }, pin = true })
 
-hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
-hl.layer_rule({ match = { namespace = "bar-1" }, blur = true })
+-- Quickshell's panels. `ignore_alpha` matters more than it looks: these surfaces are far
+-- larger than the card drawn inside them (the dashboard's is fixed at its widest destination
+-- and masked down), so without a threshold Hyprland blurs the whole invisible rectangle. 0.5
+-- clears the launcher's drop shadow while sitting well under the panels' own alpha.
+--
+-- `xray` samples only the wallpaper layer instead of whatever windows happen to be underneath,
+-- so a panel looks the same over a browser as over an empty desktop.
+--
+-- The bar is deliberately absent. It reserves its own 40px exclusive zone, so what sits behind
+-- it is almost always the static wallpaper — blurring a still image earns nothing for a
+-- per-frame cost on a surface that is never not on screen. Its transparency alone carries it.
+local quickshell_panels = { "quickshell:controlCenter", "quickshell:dashboard", "quickshell:launcher" }
+for _, namespace in ipairs(quickshell_panels) do
+	hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.5, xray = true })
+end
 
 -- hyprpicker's fullscreen freeze layer (used both by the color picker and by
 -- the screen freeze every capture selects over) otherwise inherits the popin
