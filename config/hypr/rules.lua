@@ -82,21 +82,30 @@ hl.window_rule({ match = { tag = "picture-in-picture" }, pin = true })
 -- `ignore_alpha` matters more than it looks: these surfaces are far larger than the card drawn
 -- inside them (the dashboard's is fixed at its widest destination and masked down, and the
 -- notification strip is mostly click-through), so without a threshold Hyprland blurs the whole
--- invisible rectangle. 0.5 clears the launcher's drop shadow while sitting well under the
--- surfaces' own alpha.
+-- invisible rectangle. It is bounded on both sides. Below, by the launcher's drop shadow, which
+-- must stay unblurred or its soft falloff grows a hard ring where blur stops. That bound moves:
+-- `DropShadow` masks its `#40000000` by the source's alpha, and the source is the card itself,
+-- so the shadow fades as the panels open up — at 0.70 background it peaks near 0.075, not the
+-- 0.25 the color alone suggests. Above, by the panels' own ground: Appearance paints it at 1
+-- minus `configuredBackgroundTransparency`, so raising that value walks the ground's alpha down
+-- toward this number, and the moment it crosses, the panels stop being blurred at all rather
+-- than becoming more translucent. 0.15 sits clear of both.
 --
 -- Deliberately no `xray`: it samples only the wallpaper layer, so a panel over a terminal blurs
 -- the wallpaper it is hiding rather than the terminal. Cheaper, and wrong — a frosted surface
 -- that ignores what it is actually covering stops reading as glass.
 --
--- The bar is deliberately absent. It reserves its own 40px exclusive zone, so what sits behind
--- it is almost always the static wallpaper — blurring a still image earns nothing for a
--- per-frame cost on a surface that is never not on screen. Its transparency alone carries it.
+-- The bar is in the list even though its 40px exclusive zone keeps tiled windows out from
+-- under it, so what it usually covers is the still wallpaper. Blur is still what the effect
+-- needs: unblurred, its 0.88 alpha reads as a washed-out tint of whatever the wallpaper
+-- happens to be under it, not as glass. Fullscreen windows ignore the exclusive zone and do
+-- pass beneath it.
 --
 -- The notification namespace does not follow the `quickshell:<name>` convention the others use.
 -- It is spelled the way the surface actually declares itself; a layer rule matches nothing if
 -- it disagrees with the client by a single character.
 local quickshell_surfaces = {
+	"quickshell:bar",
 	"quickshell:controlCenter",
 	"quickshell:dashboard",
 	"quickshell:launcher",
@@ -105,7 +114,7 @@ local quickshell_surfaces = {
 	"quickshell-notification-popups",
 }
 for _, namespace in ipairs(quickshell_surfaces) do
-	hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.5 })
+	hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.15 })
 end
 
 -- hyprpicker's fullscreen freeze layer (used both by the color picker and by
