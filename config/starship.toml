@@ -25,8 +25,8 @@ format = '([$all_status$ahead_behind]($style))'
 [gcloud]
 disabled = true
 
-[[battery.display]]
-threshold = 50
+[battery]
+disabled = true
 
 [lua]
 detect_folders = []
