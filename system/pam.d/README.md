@@ -153,7 +153,8 @@ The `sddm` rows are **predicted, not yet observed** — fill them in on the firs
 |---|---|
 | Correct password | `authentication successful` |
 | Empty password | prompts for a finger; enrolled finger passes |
-| Empty password, wrong finger | one attempt only, then back to a password prompt — `max-tries=1` |
+| Empty password, wrong finger | re-prompts for a finger up to 5 times, then back to a password prompt — `max-tries=5` |
+| Empty password, no finger | back to a password prompt after 10s — `timeout=10` |
 
 Two log lines that look like faults and are not: `pam_faillock: Error sending audit
 message: Operation not permitted` is pamtester running unprivileged and unable to

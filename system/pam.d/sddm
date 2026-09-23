@@ -21,10 +21,13 @@
 # Accepted: neither is load-bearing at a display manager, and both are the hazards
 # quickshell-lock avoids by including system-auth rather than login.
 #
-# max-tries=1 bounds the greeter. pam_fprintd defaults to 3 tries at a 30s timeout
-# each, and sddm gives the user no way to abort a conversation in flight, so the
-# default strands the login screen for 90 seconds on a finger that will not read.
-# One try instead falls through to the include and returns the password field.
+# max-tries=5 timeout=10 lets a misread be retried by just touching the sensor again,
+# the way the lock screen's QML retry loop does, instead of falling back to the
+# password field and needing another Enter. A no-match returns at once, so the tries
+# cost nothing while a finger is on the sensor; the short timeout is what bounds the
+# greeter when no finger comes, because sddm gives the user no way to abort a
+# conversation in flight. The upstream default of 3 tries at 30s each can strand the
+# login screen for a minute and a half.
 #
 # ArchWiki SDDM warns that KWallet cannot be unlocked by a fingerprint. It does not
 # apply here: kwallet-pam is not installed and neither pam_kwallet5.so nor
@@ -34,7 +37,7 @@
 # provider later would give this file a real cost and is the point to revisit it.
 
 auth        [success=1 new_authtok_reqd=1 default=ignore] pam_unix.so try_first_pass likeauth nullok
-auth        sufficient  pam_fprintd.so          max-tries=1
+auth        sufficient  pam_fprintd.so          max-tries=5 timeout=10
 auth        include     system-login
 -auth       optional    pam_gnome_keyring.so
 -auth       optional    pam_kwallet5.so
