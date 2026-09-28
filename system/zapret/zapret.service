@@ -1,0 +1,22 @@
+# Replaces the packaged unit, which orders after network-online.target. That target waits for
+# NetworkManager-wait-online (up to 60s when Wi-Fi fails to associate), and since zapret is in
+# multi-user.target, every unit ordered after multi-user.target waits too — including tlp-pd,
+# whose PowerProfiles D-Bus name Quickshell blocks on at startup.
+#
+# zapret does not need a live connection: IFACE_WAN is unset so the firewall rules match any
+# interface, and MODE_FILTER=hostlist is matched by nfqws per packet, with no DNS at start.
+[Unit]
+After=network.target
+
+[Service]
+Type=forking
+Restart=no
+TimeoutSec=30sec
+IgnoreSIGPIPE=no
+GuessMainPID=no
+RemainAfterExit=no
+ExecStart=/opt/zapret/init.d/sysv/zapret start
+ExecStop=/opt/zapret/init.d/sysv/zapret stop
+
+[Install]
+WantedBy=multi-user.target
